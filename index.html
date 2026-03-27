@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>The Office of the CTO – USCI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ms-blue:#0078d4;--ms-blue-dark:#005a9e;--ms-blue-light:#deecf9;--ms-blue-xlight:#eff6fc;
+  --ms-teal:#00b7c3;--ms-green:#107c10;--ms-green-light:#dff6dd;
+  --ms-yellow-bg:#fff4ce;--ms-red:#a4262c;--ms-red-bg:#fde7e9;
+  --ms-orange:#ca5010;--ms-orange-bg:#fed9cc;--ms-purple:#5c2d91;--ms-purple-light:#e9d7f5;
+  --ms-neutral-10:#faf9f8;--ms-neutral-20:#f3f2f1;--ms-neutral-30:#edebe9;
+  --ms-neutral-60:#605e5c;--ms-neutral-80:#323130;--ms-white:#ffffff;
+  --s4:0 1.6px 3.6px 0 rgba(0,0,0,.13),0 0.3px 0.9px 0 rgba(0,0,0,.11);
+  --s8:0 3.2px 7.2px 0 rgba(0,0,0,.13),0 0.6px 1.8px 0 rgba(0,0,0,.11);
+  --s16:0 6.4px 14.4px 0 rgba(0,0,0,.13),0 1.2px 3.6px 0 rgba(0,0,0,.11);
+  --r4:4px;--r8:8px;--r12:12px;--r16:16px;
+  font-family:"Inter","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--ms-neutral-10);color:var(--ms-neutral-80);min-height:100vh;
+  display:flex;flex-direction:column;max-width:430px;margin:0 auto;overflow-x:hidden;}
+
+/* APP BAR */
+.app-bar{background:var(--ms-white);border-bottom:1px solid var(--ms-neutral-30);
+  padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;box-shadow:var(--s4);}
+.app-bar-left{display:flex;align-items:center;gap:10px;}
+.waffle-btn{width:32px;height:32px;display:grid;grid-template-columns:repeat(3,7px);
+  grid-gap:3px;align-items:center;justify-items:center;cursor:pointer;
+  border-radius:var(--r4);padding:5px;transition:background .15s;border:none;background:none;}
+.waffle-btn:hover{background:var(--ms-neutral-20);}
+.waffle-btn span{width:6px;height:6px;background:var(--ms-neutral-60);border-radius:1px;display:block;}
+.ms-logo-mark{display:flex;gap:2px;flex-wrap:wrap;width:18px;height:18px;}
+.ms-logo-mark span{width:8px;height:8px;border-radius:1px;}
+.ms-logo-mark span:nth-child(1){background:#f35325;}
+.ms-logo-mark span:nth-child(2){background:#81bc06;}
+.ms-logo-mark span:nth-child(3){background:#05a6f0;}
+.ms-logo-mark span:nth-child(4){background:#ffba08;}
+.app-bar-title{font-size:13px;font-weight:700;color:var(--ms-neutral-80);line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
+.app-bar-title small{display:block;font-size:10px;font-weight:400;color:var(--ms-neutral-60);}
+.app-bar-right{display:flex;align-items:center;gap:6px;}
+.icon-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;border:none;background:transparent;
+  color:var(--ms-neutral-60);font-size:16px;transition:background .15s;}
+.icon-btn:hover{background:var(--ms-neutral-20);}
+.avatar{width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--ms-blue),var(--ms-teal));
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;}
+
+/* MAIN */
+.main-scroll{flex:1;overflow-y:auto;padding-bottom:90px;}
+.page{display:none;}
+.page.active{display:block;}
+
+/* HERO */
+.hero-section{background:linear-gradient(135deg,#0078d4 0%,#005a9e 55%,#00b7c3 100%);
+  padding:22px 16px 26px;color:white;position:relative;overflow:hidden;}
+.hero-section::before{content:"";position:absolute;top:-30px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:rgba(255,255,255,.07);}
+.hero-section::after{content:"";position:absolute;bottom:-20px;left:-20px;width:120px;height:120px;
+  border-radius:50%;background:rgba(255,255,255,.05);}
+.hero-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.8;margin-bottom:6px;}
+.hero-title{font-size:24px;font-weight:900;line-height:1.2;margin-bottom:6px;position:relative;z-index:1;}
+.hero-sub{font-size:13px;opacity:.85;line-height:1.5;position:relative;z-index:1;max-width:280px;}
+.frontier-badge{display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;backdrop-filter:blur(4px);}
+.frontier-badge .dot{width:7px;height:7px;border-radius:50%;background:#ffba08;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.7;transform:scale(1.2);}}
+
+/* SECTIONS */
+.section-header{padding:16px 16px 8px;display:flex;align-items:center;justify-content:space-between;}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ms-neutral-60);}
+.see-all{font-size:12px;color:var(--ms-blue);font-weight:600;cursor:pointer;}
+
+/* CAROUSEL */
+.carousel-wrap{overflow-x:auto;padding:0 16px 8px;scrollbar-width:none;
+  display:flex;gap:10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.carousel-wrap::-webkit-scrollbar{display:none;}
+.kpi-card{min-width:152px;max-width:152px;background:var(--ms-white);border-radius:var(--r16);
+  padding:14px;box-shadow:var(--s8);scroll-snap-align:start;cursor:pointer;
+  transition:box-shadow .2s,transform .2s;border:2px solid transparent;flex-shrink:0;
+  position:relative;overflow:hidden;}
+.kpi-card:hover{box-shadow:var(--s16);transform:translateY(-3px);}
+.kpi-card.warning{border-color:#d83b01;}
+.kpi-card.success{border-color:var(--ms-green);}
+.kpi-card.info{border-color:var(--ms-blue);}
+.kpi-card.purple{border-color:var(--ms-purple);}
+.kpi-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.kpi-icon{width:30px;height:30px;border-radius:var(--r8);display:flex;align-items:center;
+  justify-content:center;font-size:15px;flex-shrink:0;}
+.kpi-icon.blue{background:var(--ms-blue-xlight);}
+.kpi-icon.green{background:var(--ms-green-light);}
+.kpi-icon.warning{background:var(--ms-orange-bg);}
+.kpi-icon.purple{background:var(--ms-purple-light);}
+.kpi-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;
+  letter-spacing:.3px;text-transform:uppercase;}
+.kpi-badge.green{background:var(--ms-green-light);color:#107c10;}
+.kpi-badge.warning{background:var(--ms-orange-bg);color:var(--ms-orange);}
+.kpi-badge.red{background:var(--ms-red-bg);color:var(--ms-red);}
+.kpi-badge.blue{background:var(--ms-blue-light);color:var(--ms-blue-dark);}
+.kpi-value{font-size:22px;font-weight:800;color:var(--ms-neutral-80);line-height:1.1;margin-bottom:3px;}
+.kpi-label{font-size:11px;font-weight:600;color:var(--ms-neutral-60);line-height:1.3;}
+.kpi-sub{font-size:10px;color:var(--ms-neutral-60);margin-top:2px;}
+.kpi-progress{margin-top:10px;}
+.progress-track{height:5px;background:var(--ms-neutral-30);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+.progress-fill.blue{background:linear-gradient(90deg,var(--ms-blue),var(--ms-teal));}
+.progress-fill.green{background:linear-gradient(90deg,var(--ms-green),#13a10e);}
+.progress-fill.warning{background:linear-gradient(90deg,#ca5010,#ff8c00);}
+.progress-fill.red{background:linear-gradient(90deg,var(--ms-red),#d83b01);}
+
+/* QUICK ACTIONS */
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;}
+.qa-btn{background:var(--ms-white);border-radius:var(--r16);padding:12px 4px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  box-shadow:var(--s4);cursor:pointer;transition:box-shadow .15s,transform .15s;border:none;}
+.qa-btn:hover{box-shadow:var(--s8);transform:translateY(-2px);}
+.qa-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:16px;}
+.qa-btn-label{font-size:10px;font-weight:600;color:var(--ms-neutral-80);text-align:center;line-height:1.2;}
+
+/* SIGNAL CARDS */
+.signal-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.signal-card{background:var(--ms-white);border-radius:var(--r16);padding:12px 14px;
+  box-shadow:var(--s4);display:flex;align-items:flex-start;gap:10px;
+  cursor:pointer;transition:box-shadow .15s,transform .15s;border-left:4px solid transparent;}
+.signal-card:hover{box-shadow:var(--s8);transform:translateY(-1px);}
+.signal-card.blue{border-color:var(--ms-blue);}
+.signal-card.orange{border-color:var(--ms-orange);}
+.signal-card.green{border-color:var(--ms-green);}
+.signal-card.red{border-color:var(--ms-red);}
+.signal-card.purple{border-color:var(--ms-purple);}
+.signal-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.signal-content{flex:1;}
+.signal-title{font-size:13px;font-weight:700;color:var(--ms-neutral-80);margin-bottom:2px;line-height:1.3;}
+.signal-desc{font-size:11px;color:var(--ms-neutral-60);line-height:1.4;}
+.signal-meta{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.signal-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.3px;}
+.signal-tag.orange{background:var(--ms-orange-bg);color:var(--ms-orange);}
+.signal-tag.blue{background:var(--ms-blue-light);color:var(--ms-blue-dark);}
+.signal-tag.green{background:var(--ms-green-light);color:#107c10;}
+.signal-tag.red{background:var(--ms-red-bg);color:var(--ms-red);}
+.signal-tag.purple{background:var(--ms-purple-light);color:var(--ms-purple);}
+.signal-time{font-size:10px;color:var(--ms-neutral-60);}
+.signal-chevron{font-size:14px;color:var(--ms-neutral-60);flex-shrink:0;margin-top:3px;}
+
+/* MEGAN */
+.megan-panel{margin:0 16px;background:linear-gradient(135deg,#f3f2f1 0%,#deecf9 100%);
+  border-radius:20px;padding:16px;border:2px solid var(--ms-blue-light);
+  position:relative;overflow:hidden;}
+.megan-panel::before{content:"";position:absolute;top:-20px;right:-20px;width:100px;height:100px;
+  border-radius:50%;background:rgba(0,120,212,.06);}
+.megan-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.megan-avatar{width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--ms-blue),var(--ms-teal));
+  display:flex;align-items:center;justify-content:center;color:white;font-size:14px;
+  font-weight:700;border:2px solid white;box-shadow:var(--s4);flex-shrink:0;}
+.megan-name{font-size:14px;font-weight:800;color:var(--ms-blue-dark);}
+.megan-role{font-size:11px;color:var(--ms-neutral-60);margin-top:1px;}
+.megan-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--ms-green);}
+.megan-status::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ms-green);display:block;animation:pulse 2s infinite;}
+.megan-input-mock{background:white;border-radius:22px;padding:10px 14px;font-size:12px;
+  color:var(--ms-neutral-60);border:1px solid var(--ms-neutral-30);
+  display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+  box-shadow:var(--s4);margin-bottom:10px;}
+.megan-send{width:28px;height:28px;border-radius:50%;background:var(--ms-blue);
+  display:flex;align-items:center;justify-content:center;color:white;font-size:12px;flex-shrink:0;}
+.prompt-chips{display:flex;gap:6px;flex-wrap:wrap;}
+.prompt-chip{background:white;border:1.5px solid var(--ms-neutral-30);border-radius:14px;
+  padding:5px 11px;font-size:11px;font-weight:600;color:var(--ms-blue);cursor:pointer;
+  transition:all .15s;white-space:nowrap;}
+.prompt-chip:hover{background:var(--ms-blue);color:white;border-color:var(--ms-blue);}
+
+/* ACCOUNT CARDS */
+.account-cards{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
+.account-card{background:var(--ms-white);border-radius:var(--r16);padding:16px;
+  box-shadow:var(--s4);cursor:pointer;transition:box-shadow .15s;
+  border:1px solid var(--ms-neutral-30);}
+.account-card:hover{box-shadow:var(--s16);}
+.account-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.account-logo{width:38px;height:38px;border-radius:var(--r8);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.account-logo.retail{background:#fff4e6;}
+.account-logo.mfg{background:#e6f3ff;}
+.account-logo.energy{background:#e8f5e8;}
+.account-name{font-size:15px;font-weight:800;color:var(--ms-neutral-80);}
+.account-industry{font-size:11px;color:var(--ms-neutral-60);}
+.account-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.acct-metric{background:var(--ms-neutral-10);border-radius:var(--r8);padding:7px 8px;text-align:center;}
+.acct-metric-val{font-size:14px;font-weight:800;color:var(--ms-neutral-80);}
+.acct-metric-label{font-size:9px;color:var(--ms-neutral-60);text-transform:uppercase;letter-spacing:.3px;}
+.account-warning{background:var(--ms-red-bg);border-radius:var(--r8);padding:7px 11px;
+  font-size:11px;color:var(--ms-red);font-weight:700;
+  display:flex;align-items:center;gap:5px;margin-bottom:10px;}
+.account-actions{display:flex;gap:6px;}
+.acct-btn{flex:1;padding:8px 4px;border-radius:var(--r8);font-size:11px;font-weight:700;
+  text-align:center;cursor:pointer;border:2px solid var(--ms-blue);transition:all .15s;}
+.acct-btn.primary{background:var(--ms-blue);color:white;border-color:var(--ms-blue);}
+.acct-btn.primary:hover{background:var(--ms-blue-dark);}
+.acct-btn.outline{background:transparent;color:var(--ms-blue);}
+.acct-btn.outline:hover{background:var(--ms-blue-xlight);}
+
+/* INTEL CARDS */
+.intel-cards{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.intel-card{background:var(--ms-white);border-radius:var(--r16);padding:12px 14px;
+  box-shadow:var(--s4);cursor:pointer;transition:box-shadow .15s;
+  border:1px solid var(--ms-neutral-30);display:flex;gap:10px;align-items:flex-start;}
+.intel-card:hover{box-shadow:var(--s8);}
+.intel-img{width:48px;height:48px;border-radius:var(--r8);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:24px;}
+.intel-img.blue{background:var(--ms-blue-xlight);}
+.intel-img.green{background:var(--ms-green-light);}
+.intel-img.purple{background:var(--ms-purple-light);}
+.intel-img.yellow{background:var(--ms-yellow-bg);}
+.intel-body{flex:1;}
+.intel-title{font-size:13px;font-weight:700;color:var(--ms-neutral-80);line-height:1.3;margin-bottom:3px;}
+.intel-desc{font-size:11px;color:var(--ms-neutral-60);line-height:1.4;}
+.intel-tag{display:inline-block;margin-top:5px;font-size:9px;font-weight:700;
+  padding:2px 7px;border-radius:10px;text-transform:uppercase;}
+
+/* ── WINS WIDGETS ── */
+.wins-section{padding:0 16px;display:flex;flex-direction:column;gap:12px;}
+.win-widget{background:var(--ms-white);border-radius:20px;overflow:hidden;
+  box-shadow:var(--s8);cursor:pointer;transition:box-shadow .2s,transform .2s;
+  border:1px solid var(--ms-neutral-30);}
+.win-widget:hover{box-shadow:var(--s16);transform:translateY(-2px);}
+.win-header-band{padding:14px 16px 12px;display:flex;align-items:center;
+  justify-content:space-between;gap:8px;color:white;}
+.win-header-band.nvidia{background:linear-gradient(135deg,#76b900,#4a7a00);}
+.win-header-band.anthropic{background:linear-gradient(135deg,#cc785c,#8b3c28);}
+.win-header-band.aveva{background:linear-gradient(135deg,#0078d4,#005a9e);}
+.win-header-band.fractal{background:linear-gradient(135deg,#ca5010,#8b3500);}
+.win-header-band.azure{background:linear-gradient(135deg,#0078d4,#00b7c3);}
+.win-partner-name{font-size:16px;font-weight:900;letter-spacing:-.3px;}
+.win-partner-sub{font-size:10px;opacity:.85;margin-top:1px;font-weight:500;}
+.win-big-num{font-size:26px;font-weight:900;line-height:1;}
+.win-big-label{font-size:9px;opacity:.8;text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+.win-body{padding:12px 16px 14px;}
+.win-stat-row{display:flex;gap:8px;margin-bottom:10px;}
+.win-stat{flex:1;background:var(--ms-neutral-10);border-radius:var(--r8);padding:9px 8px;text-align:center;}
+.win-stat-val{font-size:17px;font-weight:800;line-height:1;margin-bottom:2px;}
+.win-stat-val.blue{color:var(--ms-blue);}
+.win-stat-val.green{color:var(--ms-green);}
+.win-stat-val.orange{color:var(--ms-orange);}
+.win-stat-val.purple{color:var(--ms-purple);}
+.win-stat-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--ms-neutral-60);}
+.win-bar-wrap{margin-bottom:4px;}
+.win-bar-row{display:flex;justify-content:space-between;font-size:10px;
+  color:var(--ms-neutral-60);margin-bottom:4px;}
+.win-bar-track{height:7px;background:var(--ms-neutral-20);border-radius:4px;overflow:hidden;}
+.win-bar-fill{height:100%;border-radius:4px;}
+.win-bar-fill.blue{background:linear-gradient(90deg,var(--ms-blue),var(--ms-teal));}
+.win-bar-fill.green{background:linear-gradient(90deg,var(--ms-green),#13a10e);}
+.win-bar-fill.nvidia{background:linear-gradient(90deg,#76b900,#b3e000);}
+.win-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.win-tag{font-size:9px;font-weight:700;padding:3px 9px;border-radius:12px;
+  text-transform:uppercase;letter-spacing:.3px;}
+.win-tag.blue{background:var(--ms-blue-light);color:var(--ms-blue-dark);}
+.win-tag.green{background:var(--ms-green-light);color:#107c10;}
+.win-tag.orange{background:var(--ms-orange-bg);color:var(--ms-orange);}
+.win-tag.nvidia{background:#e8f5d0;color:#3d6600;}
+.win-tag.purple{background:var(--ms-purple-light);color:var(--ms-purple);}
+
+/* TAB BAR */
+.tab-bar{display:flex;gap:0;padding:0 16px;border-bottom:1px solid var(--ms-neutral-30);
+  overflow-x:auto;scrollbar-width:none;margin-bottom:12px;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-item{padding:10px 14px;font-size:13px;font-weight:500;color:var(--ms-neutral-60);
+  cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;}
+.tab-item.active{color:var(--ms-blue);border-bottom-color:var(--ms-blue);font-weight:700;}
+.tab-item:hover{color:var(--ms-blue);}
+
+/* PIPELINE */
+.pipeline-bar{margin:0 16px 16px;background:var(--ms-white);border-radius:var(--r16);
+  padding:16px;box-shadow:var(--s4);}
+.pipeline-bar-title{font-size:11px;font-weight:700;color:var(--ms-neutral-60);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+.pipe-stages{display:flex;gap:4px;align-items:flex-end;height:60px;margin-bottom:8px;}
+.pipe-stage-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pipe-stage-bar{width:100%;border-radius:6px 6px 0 0;}
+.pipe-stage-label{font-size:9px;color:var(--ms-neutral-60);text-align:center;font-weight:600;}
+.deal-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.deal-card{background:var(--ms-white);border-radius:var(--r12);padding:12px 14px;
+  box-shadow:var(--s4);cursor:pointer;transition:box-shadow .15s;
+  display:flex;align-items:flex-start;gap:10px;}
+.deal-card:hover{box-shadow:var(--s8);}
+.deal-stage-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.deal-info{flex:1;}
+.deal-name{font-size:13px;font-weight:700;color:var(--ms-neutral-80);}
+.deal-meta{font-size:11px;color:var(--ms-neutral-60);margin-top:2px;}
+.deal-value{font-size:13px;font-weight:800;color:var(--ms-neutral-80);text-align:right;}
+.deal-close{font-size:10px;color:var(--ms-neutral-60);text-align:right;margin-top:2px;}
+
+/* GOVERNANCE */
+.gov-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px;}
+.gov-card{background:var(--ms-white);border-radius:var(--r16);padding:14px;
+  box-shadow:var(--s4);cursor:pointer;transition:box-shadow .15s;}
+.gov-card:hover{box-shadow:var(--s8);}
+.gov-icon{font-size:24px;margin-bottom:8px;}
+.gov-title{font-size:12px;font-weight:700;color:var(--ms-neutral-80);margin-bottom:3px;}
+.gov-desc{font-size:10px;color:var(--ms-neutral-60);line-height:1.4;}
+
+/* BRIEFINGS */
+.briefing-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.briefing-card{background:var(--ms-white);border-radius:var(--r16);padding:14px;
+  box-shadow:var(--s4);cursor:pointer;transition:box-shadow .15s;border:1px solid var(--ms-neutral-30);}
+.briefing-card:hover{box-shadow:var(--s8);}
+.briefing-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.briefing-icon{width:32px;height:32px;border-radius:var(--r8);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.briefing-title{font-size:13px;font-weight:700;color:var(--ms-neutral-80);line-height:1.3;}
+.briefing-date{font-size:11px;color:var(--ms-neutral-60);margin-top:2px;}
+.briefing-points{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.briefing-points li{font-size:12px;color:var(--ms-neutral-80);line-height:1.3;
+  padding-left:14px;position:relative;}
+.briefing-points li::before{content:"•";position:absolute;left:0;color:var(--ms-blue);font-weight:700;}
+
+/* BP */
+.bp-list{padding:0 16px;display:flex;flex-direction:column;gap:8px;}
+.bp-card{background:var(--ms-white);border-radius:var(--r16);padding:14px;
+  box-shadow:var(--s4);display:flex;gap:10px;align-items:flex-start;cursor:pointer;transition:box-shadow .15s;}
+.bp-card:hover{box-shadow:var(--s8);}
+.bp-num{width:28px;height:28px;border-radius:50%;background:var(--ms-blue);color:white;
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.bp-content{flex:1;}
+.bp-title{font-size:13px;font-weight:700;color:var(--ms-neutral-80);margin-bottom:3px;}
+.bp-desc{font-size:11px;color:var(--ms-neutral-60);line-height:1.4;}
+
+/* CHIPS */
+.scroll-chips{overflow-x:auto;scrollbar-width:none;display:flex;gap:6px;padding:0 16px;flex-wrap:nowrap;}
+.scroll-chips::-webkit-scrollbar{display:none;}
+.chip{background:var(--ms-white);border:1.5px solid var(--ms-neutral-30);border-radius:14px;
+  padding:5px 12px;font-size:11px;font-weight:700;color:var(--ms-neutral-80);cursor:pointer;transition:all .15s;}
+.chip.active,.chip:hover{background:var(--ms-blue);color:white;border-color:var(--ms-blue);}
+
+/* ── ENHANCED BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;background:white;border-top:none;
+  display:flex;align-items:stretch;
+  box-shadow:0 -8px 32px rgba(0,0,0,.2),0 -2px 8px rgba(0,0,0,.12);
+  z-index:100;padding-bottom:env(safe-area-inset-bottom);
+  border-radius:24px 24px 0 0;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 4px 8px;cursor:pointer;transition:all .2s ease;position:relative;
+  text-decoration:none;border:none;background:transparent;}
+.nav-item:first-child{border-radius:24px 0 0 0;}
+.nav-item:last-child{border-radius:0 24px 0 0;}
+.nav-item:hover{background:rgba(0,0,0,.03);}
+.nav-item.active::before{content:"";position:absolute;top:0;left:20%;right:20%;
+  height:3px;border-radius:0 0 3px 3px;}
+.nav-item:nth-child(1).active::before{background:linear-gradient(90deg,#0078d4,#00b7c3);}
+.nav-item:nth-child(2).active::before{background:linear-gradient(90deg,#ca5010,#ff8c00);}
+.nav-item:nth-child(3).active::before{background:linear-gradient(90deg,#5c2d91,#8764b8);}
+.nav-item:nth-child(4).active::before{background:linear-gradient(90deg,#107c10,#13a10e);}
+.nav-item:nth-child(5).active::before{background:linear-gradient(90deg,#0078d4,#2899f5);}
+.nav-item:nth-child(6).active::before{background:linear-gradient(90deg,#d13438,#f35325);}
+.nav-icon-wrap{width:40px;height:40px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:18px;margin-bottom:3px;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  position:relative;color:white;}
+.nav-item.active .nav-icon-wrap{transform:translateY(-5px) scale(1.15);box-shadow:0 8px 20px rgba(0,0,0,.2);}
+.nav-item:hover:not(.active) .nav-icon-wrap{transform:translateY(-2px) scale(1.05);}
+.nav-item:nth-child(1) .nav-icon-wrap{background:linear-gradient(135deg,#0078d4,#00b7c3);}
+.nav-item:nth-child(2) .nav-icon-wrap{background:linear-gradient(135deg,#ca5010,#ff8c00);}
+.nav-item:nth-child(3) .nav-icon-wrap{background:linear-gradient(135deg,#5c2d91,#8764b8);}
+.nav-item:nth-child(4) .nav-icon-wrap{background:linear-gradient(135deg,#107c10,#13a10e);}
+.nav-item:nth-child(5) .nav-icon-wrap{background:linear-gradient(135deg,#0078d4,#2899f5);}
+.nav-item:nth-child(6) .nav-icon-wrap{background:linear-gradient(135deg,#d13438,#f35325);}
+.nav-label{font-size:9px;font-weight:700;letter-spacing:.2px;text-transform:uppercase;transition:color .15s;}
+.nav-item:nth-child(1) .nav-label{color:#0078d4;}
+.nav-item:nth-child(2) .nav-label{color:#ca5010;}
+.nav-item:nth-child(3) .nav-label{color:#5c2d91;}
+.nav-item:nth-child(4) .nav-label{color:#107c10;}
+.nav-item:nth-child(5) .nav-label{color:#0078d4;}
+.nav-item:nth-child(6) .nav-label{color:#d13438;}
+.nav-item.active .nav-label{font-weight:800;}
+.nav-badge{position:absolute;top:2px;right:2px;width:9px;height:9px;border-radius:50%;
+  background:#d13438;border:2px solid white;}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:200;animation:fadeIn .2s ease;}
+.modal-overlay.open{display:flex;align-items:flex-end;}
+.modal-sheet{background:var(--ms-white);border-radius:24px 24px 0 0;
+  width:100%;max-width:430px;margin:0 auto;max-height:88vh;overflow-y:auto;
+  animation:slideUp .3s ease;padding-bottom:32px;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-handle{width:36px;height:4px;background:var(--ms-neutral-30);
+  border-radius:2px;margin:12px auto 16px;display:block;}
+.modal-header{padding:0 16px 14px;border-bottom:1px solid var(--ms-neutral-30);margin-bottom:16px;position:relative;}
+.modal-close{float:right;background:var(--ms-neutral-20);border:none;width:28px;height:28px;
+  border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;
+  justify-content:center;color:var(--ms-neutral-60);}
+.modal-title{font-size:18px;font-weight:800;color:var(--ms-neutral-80);margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--ms-neutral-60);}
+.modal-body{padding:0 16px;}
+
+/* DETAIL SECTIONS */
+.detail-section{margin-bottom:18px;}
+.detail-section-title{font-size:11px;font-weight:800;color:var(--ms-blue);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;padding-bottom:5px;
+  border-bottom:2px solid var(--ms-blue-light);}
+.detail-text{font-size:13px;color:var(--ms-neutral-80);line-height:1.6;}
+.detail-bullets{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.detail-bullets li{font-size:13px;color:var(--ms-neutral-80);line-height:1.4;
+  padding-left:16px;position:relative;}
+.detail-bullets li::before{content:"→";position:absolute;left:0;color:var(--ms-blue);font-size:11px;top:2px;}
+.exec-action-box{background:linear-gradient(135deg,var(--ms-blue-xlight),#f0f7ff);
+  border:2px solid var(--ms-blue-light);border-radius:var(--r12);padding:14px;}
+.exec-action-title{font-size:11px;font-weight:800;color:var(--ms-blue);margin-bottom:5px;
+  text-transform:uppercase;letter-spacing:.5px;}
+.exec-action-text{font-size:13px;color:var(--ms-neutral-80);line-height:1.6;}
+.consumption-gauge{background:var(--ms-neutral-10);border-radius:var(--r12);padding:14px;margin-bottom:16px;}
+.gauge-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.gauge-label{font-size:12px;font-weight:700;color:var(--ms-neutral-80);}
+.gauge-value{font-size:14px;font-weight:800;}
+.gauge-track{height:10px;background:var(--ms-neutral-30);border-radius:5px;overflow:hidden;}
+.gauge-fill{height:100%;border-radius:5px;}
+.gauge-fill.red{background:linear-gradient(90deg,var(--ms-red),#d83b01);}
+.gauge-fill.medium{background:linear-gradient(90deg,var(--ms-orange),#ff8c00);}
+.gauge-fill.good{background:linear-gradient(90deg,var(--ms-green),#13a10e);}
+
+/* NEWS ARTICLES */
+.news-article-section{margin-bottom:16px;}
+.news-article-card{padding:11px 0;border-bottom:1px solid var(--ms-neutral-20);
+  display:flex;gap:10px;align-items:flex-start;}
+.news-article-card:last-child{border-bottom:none;}
+.news-source-badge{font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px;
+  white-space:nowrap;flex-shrink:0;text-transform:uppercase;letter-spacing:.3px;margin-top:2px;}
+.news-article-body{flex:1;}
+.news-article-title{font-size:12px;font-weight:700;color:var(--ms-neutral-80);line-height:1.4;margin-bottom:3px;}
+.news-article-meta{font-size:10px;color:var(--ms-neutral-60);}
+.news-article-link{font-size:10px;color:var(--ms-blue);font-weight:700;
+  text-decoration:none;display:inline-block;margin-top:4px;}
+.news-article-link:hover{text-decoration:underline;}
+
+/* NEWS ITEMS in modal */
+.news-item{padding:9px 0;border-bottom:1px solid var(--ms-neutral-20);display:flex;gap:10px;align-items:flex-start;}
+.news-item:last-child{border-bottom:none;}
+.news-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.news-dot.blue{background:var(--ms-blue);}
+.news-dot.orange{background:var(--ms-orange);}
+.news-dot.green{background:var(--ms-green);}
+.news-text{font-size:12px;color:var(--ms-neutral-80);line-height:1.4;}
+.news-date{font-size:10px;color:var(--ms-neutral-60);margin-top:2px;}
+
+/* SPACERS */
+.spacer-16{height:16px;}.spacer-8{height:8px;}
+
+  /* ── ORG CHART / COMPANY PROFILE ── */
+  .company-profile-header {
+    background: linear-gradient(135deg, #0078d4, #005a9e);
+    color: white; padding: 20px 16px 16px; margin: 0 -0px;
+    border-radius: 0;
+  }
+  .company-stats-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+    margin: 14px 0;
+  }
+  .company-stat {
+    background: rgba(255,255,255,.15); border-radius: 10px;
+    padding: 10px 8px; text-align: center;
+  }
+  .company-stat-val { font-size: 16px; font-weight: 800; line-height: 1; }
+  .company-stat-label { font-size: 9px; opacity: .85; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .3px; margin-top: 3px; }
+
+  .org-section-label {
+    font-size: 11px; font-weight: 800; color: #0078d4;
+    text-transform: uppercase; letter-spacing: .6px;
+    padding: 12px 0 6px; border-bottom: 2px solid #deecf9;
+    margin-bottom: 10px;
+  }
+
+  /* CEO card (full width) */
+  .exec-card-ceo {
+    background: linear-gradient(135deg, #0078d4, #005a9e);
+    border-radius: 16px; padding: 14px 16px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    transition: box-shadow .2s; box-shadow: 0 4px 14px rgba(0,120,212,.3);
+    color: white;
+  }
+  .exec-card-ceo:hover { box-shadow: 0 8px 24px rgba(0,120,212,.4); }
+
+  /* Exec cards grid */
+  .exec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .exec-card {
+    background: white; border-radius: 14px; padding: 12px;
+    border: 1.5px solid #edebe9; cursor: pointer;
+    transition: box-shadow .15s, border-color .15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,.07);
+  }
+  .exec-card:hover { box-shadow: 0 6px 18px rgba(0,0,0,.12); border-color: #0078d4; }
+
+  .exec-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,.4);
+  }
+  .exec-avatar-sm {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0; margin-bottom: 8px;
+    color: white;
+  }
+  .exec-name-lg { font-size: 15px; font-weight: 800; }
+  .exec-title-lg { font-size: 11px; opacity: .85; margin-top: 2px; }
+  .exec-since { font-size: 10px; opacity: .7; margin-top: 1px; }
+
+  .exec-name-sm { font-size: 12px; font-weight: 800; color: #323130; line-height: 1.2; margin-bottom: 2px; }
+  .exec-title-sm { font-size: 10px; color: #605e5c; line-height: 1.3; margin-bottom: 6px; }
+
+  .exec-action-row { display: flex; gap: 5px; }
+  .exec-action-btn {
+    flex: 1; padding: 5px 4px; border-radius: 8px;
+    font-size: 10px; font-weight: 700; text-align: center;
+    cursor: pointer; border: none; transition: all .15s;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
+  }
+  .exec-action-btn.linkedin { background: #0a66c2; color: white; }
+  .exec-action-btn.linkedin:hover { background: #004182; }
+  .exec-action-btn.call { background: #107c10; color: white; }
+  .exec-action-btn.call:hover { background: #0b5c0b; }
+  .exec-action-btn.sms { background: #ca5010; color: white; }
+  .exec-action-btn.sms:hover { background: #8b3500; }
+
+  /* MSX Drill-down styles */
+  .kpi-drilldown-hero {
+    background: linear-gradient(135deg, #0078d4, #00b7c3);
+    color: white; padding: 16px; border-radius: 14px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .kpi-big-circle {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,.2); border: 3px solid rgba(255,255,255,.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900; flex-shrink: 0;
+  }
+  .kpi-drilldown-stat-row {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px;
+  }
+  .kpi-drilldown-stat {
+    background: #faf9f8; border-radius: 12px; padding: 12px 8px; text-align: center;
+    border: 1px solid #edebe9;
+  }
+  .kpi-drilldown-stat-val { font-size: 18px; font-weight: 900; line-height: 1; margin-bottom: 3px; }
+  .kpi-drilldown-stat-label { font-size: 9px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .3px; color: #605e5c; }
+
+  /* KBYG article links */
+  .kbyg-article {
+    padding: 11px 0; border-bottom: 1px solid #edebe9;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .kbyg-article:last-child { border-bottom: none; }
+  .kbyg-source {
+    font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 10px;
+    white-space: nowrap; flex-shrink: 0; text-transform: uppercase; margin-top: 2px;
+  }
+  .kbyg-body { flex: 1; }
+  .kbyg-title { font-size: 12px; font-weight: 700; color: #323130; line-height: 1.4; margin-bottom: 2px; }
+  .kbyg-meta { font-size: 10px; color: #605e5c; }
+  .kbyg-link { font-size: 10px; color: #0078d4; font-weight: 700; text-decoration: none;
+    display: inline-block; margin-top: 4px; }
+  .kbyg-link:hover { text-decoration: underline; }
+
+  /* Microsoft competitive badge */
+  .ms-vs-badge {
+    display: flex; gap: 10px; margin-bottom: 14px;
+  }
+  .ms-vs-badge > div {
+    flex: 1; border-radius: 12px; padding: 12px; text-align: center;
+  }
+
+
+  /* ── WAFFLE QUICK NAV ── */
+  .waffle-wrap { position: relative; }
+  .quick-nav-menu {
+    position: absolute; top: 42px; left: 0; width: 240px;
+    background: white; border: 1px solid #edebe9; border-radius: 18px;
+    box-shadow: 0 12px 32px rgba(0,0,0,.18), 0 4px 10px rgba(0,0,0,.08);
+    padding: 10px; z-index: 250; display: none;
+    animation: fadeScale .18s ease;
+  }
+  .quick-nav-menu.open { display: block; }
+  @keyframes fadeScale { from { opacity: 0; transform: translateY(-6px) scale(.98);} to { opacity: 1; transform: translateY(0) scale(1);} }
+  .quick-nav-title {
+    font-size: 10px; font-weight: 800; color: #605e5c; text-transform: uppercase;
+    letter-spacing: .6px; padding: 4px 6px 8px;
+  }
+  .quick-nav-grid {
+    display: grid; grid-template-columns: repeat(2,1fr); gap: 8px;
+  }
+  .quick-nav-item {
+    background: #faf9f8; border: 1px solid #edebe9; border-radius: 14px;
+    padding: 10px 8px; text-decoration: none; cursor: pointer;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 74px;
+  }
+  .quick-nav-item:hover {
+    transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.10); border-color: #0078d4;
+  }
+  .quick-nav-icon {
+    width: 38px; height: 38px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: white; margin-bottom: 6px;
+  }
+  .quick-nav-label {
+    font-size: 10px; font-weight: 800; color: #323130; text-transform: uppercase; letter-spacing: .25px; text-align: center;
+  }
+  .quick-nav-sub {
+    font-size: 9px; color: #605e5c; margin-top: 1px; text-align: center;
+  }
+
+  /* compact competitive card to match top cards */
+  .kpi-card.compete-red { border-color: #a4262c; }
+  .kpi-icon.red-soft { background: #fde7e9; }
+
+
+  .chip { user-select:none; }
+  .deck-card.hidden { display:none; }
+  .clickable-title { color: var(--ms-blue); cursor:pointer; text-decoration: underline dotted 1px; }
+  .clickable-title:hover { color: var(--ms-blue-dark); }
+  .briefing-card, .intel-card, .gov-card, .bp-card, .deal-card, .qa-btn, .signal-card, .account-card, .kpi-card, .chip, .tab-item, .see-all { cursor:pointer; }
+
+
+  .app-bar-title.home-disabled { cursor: default; opacity: 1; }
+  .app-bar-title.home-enabled { cursor: pointer; }
+  .app-bar-title.home-enabled:hover { color: var(--ms-blue); }
+  .app-bar-title.home-enabled small:hover { color: var(--ms-blue-dark); }
+
+
+  .account-card { transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+  .account-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,.08); border-color: rgba(0,120,212,.28); }
+
+</style>
+</head>
+<body>
+
+<!-- APP BAR -->
+<header class="app-bar">
+  <div class="app-bar-left">
+    <div class="waffle-wrap">
+      <button class="waffle-btn" id="waffle-trigger" onclick="toggleQuickNav(event)">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </button>
+      <div class="quick-nav-menu" id="quick-nav-menu">
+        <div class="quick-nav-title">Quick Navigate</div>
+        <div class="quick-nav-grid">
+          <div class="quick-nav-item" onclick="quickNavTo('home')">
+            <div class="quick-nav-icon" style="background:linear-gradient(135deg,#0078d4,#00b7c3)">🏠</div>
+            <div class="quick-nav-label">Home</div>
+            <div class="quick-nav-sub">Overview</div>
+          </div>
+          <div class="quick-nav-item" onclick="quickNavTo('wins')">
+            <div class="quick-nav-icon" style="background:linear-gradient(135deg,#ca5010,#ff8c00)">🏆</div>
+            <div class="quick-nav-label">Wins</div>
+            <div class="quick-nav-sub">Signals</div>
+          </div>
+          <div class="quick-nav-item" onclick="quickNavTo('pipeline')">
+            <div class="quick-nav-icon" style="background:linear-gradient(135deg,#5c2d91,#8764b8)">📈</div>
+            <div class="quick-nav-label">Pipeline</div>
+            <div class="quick-nav-sub">Revenue</div>
+          </div>
+          <div class="quick-nav-item" onclick="quickNavTo('decks')">
+            <div class="quick-nav-icon" style="background:linear-gradient(135deg,#107c10,#13a10e)">📑</div>
+            <div class="quick-nav-label">Decks</div>
+            <div class="quick-nav-sub">Stories</div>
+          </div>
+          <div class="quick-nav-item" onclick="quickNavTo('briefings')">
+            <div class="quick-nav-icon" style="background:linear-gradient(135deg,#0078d4,#2899f5)">🎯</div>
+            <div class="quick-nav-label">Briefings</div>
+            <div class="quick-nav-sub">Prep</div>
+          </div>
+          <div class="quick-nav-item" onclick="quickNavTo('megan')">
+            <div class="quick-nav-icon" style="background:linear-gradient(135deg,#d13438,#f35325)">✨</div>
+            <div class="quick-nav-label">Ask Megan</div>
+            <div class="quick-nav-sub">Strategy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ms-logo-mark">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="app-bar-title" id="app-title" onclick="titleGoHome()" style="cursor:default">
+      The Office of the CTO
+      <small>US Commercial Industries</small>
+    </div>
+  </div>
+  <div class="app-bar-right">
+    <button class="icon-btn" onclick="openModal('notifications-modal')">🔔</button>
+    <div class="avatar" onclick="openModal('profile-modal')">WG</div>
+  </div>
+</header>
+
+<div class="main-scroll" id="main-scroll">
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+  <section class="hero-section">
+    <div class="hero-tag">⚡ Frontier Transformation · FY26</div>
+    <div class="hero-title">Turn Pipeline<br>Into Revenue</div>
+    <div class="hero-sub">Your priorities, pipeline,<br>and prep — in one place.</div>
+    <div class="frontier-badge">
+      <span class="dot"></span>
+      Intelligence + Trust · USCI
+    </div>
+  </section>
+
+  <div class="tab-bar" style="margin-top:12px">
+    <div class="tab-item active">Overview</div>
+    <div class="tab-item" onclick="navTo('wins')">Wins</div>
+    <div class="tab-item" onclick="openModal('compete-modal')">Compete</div>
+    <div class="tab-item" onclick="openModal('frontier-modal')">Frontier</div>
+  </div>
+
+  <!-- KPI CAROUSEL -->
+  <div class="section-header">
+    <span class="section-label">MSX Momentum</span>
+    <a class="see-all" onclick="navTo('pipeline')">Open MSX →</a>
+  </div>
+  <div class="carousel-wrap">
+    <div class="kpi-card success" onclick="openModal('quota-modal')">
+      <div class="kpi-card-top">
+        <div class="kpi-icon green">📊</div>
+        <span class="kpi-badge green">On Track</span>
+      </div>
+      <div class="kpi-value">76%</div>
+      <div class="kpi-label">Quota Attainment</div>
+      <div class="kpi-sub">Q3 FY26</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill green" style="width:76%"></div></div></div>
+    </div>
+    <div class="kpi-card info" onclick="openModal('revenue-modal')">
+      <div class="kpi-card-top">
+        <div class="kpi-icon blue">💰</div>
+        <span class="kpi-badge blue">+18% YoY</span>
+      </div>
+      <div class="kpi-value">$4.2B</div>
+      <div class="kpi-label">Revenue Closed</div>
+      <div class="kpi-sub">FY26 YTD</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill blue" style="width:62%"></div></div></div>
+    </div>
+    <div class="kpi-card compete-red" onclick="openModal('gemini-compete-modal')">
+      <div class="kpi-card-top">
+        <div class="kpi-icon red-soft">🚨</div>
+        <span class="kpi-badge red">Active</span>
+      </div>
+      <div class="kpi-value" style="font-size:18px;color:#a4262c">Gemini</div>
+      <div class="kpi-label">Walmart + Target<br>Competitive Alert</div>
+      <div class="kpi-sub">Retail pressure live</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill red" style="width:82%"></div></div></div>
+    </div>
+    <div class="kpi-card warning" onclick="openModal('azure-modal')">
+      <div class="kpi-card-top">
+        <div class="kpi-icon warning">⚠️</div>
+        <span class="kpi-badge warning">Alert</span>
+      </div>
+      <div class="kpi-value">3</div>
+      <div class="kpi-label">Azure Commitment<br>Alerts</div>
+      <div class="kpi-sub">Tap to review</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill warning" style="width:35%"></div></div></div>
+    </div>
+    <div class="kpi-card purple" onclick="openModal('ai-modal')">
+      <div class="kpi-card-top">
+        <div class="kpi-icon purple">🤖</div>
+        <span class="kpi-badge blue">New</span>
+      </div>
+      <div class="kpi-value">12</div>
+      <div class="kpi-label">AI Opportunities</div>
+      <div class="kpi-sub">Identified this month</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill" style="width:48%;background:linear-gradient(90deg,#5c2d91,#8764b8)"></div></div></div>
+    </div>
+    <div class="kpi-card" onclick="openModal('pipeline-modal-home')">
+      <div class="kpi-card-top">
+        <div class="kpi-icon blue">📈</div>
+        <span class="kpi-badge green">Healthy</span>
+      </div>
+      <div class="kpi-value">$18.7B</div>
+      <div class="kpi-label">Pipeline Coming</div>
+      <div class="kpi-sub">Next 12 months</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill blue" style="width:85%"></div></div></div>
+    </div>
+    <div class="kpi-card" style="border-color:var(--ms-teal)">
+      <div class="kpi-card-top">
+        <div class="kpi-icon" style="background:#e6f9fa">🌐</div>
+        <span class="kpi-badge" style="background:#e6f9fa;color:#007d8a">Strategic</span>
+      </div>
+      <div class="kpi-value">47</div>
+      <div class="kpi-label">Strategic Accounts</div>
+      <div class="kpi-sub">Across all industries</div>
+      <div class="kpi-progress"><div class="progress-track"><div class="progress-fill" style="width:92%;background:linear-gradient(90deg,var(--ms-teal),#00d4e0)"></div></div></div>
+    </div>
+  </div>
+
+
+  <!-- QUICK ACTIONS -->
+  <div class="section-header"><span class="section-label">Quick Access</span></div>
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="navTo('decks')">
+      <div class="qa-icon" style="background:#eff6fc">📑</div>
+      <span class="qa-btn-label">Open Decks</span>
+    </button>
+    <button class="qa-btn" onclick="navTo('pipeline')">
+      <div class="qa-icon" style="background:#fff4e6">💼</div>
+      <span class="qa-btn-label">Pipeline</span>
+    </button>
+    <button class="qa-btn" onclick="openModal('news-modal')">
+      <div class="qa-icon" style="background:#e6f9fa">📰</div>
+      <span class="qa-btn-label">Scan News</span>
+    </button>
+    <button class="qa-btn" onclick="navTo('briefings')">
+      <div class="qa-icon" style="background:#e6ffe6">🎯</div>
+      <span class="qa-btn-label">Prep Meeting</span>
+    </button>
+  </div>
+
+  <!-- SIGNALS -->
+  <div class="section-header">
+    <span class="section-label">Signals</span>
+    <a class="see-all" onclick="navTo('wins')">View All</a>
+  </div>
+  <div class="signal-list">
+    <div class="signal-card orange" onclick="openModal('walmart-modal')">
+      <div class="signal-icon">🛒</div>
+      <div class="signal-content">
+        <div class="signal-title">Walmart — Azure Commitment Alert</div>
+        <div class="signal-desc">20% of annual Azure spend consumed. 8 months remain. Sparky AI +35% order value. Expansion plays ready.</div>
+        <div class="signal-meta"><span class="signal-tag orange">Behind Plan</span><span class="signal-time">Updated today</span></div>
+      </div>
+      <div class="signal-chevron">›</div>
+    </div>
+    <div class="signal-card blue" onclick="openModal('nvidia-modal')">
+      <div class="signal-icon">⚡</div>
+      <div class="signal-content">
+        <div class="signal-title">NVIDIA Partnership Expanding</div>
+        <div class="signal-desc">AI Superfactories online. Nuclear AI partnership CERAWeek. Blackwell Ultra in Azure. Cat + NVIDIA + Microsoft at GTC 2026.</div>
+        <div class="signal-meta"><span class="signal-tag blue">Strategic</span><span class="signal-time">Mar 2026</span></div>
+      </div>
+      <div class="signal-chevron">›</div>
+    </div>
+    <div class="signal-card green" onclick="openModal('aveva-modal')">
+      <div class="signal-icon">🏭</div>
+      <div class="signal-content">
+        <div class="signal-title">AVEVA — Manufacturing Win</div>
+        <div class="signal-desc">2025 Microsoft Manufacturing Partner of the Year. 98% fewer machine failures. Azure + Fabric live.</div>
+        <div class="signal-meta"><span class="signal-tag green">Win</span><span class="signal-time">Nov 2025</span></div>
+      </div>
+      <div class="signal-chevron">›</div>
+    </div>
+    <div class="signal-card red" onclick="openModal('compete-modal')">
+      <div class="signal-icon">🎯</div>
+      <div class="signal-content">
+        <div class="signal-title">Google Gemini — Competitive Signal</div>
+        <div class="signal-desc">Gemini rising 12.8%→15.7%. Unilever migrated. 11+ Google AI execs moved to Microsoft. Trust gap is our win.</div>
+        <div class="signal-meta"><span class="signal-tag red">Monitor</span><span class="signal-time">Active</span></div>
+      </div>
+      <div class="signal-chevron">›</div>
+    </div>
+    <div class="signal-card purple" onclick="openModal('anthropic-modal')">
+      <div class="signal-icon">🤝</div>
+      <div class="signal-content">
+        <div class="signal-title">Anthropic — $30B Azure Commitment</div>
+        <div class="signal-desc">Microsoft + NVIDIA + Anthropic triple-party partnership. Claude on Azure. Model diversity advantage.</div>
+        <div class="signal-meta"><span class="signal-tag purple">Partnership</span><span class="signal-time">Nov 2025</span></div>
+      </div>
+      <div class="signal-chevron">›</div>
+    </div>
+  </div>
+
+  <!-- INDUSTRY ACCOUNTS -->
+  <div class="section-header">
+    <span class="section-label">Industry Accounts</span>
+    <a class="see-all" onclick="navTo('pipeline')">See All 47</a>
+  </div>
+  <div class="account-cards">
+    <!-- WALMART -->
+    <div class="account-card">
+      <div class="account-top">
+        <div class="account-logo retail">🛍️</div>
+        <div>
+          <div class="account-name" onclick="openModal('walmart-profile-modal')" style="color:var(--ms-blue);cursor:pointer;text-decoration:underline dotted 1px">Walmart 🏢</div>
+          <div class="account-industry">Retail &amp; Consumer Goods</div>
+        </div>
+      </div>
+      <div class="account-warning">⚠️ Azure Commitment: Only 20% consumed — action needed</div>
+      <div class="account-metrics">
+        <div class="acct-metric">
+          <div class="acct-metric-val">$1.2B</div>
+          <div class="acct-metric-label">MACC Value</div>
+        </div>
+        <div class="acct-metric">
+          <div class="acct-metric-val">20%</div>
+          <div class="acct-metric-label">Consumed</div>
+        </div>
+        <div class="acct-metric">
+          <div class="acct-metric-val">8 mo</div>
+          <div class="acct-metric-label">Remaining</div>
+        </div>
+      </div>
+      <div class="account-actions">
+        <div class="acct-btn primary" onclick="openModal('walmart-modal')">Review Plays</div>
+        <div class="acct-btn outline" onclick="openModal('walmart-news-modal')">In the News</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:6px"><div class="acct-btn outline" onclick="openModal('walmart-profile-modal')" style="font-size:10px">🏢 Org Chart</div><div class="acct-btn outline" onclick="openModal('kbyg-modal')" style="font-size:10px">📚 Read Up</div></div>
+    </div>
+    <!-- CATERPILLAR -->
+    <div class="account-card" onclick="openModal('caterpillar-modal')">
+      <div class="account-top">
+        <div class="account-logo mfg">🏗️</div>
+        <div>
+          <div class="account-name">Caterpillar</div>
+          <div class="account-industry">Manufacturing &amp; Mobility</div>
+        </div>
+      </div>
+      <div class="account-metrics">
+        <div class="acct-metric">
+          <div class="acct-metric-val">3</div>
+          <div class="acct-metric-label">AI Pilots</div>
+        </div>
+        <div class="acct-metric">
+          <div class="acct-metric-val">68%</div>
+          <div class="acct-metric-label">Consumed</div>
+        </div>
+        <div class="acct-metric">
+          <div class="acct-metric-val">Scale</div>
+          <div class="acct-metric-label">Next Move</div>
+        </div>
+      </div>
+      <div class="account-actions">
+        <div class="acct-btn primary" onclick="openModal('cat-modal')">See AI Plays</div>
+        <div class="acct-btn outline" onclick="openModal('cat-news-modal')">In the News</div>
+      </div>
+    </div>
+    <!-- CHEVRON -->
+    <div class="account-card" onclick="openModal('chevron-modal')">
+      <div class="account-top">
+        <div class="account-logo energy">⚡</div>
+        <div>
+          <div class="account-name">Chevron</div>
+          <div class="account-industry">Energy &amp; Resources</div>
+        </div>
+      </div>
+      <div class="account-metrics">
+        <div class="acct-metric">
+          <div class="acct-metric-val">+18%</div>
+          <div class="acct-metric-label">AI Potential</div>
+        </div>
+        <div class="acct-metric">
+          <div class="acct-metric-val">54%</div>
+          <div class="acct-metric-label">Consumed</div>
+        </div>
+        <div class="acct-metric">
+          <div class="acct-metric-val">Nuclear</div>
+          <div class="acct-metric-label">New Play</div>
+        </div>
+      </div>
+      <div class="account-actions">
+        <div class="acct-btn primary" onclick="openModal('chevron-modal')">Energy Plays</div>
+        <div class="acct-btn outline" onclick="openModal('chevron-news-modal')">In the News</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEGAN -->
+  <div class="section-header" style="margin-top:16px">
+    <span class="section-label">Ask Megan</span>
+    <span style="font-size:10px;color:var(--ms-green);font-weight:700">● Live</span>
+  </div>
+  <div class="megan-panel">
+    <div class="megan-top">
+      <div class="megan-avatar">WG</div>
+      <div>
+        <div class="megan-name">Megan Fasano</div>
+        <div class="megan-role">Your Executive Strategist · CTO Office</div>
+        <div class="megan-status">Ready to help</div>
+      </div>
+    </div>
+    <div class="megan-input-mock" onclick="openModal('megan-modal')">
+      <span>What needs my attention today?</span>
+      <div class="megan-send">→</div>
+    </div>
+    <div class="prompt-chips">
+      <div class="prompt-chip" onclick="openModal('megan-modal')">Prep meeting</div>
+      <div class="prompt-chip" onclick="openModal('megan-modal')">Top pipeline</div>
+      <div class="prompt-chip" onclick="openModal('megan-modal')">What closed?</div>
+      <div class="prompt-chip" onclick="openModal('megan-modal')">AI plays</div>
+      <div class="prompt-chip" onclick="openModal('compete-modal')">Competitive</div>
+    </div>
+  </div>
+
+  <!-- FRONTIER INTEL -->
+  <div class="section-header" style="margin-top:16px">
+    <span class="section-label">Frontier Intelligence</span>
+    <a class="see-all" onclick="navTo('wins')">More →</a>
+  </div>
+  <div class="intel-cards">
+    <div class="intel-card" onclick="openModal('frontier-modal')">
+      <div class="intel-img blue">🚀</div>
+      <div class="intel-body">
+        <div class="intel-title">Frontier Transformation — Judson's Vision</div>
+        <div class="intel-desc">Intelligence + Trust. Work IQ, Fabric IQ, Foundry IQ. Agent 365 governance control plane.</div>
+        <span class="intel-tag" style="background:var(--ms-blue-light);color:var(--ms-blue-dark)">Key Alignment</span>
+      </div>
+    </div>
+    <div class="intel-card" onclick="openModal('azure-revenue-modal')">
+      <div class="intel-img green">📊</div>
+      <div class="intel-body">
+        <div class="intel-title">Azure +39% · Cloud $50B+ Quarter</div>
+        <div class="intel-desc">RPO doubled to $625B. AI run-rate $26B+. 85% of Fortune 500 on Azure.</div>
+        <span class="intel-tag" style="background:var(--ms-green-light);color:#107c10">Finance Signal</span>
+      </div>
+    </div>
+    <div class="intel-card" onclick="openModal('anthropic-modal')">
+      <div class="intel-img purple">🤝</div>
+      <div class="intel-body">
+        <div class="intel-title">Anthropic — $30B Azure Commitment</div>
+        <div class="intel-desc">Microsoft + NVIDIA + Anthropic triple-party strategic partnership. Nov 2025.</div>
+        <span class="intel-tag" style="background:var(--ms-purple-light);color:var(--ms-purple)">Partnership</span>
+      </div>
+    </div>
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+<!-- ═══ WINS ═══ -->
+<div class="page" id="page-wins">
+  <div style="padding:16px 16px 8px">
+    <div style="font-size:20px;font-weight:900;color:var(--ms-neutral-80)">Current Wins</div>
+    <div style="font-size:13px;color:var(--ms-neutral-60)">Recent partnerships &amp; marketplace victories · FY26</div>
+  </div>
+  <div class="wins-section">
+
+    <!-- NVIDIA WIN -->
+    <div class="win-widget" onclick="openModal('nvidia-modal')">
+      <div class="win-header-band nvidia">
+        <div>
+          <div class="win-partner-name">⚡ NVIDIA Partnership</div>
+          <div class="win-partner-sub">AI Superfactories · Blackwell Ultra · Nuclear AI</div>
+        </div>
+        <div style="text-align:right">
+          <div class="win-big-num">$15B</div>
+          <div class="win-big-label">Joint Investment</div>
+        </div>
+      </div>
+      <div class="win-body">
+        <div class="win-stat-row">
+          <div class="win-stat"><div class="win-stat-val nvidia" style="color:#4a7a00">100s K</div><div class="win-stat-label">Blackwell GPUs</div></div>
+          <div class="win-stat"><div class="win-stat-val blue">2</div><div class="win-stat-label">Superfactories</div></div>
+          <div class="win-stat"><div class="win-stat-val green">NIM</div><div class="win-stat-label">in Foundry</div></div>
+        </div>
+        <div class="win-bar-wrap">
+          <div class="win-bar-row"><span>AI Infrastructure Build-out</span><span>Mar 2026</span></div>
+          <div class="win-bar-track"><div class="win-bar-fill nvidia" style="width:88%"></div></div>
+        </div>
+        <div class="win-tags">
+          <span class="win-tag nvidia">AI Factory</span>
+          <span class="win-tag blue">Azure Integrated</span>
+          <span class="win-tag green">Nuclear AI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANTHROPIC WIN -->
+    <div class="win-widget" onclick="openModal('anthropic-modal')">
+      <div class="win-header-band anthropic">
+        <div>
+          <div class="win-partner-name">🤝 Anthropic · Claude</div>
+          <div class="win-partner-sub">Triple Partnership: Microsoft + NVIDIA + Anthropic</div>
+        </div>
+        <div style="text-align:right">
+          <div class="win-big-num">$30B</div>
+          <div class="win-big-label">Azure Commitment</div>
+        </div>
+      </div>
+      <div class="win-body">
+        <div class="win-stat-row">
+          <div class="win-stat"><div class="win-stat-val orange">1GW</div><div class="win-stat-label">Compute Cap.</div></div>
+          <div class="win-stat"><div class="win-stat-val purple">$350B</div><div class="win-stat-label">Valuation</div></div>
+          <div class="win-stat"><div class="win-stat-val blue">Nov '25</div><div class="win-stat-label">Signed</div></div>
+        </div>
+        <div class="win-bar-wrap">
+          <div class="win-bar-row"><span>Model Diversity Advantage</span><span>vs. GCP</span></div>
+          <div class="win-bar-track"><div class="win-bar-fill blue" style="width:92%"></div></div>
+        </div>
+        <div class="win-tags">
+          <span class="win-tag purple">Claude on Azure</span>
+          <span class="win-tag blue">AI Model Layer</span>
+          <span class="win-tag green">Enterprise GTM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVEVA WIN -->
+    <div class="win-widget" onclick="openModal('aveva-modal')">
+      <div class="win-header-band aveva">
+        <div>
+          <div class="win-partner-name">🏭 AVEVA</div>
+          <div class="win-partner-sub">2025 Manufacturing Partner of the Year</div>
+        </div>
+        <div style="text-align:right">
+          <div class="win-big-num">98%</div>
+          <div class="win-big-label">Less Machine Failures</div>
+        </div>
+      </div>
+      <div class="win-body">
+        <div class="win-stat-row">
+          <div class="win-stat"><div class="win-stat-val green">8%</div><div class="win-stat-label">Energy Saved</div></div>
+          <div class="win-stat"><div class="win-stat-val blue">20%</div><div class="win-stat-label">Less Maint. Hours</div></div>
+          <div class="win-stat"><div class="win-stat-val orange">Azure</div><div class="win-stat-label">Platform</div></div>
+        </div>
+        <div class="win-bar-wrap">
+          <div class="win-bar-row"><span>Industry AI Deployment</span><span>Production</span></div>
+          <div class="win-bar-track"><div class="win-bar-fill green" style="width:100%"></div></div>
+        </div>
+        <div class="win-tags">
+          <span class="win-tag blue">Azure + Fabric</span>
+          <span class="win-tag green">Gen AI Live</span>
+          <span class="win-tag orange">Manufacturing</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRACTAL WIN -->
+    <div class="win-widget" onclick="openModal('fractal-modal')">
+      <div class="win-header-band fractal">
+        <div>
+          <div class="win-partner-name">🛍️ Fractal Analytics</div>
+          <div class="win-partner-sub">2025 Retail &amp; Consumer Goods Partner of Year</div>
+        </div>
+        <div style="text-align:right">
+          <div class="win-big-num">#1</div>
+          <div class="win-big-label">Retail AI Win</div>
+        </div>
+      </div>
+      <div class="win-body">
+        <div class="win-stat-row">
+          <div class="win-stat"><div class="win-stat-val orange">Azure</div><div class="win-stat-label">AI Foundry</div></div>
+          <div class="win-stat"><div class="win-stat-val blue">Retail</div><div class="win-stat-label">Vertical</div></div>
+          <div class="win-stat"><div class="win-stat-val green">Nov '25</div><div class="win-stat-label">Awarded</div></div>
+        </div>
+        <div class="win-bar-wrap">
+          <div class="win-bar-row"><span>Consumer AI Engagement</span><span>Expanding</span></div>
+          <div class="win-bar-track"><div class="win-bar-fill" style="width:80%;background:linear-gradient(90deg,#ca5010,#ff8c00)"></div></div>
+        </div>
+        <div class="win-tags">
+          <span class="win-tag orange">Consumer AI</span>
+          <span class="win-tag blue">Azure Foundry</span>
+          <span class="win-tag green">GTM Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AZURE $50B WIN -->
+    <div class="win-widget" onclick="openModal('azure-revenue-modal')">
+      <div class="win-header-band azure">
+        <div>
+          <div class="win-partner-name">☁️ Azure Cloud Milestone</div>
+          <div class="win-partner-sub">$50B Quarter · 39% Growth · RPO $625B</div>
+        </div>
+        <div style="text-align:right">
+          <div class="win-big-num">$26B</div>
+          <div class="win-big-label">AI Run-Rate</div>
+        </div>
+      </div>
+      <div class="win-body">
+        <div class="win-stat-row">
+          <div class="win-stat"><div class="win-stat-val blue">85%</div><div class="win-stat-label">Fortune 500</div></div>
+          <div class="win-stat"><div class="win-stat-val green">80K+</div><div class="win-stat-label">AI Foundry Orgs</div></div>
+          <div class="win-stat"><div class="win-stat-val orange">39%</div><div class="win-stat-label">Azure Growth</div></div>
+        </div>
+        <div class="win-bar-wrap">
+          <div class="win-bar-row"><span>Enterprise AI Adoption Rate</span><span>Q2 FY26</span></div>
+          <div class="win-bar-track"><div class="win-bar-fill blue" style="width:95%"></div></div>
+        </div>
+        <div class="win-tags">
+          <span class="win-tag blue">Market Leader</span>
+          <span class="win-tag green">$625B RPO</span>
+          <span class="win-tag orange">AI Supercycle</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+<!-- ═══ PIPELINE ═══ -->
+<div class="page" id="page-pipeline">
+  <div style="padding:16px 16px 8px">
+    <div style="font-size:20px;font-weight:900;color:var(--ms-neutral-80)">Move Revenue</div>
+    <div style="font-size:13px;color:var(--ms-neutral-60)">Pipeline in motion · FY26 Q3</div>
+  </div>
+  <div class="pipeline-bar">
+    <div class="pipeline-bar-title">MSX Pipeline Stages</div>
+    <div class="pipe-stages">
+      <div class="pipe-stage-wrap"><div class="pipe-stage-bar" style="height:40px;background:var(--ms-blue-light)"></div><div class="pipe-stage-label">Qualify</div></div>
+      <div class="pipe-stage-wrap"><div class="pipe-stage-bar" style="height:52px;background:var(--ms-blue)"></div><div class="pipe-stage-label">Develop</div></div>
+      <div class="pipe-stage-wrap"><div class="pipe-stage-bar" style="height:36px;background:var(--ms-orange)"></div><div class="pipe-stage-label">Propose</div></div>
+      <div class="pipe-stage-wrap"><div class="pipe-stage-bar" style="height:44px;background:var(--ms-teal)"></div><div class="pipe-stage-label">Negotiate</div></div>
+      <div class="pipe-stage-wrap"><div class="pipe-stage-bar" style="height:28px;background:var(--ms-green)"></div><div class="pipe-stage-label">Close</div></div>
+    </div>
+  </div>
+  <div class="section-header"><span class="section-label">Top Opportunities</span></div>
+  <div class="deal-list">
+    <div class="deal-card"><div class="deal-stage-dot" style="background:var(--ms-green)"></div><div class="deal-info"><div class="deal-name">Walmart — Azure AI Expansion</div><div class="deal-meta">Retail · Negotiate · Exec sponsor needed</div></div><div><div class="deal-value">$340M</div><div class="deal-close">Close: May 2026</div></div></div>
+    <div class="deal-card"><div class="deal-stage-dot" style="background:var(--ms-teal)"></div><div class="deal-info"><div class="deal-name">Caterpillar — Digital Twin + Helios</div><div class="deal-meta">Manufacturing · Propose · 3 pilots to scale</div></div><div><div class="deal-value">$210M</div><div class="deal-close">Close: Jun 2026</div></div></div>
+    <div class="deal-card"><div class="deal-stage-dot" style="background:var(--ms-blue)"></div><div class="deal-info"><div class="deal-name">Chevron — Intelligent Energy Ops</div><div class="deal-meta">Energy · Develop · Nuclear AI entry point</div></div><div><div class="deal-value">$185M</div><div class="deal-close">Close: Q4 FY26</div></div></div>
+    <div class="deal-card"><div class="deal-stage-dot" style="background:var(--ms-orange)"></div><div class="deal-info"><div class="deal-name">Target — AI Commerce Platform</div><div class="deal-meta">Retail · Develop · Competitive vs. GCP</div></div><div><div class="deal-value">$95M</div><div class="deal-close">Close: Jul 2026</div></div></div>
+    <div class="deal-card"><div class="deal-stage-dot" style="background:var(--ms-purple)"></div><div class="deal-info"><div class="deal-name">Dow Chemical — Azure Safety AI</div><div class="deal-meta">Manufacturing · Qualify · High potential</div></div><div><div class="deal-value">$78M</div><div class="deal-close">Close: Sep 2026</div></div></div>
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+<!-- ═══ DECKS ═══ -->
+<div class="page" id="page-decks">
+  <div style="padding:16px 16px 8px">
+    <div style="font-size:20px;font-weight:900;color:var(--ms-neutral-80)">Tell the Story</div>
+    <div style="font-size:13px;color:var(--ms-neutral-60)">Executive presentations &amp; customer narratives</div>
+  </div>
+  <div class="scroll-chips" style="margin-bottom:12px" id="deck-filters">
+    <div class="chip active" data-filter="all" onclick="toggleDeckFilter(this)">All</div><div class="chip" data-filter="retail" onclick="toggleDeckFilter(this)">Retail</div><div class="chip" data-filter="manufacturing" onclick="toggleDeckFilter(this)">Manufacturing</div>
+    <div class="chip" data-filter="energy" onclick="toggleDeckFilter(this)">Energy</div><div class="chip" data-filter="frontier" onclick="toggleDeckFilter(this)">Frontier</div><div class="chip" data-filter="compete" onclick="toggleDeckFilter(this)">Compete</div>
+  </div>
+  <div class="briefing-list">
+    <div class="briefing-card deck-card" data-tag="frontier"><div class="briefing-header"><div class="briefing-icon" style="background:var(--ms-blue-xlight)">📊</div><div><div class="briefing-title">Frontier Transformation — CTO Executive Deck</div><div class="briefing-date">Updated: Mar 2026 · Judson-aligned</div></div></div><ul class="briefing-points"><li>Intelligence + Trust framework with 3 IQ layers</li><li>Work IQ, Fabric IQ, Foundry IQ overview</li><li>Industry transformation ROI proof points</li></ul></div>
+    <div class="briefing-card deck-card" data-tag="retail compete"><div class="briefing-header"><div class="briefing-icon" style="background:var(--ms-orange-bg)">🛍️</div><div><div class="briefing-title">Retail AI — Walmart + Target Value Story</div><div class="briefing-date">Updated: Mar 2026 · Sparky AI + Agentic Commerce</div></div></div><ul class="briefing-points"><li>Sparky AI: 35% higher avg order value</li><li>Agentic commerce with OpenAI / ChatGPT integration</li><li>MACC consumption expansion plays ready</li></ul></div>
+    <div class="briefing-card deck-card" data-tag="manufacturing"><div class="briefing-header"><div class="briefing-icon" style="background:#e6f3ff)">🏭</div><div><div class="briefing-title">Industrial AI — Caterpillar Helios Platform</div><div class="briefing-date">Updated: Jan 2026 · CES 2026 / GTC 2026</div></div></div><ul class="briefing-points"><li>Cat AI Assistant on NVIDIA Jetson Thor</li><li>1.5M connected assets · 16 petabytes of data</li><li>Digital twin with NVIDIA Omniverse</li></ul></div>
+    <div class="briefing-card deck-card" data-tag="energy"><div class="briefing-header"><div class="briefing-icon" style="background:#e6ffe6">⚡</div><div><div class="briefing-title">Energy Transformation — Chevron AI + Nuclear</div><div class="briefing-date">Updated: Mar 2026 · CERAWeek</div></div></div><ul class="briefing-points"><li>Chevron + GE Vernova: 4GW AI data center power plants</li><li>Microsoft + NVIDIA nuclear AI lifecycle partnership</li><li>Azure IoT Operations at Chevron edge facilities</li></ul></div>
+    <div class="briefing-card deck-card" data-tag="compete"><div class="briefing-header"><div class="briefing-icon" style="background:var(--ms-red-bg)">⚔️</div><div><div class="briefing-title">Compete vs. Google Gemini — Win Card</div><div class="briefing-date">Updated: Mar 2026 · Active competitive</div></div></div><ul class="briefing-points"><li>Azure 21% vs GCP 12% enterprise market share</li><li>Gemini trust gap + RAG quality issues in enterprise</li><li>MACC financial moat + Fortune 500 incumbency</li></ul></div>
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+<!-- ═══ BRIEFINGS ═══ -->
+<div class="page" id="page-briefings">
+  <div style="padding:16px 16px 8px">
+    <div style="font-size:20px;font-weight:900;color:var(--ms-neutral-80)">Know Before You Go</div>
+    <div style="font-size:13px;color:var(--ms-neutral-60)">Customer intel · Talking points · Meeting prep</div>
+  </div>
+  <div class="section-header"><span class="section-label">Today's Briefings</span><a class="see-all" onclick="openModal('kbyg-modal')">📚 Read Up →</a></div>
+  <div class="briefing-list">
+    <div class="briefing-card" onclick="openModal('walmart-modal')"><div class="briefing-header"><div class="briefing-icon" style="background:#fff4e6">🛒</div><div><div class="briefing-title">Walmart — Pre-Meeting Briefing</div><div class="briefing-date">Today · CTO Meeting Prep</div></div></div><ul class="briefing-points"><li>Azure commitment 20% consumed — bring expansion roadmap</li><li>Sparky AI agent +35% order value — reference in meeting</li><li>Talking point: AI in flow of human ambition (Judson)</li></ul></div>
+    <div class="briefing-card" onclick="openModal('cat-modal')"><div class="briefing-header"><div class="briefing-icon" style="background:#e6f3ff">🏗️</div><div><div class="briefing-title">Caterpillar — Helios + CES 2026 Review</div><div class="briefing-date">Tomorrow · Business Review</div></div></div><ul class="briefing-points"><li>Cat AI Assistant live on NVIDIA Jetson Thor excavator</li><li>Helios platform: 1.5M assets, ready for Fabric scale</li><li>Microsoft + NVIDIA + Caterpillar: GTC 2026 AI Factory</li></ul></div>
+    <div class="briefing-card" onclick="openModal('chevron-modal')"><div class="briefing-header"><div class="briefing-icon" style="background:#e6ffe6">⚡</div><div><div class="briefing-title">Chevron — Energy Strategy Discussion</div><div class="briefing-date">This Week · ELT Meeting</div></div></div><ul class="briefing-points"><li>$18-19B CapEx 2026: 50%+ in US operations + AI</li><li>4GW off-grid AI data center power play in West Texas</li><li>Azure IoT Operations already at Chevron edge facilities</li></ul></div>
+  </div>
+  <div class="section-header" style="margin-top:8px"><span class="section-label">Industry News — Last 90 Days</span></div>
+  <div class="intel-cards">
+    <div class="intel-card"><div class="intel-img blue">📰</div><div class="intel-body"><div class="intel-title">Microsoft cloud $50B quarter · Azure +39%</div><div class="intel-desc">Q2 FY26 earnings beat. RPO $625B. Anthropic + OpenAI driving demand. AI run-rate $26B.</div><span class="intel-tag" style="background:var(--ms-blue-light);color:var(--ms-blue-dark)">Jan 2026</span></div></div>
+    <div class="intel-card"><div class="intel-img" style="background:var(--ms-orange-bg)">🏭</div><div class="intel-body"><div class="intel-title">Caterpillar + Microsoft + NVIDIA — GTC 2026</div><div class="intel-desc">Nscale signed LOI with Microsoft for 1.35GW with NVIDIA and Caterpillar powering AI factory.</div><span class="intel-tag" style="background:var(--ms-green-light);color:#107c10">Mar 2026</span></div></div>
+    <div class="intel-card"><div class="intel-img" style="background:var(--ms-green-light)">⚡</div><div class="intel-body"><div class="intel-title">Microsoft + NVIDIA: Nuclear AI partnership</div><div class="intel-desc">AI to accelerate nuclear permitting, design, and operations. Announced CERAWeek Houston.</div><span class="intel-tag" style="background:#e6ffe6;color:#107c10">Mar 2026</span></div></div>
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+<!-- ═══ GOVERNANCE ═══ -->
+<div class="page" id="page-governance">
+  <div style="padding:16px 16px 12px">
+    <div style="font-size:20px;font-weight:900;color:var(--ms-neutral-80)">Keep It Moving</div>
+    <div style="font-size:13px;color:var(--ms-neutral-60)">Org governance · Best practices · Team enablement</div>
+  </div>
+  <div class="gov-grid" style="margin-bottom:12px">
+    <div class="gov-card" onclick="openModal('frontier-modal')"><div class="gov-icon">🏛️</div><div class="gov-title">AI Governance</div><div class="gov-desc">Agent 365 control plane, observability, trust framework</div></div>
+    <div class="gov-card" onclick="navTo('decks')"><div class="gov-icon">📋</div><div class="gov-title">Team Playbooks</div><div class="gov-desc">Go-to-market plays by industry and solution area</div></div>
+    <div class="gov-card" onclick="navTo('briefings')"><div class="gov-icon">🎓</div><div class="gov-title">Best Practices</div><div class="gov-desc">Frontier Transformation execution guides for CTO team</div></div>
+    <div class="gov-card" onclick="openModal('nvidia-modal')"><div class="gov-icon">🤝</div><div class="gov-title">Partner Motions</div><div class="gov-desc">Co-sell, MACC, NVIDIA, Anthropic joint plays</div></div>
+    <div class="gov-card" onclick="openModal('frontier-modal')"><div class="gov-icon">📐</div><div class="gov-title">Architecture</div><div class="gov-desc">Industry reference architectures and design patterns</div></div>
+    <div class="gov-card" onclick="openModal('quota-modal')"><div class="gov-icon">📊</div><div class="gov-title">OKR Tracker</div><div class="gov-desc">Org goals, milestones, CTO office KPIs</div></div>
+  </div>
+  <div class="section-header"><span class="section-label">Frontier Best Practices</span></div>
+  <div class="bp-list">
+    <div class="bp-card"><div class="bp-num">1</div><div class="bp-content"><div class="bp-title">Become Customer Zero First</div><div class="bp-desc">Judson's mandate: teams must use Microsoft AI internally before evangelizing to customers.</div></div></div>
+    <div class="bp-card"><div class="bp-num">2</div><div class="bp-content"><div class="bp-title">Lead with Intelligence + Trust</div><div class="bp-desc">Every CTO conversation anchors to Work IQ, Fabric IQ, Foundry IQ as the intelligence layer.</div></div></div>
+    <div class="bp-card"><div class="bp-num">3</div><div class="bp-content"><div class="bp-title">Three Solution Areas — FY26</div><div class="bp-desc">AI Business Solutions · Cloud &amp; AI Platforms · Security. All GTM maps to these three.</div></div></div>
+    <div class="bp-card"><div class="bp-num">4</div><div class="bp-content"><div class="bp-title">Observability at Every Layer</div><div class="bp-desc">Only 47% of enterprises have AI security controls. Lead with governance as differentiator.</div></div></div>
+    <div class="bp-card"><div class="bp-num">5</div><div class="bp-content"><div class="bp-title">Convert Pilots to Scale</div><div class="bp-desc">Win requires multi-site, multi-workload, production-ready AI deployments — not POCs.</div></div></div>
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+<!-- ═══ MEGAN PAGE ═══ -->
+<div class="page" id="page-megan">
+  <div style="padding:16px 16px 0">
+    <div style="font-size:20px;font-weight:900;color:var(--ms-neutral-80)">Ask Megan</div>
+    <div style="font-size:13px;color:var(--ms-neutral-60)">Your executive strategist · CTO Office · USCI</div>
+  </div>
+  <div style="padding:16px">
+    <div class="megan-panel">
+      <div class="megan-top">
+        <div class="megan-avatar">MF</div>
+        <div>
+          <div class="megan-name">Megan Fasano</div>
+          <div class="megan-role">Proposal Orals &amp; Strategy · Executive Partner</div>
+          <div class="megan-status">Available now</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--ms-neutral-60);margin-bottom:12px;line-height:1.5">I'm your curated guide for go-to-market strategy, executive meetings, competitive positioning, and customer prep. Ask me anything.</div>
+      <div class="megan-input-mock" onclick="openModal('megan-modal')">
+        <span>What needs my attention today?</span>
+        <div class="megan-send">→</div>
+      </div>
+    </div>
+  </div>
+  <div class="section-header"><span class="section-label">Quick Prompts</span></div>
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px">
+    <div class="signal-card blue" onclick="openModal('megan-modal')"><div class="signal-content"><div class="signal-title">Prep me for my next customer meeting</div><div class="signal-desc">Pre-built briefing with news, talking points, and expansion plays</div></div><div class="signal-chevron">›</div></div>
+    <div class="signal-card purple" onclick="openModal('megan-modal')"><div class="signal-content"><div class="signal-title">Show top pipeline moves this quarter</div><div class="signal-desc">Accounts with highest close probability and exec leverage points</div></div><div class="signal-chevron">›</div></div>
+    <div class="signal-card green" onclick="openModal('megan-modal')"><div class="signal-content"><div class="signal-title">What AI opportunities should I prioritize?</div><div class="signal-desc">Ranked by account readiness, deal size, and Frontier alignment</div></div><div class="signal-chevron">›</div></div>
+    <div class="signal-card orange" onclick="openModal('megan-modal')"><div class="signal-content"><div class="signal-title">Azure commitment alerts — what to do?</div><div class="signal-desc">Step-by-step expansion plays for each at-risk account</div></div><div class="signal-chevron">›</div></div>
+    <div class="signal-card red" onclick="openModal('compete-modal')"><div class="signal-content"><div class="signal-title">How do I win against Google Gemini?</div><div class="signal-desc">Competitive positioning, trust story, and enterprise advantage</div></div><div class="signal-chevron">›</div></div>
+    <div class="signal-card blue" onclick="openModal('frontier-modal')"><div class="signal-content"><div class="signal-title">Align me to Judson's Frontier vision</div><div class="signal-desc">Key themes, messaging, and talking points from his latest announcements</div></div><div class="signal-chevron">›</div></div>
+  </div>
+  <div class="spacer-16"></div>
+</div>
+
+</div><!-- end main-scroll -->
+
+<!-- ═══════ BOTTOM NAV ═══════ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-home" onclick="navTo('home')">
+    <div class="nav-icon-wrap">🏠</div>
+    <span class="nav-label">Home</span>
+  </button>
+  <button class="nav-item" id="nav-wins" onclick="navTo('wins')">
+    <div class="nav-icon-wrap">🏆</div>
+    <span class="nav-label">Wins</span>
+  </button>
+  <button class="nav-item" id="nav-pipeline" onclick="navTo('pipeline')">
+    <div class="nav-icon-wrap">📈</div>
+    <span class="nav-label">Pipeline</span>
+    <div class="nav-badge"></div>
+  </button>
+  <button class="nav-item" id="nav-decks" onclick="navTo('decks')">
+    <div class="nav-icon-wrap">📑</div>
+    <span class="nav-label">Decks</span>
+  </button>
+  <button class="nav-item" id="nav-briefings" onclick="navTo('briefings')">
+    <div class="nav-icon-wrap">🎯</div>
+    <span class="nav-label">Briefings</span>
+  </button>
+  <button class="nav-item" id="nav-megan" onclick="navTo('megan')">
+    <div class="nav-icon-wrap">✨</div>
+    <span class="nav-label">Ask Megan</span>
+    <div class="nav-badge"></div>
+  </button>
+</nav>
+
+<!-- ════ MODALS ════ -->
+
+<!-- WALMART REVIEW MODAL -->
+<div class="modal-overlay" id="walmart-modal" onclick="closeModalOutside(event,'walmart-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('walmart-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">🛒</div>
+      <div class="modal-title">Walmart</div>
+      <div class="modal-sub">Retail &amp; Consumer Goods · MACC Account Review</div>
+    </div>
+    <div class="modal-body">
+      <div class="consumption-gauge">
+        <div class="gauge-row"><div class="gauge-label">Azure Commitment Consumed</div><div class="gauge-value" style="color:var(--ms-red)">20%</div></div>
+        <div class="gauge-track"><div class="gauge-fill red" style="width:20%"></div></div>
+        <div style="font-size:11px;color:var(--ms-neutral-60);margin-top:5px">$240M of $1.2B · 8 months remaining · Action required</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">What's Happening</div>
+        <ul class="detail-bullets">
+          <li>Sparky AI agent driving 35% higher average order value among users</li>
+          <li>AI generating or supporting 40%+ of new Walmart code in Q3 FY26</li>
+          <li>ChatGPT + Walmart agentic commerce integration live in holiday season</li>
+          <li>Advertising revenue $6.4B in FY26 — 46% YoY, powered by AI personalization</li>
+          <li>John Furner now CEO (Feb 2026) — architect of Adaptive Retail strategy</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Azure Expansion Plays</div>
+        <ul class="detail-bullets">
+          <li>Agentic commerce workloads — migrate ChatGPT integration to Azure OpenAI Service</li>
+          <li>Walmart Connect advertising platform — scale on Azure AI + data platform</li>
+          <li>Elem^^ent ML platform modernization — Azure ML + Fabric data layer</li>
+          <li>MyAssistant &amp; associate AI tools — Microsoft 365 Copilot expansion</li>
+          <li>Supply chain twin — Azure Digital Twins + IoT Operations</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Your Next Move</div>
+        <div class="exec-action-text">Request an EBC with John Furner's team. Lead with Judson's "AI in the flow of human ambition" messaging. Bring Fabric + Copilot expansion roadmap tied to Walmart's $1T market cap AI transformation story.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WALMART NEWS MODAL (real links) -->
+<div class="modal-overlay" id="walmart-news-modal" onclick="closeModalOutside(event,'walmart-news-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('walmart-news-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">📰</div>
+      <div class="modal-title">Walmart — In the News</div>
+      <div class="modal-sub">Live articles · March 2026</div>
+    </div>
+    <div class="modal-body">
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#1565c0;color:white">DC360</span>
+        <div class="news-article-body">
+          <div class="news-article-title">How Walmart Is Using AI Across Commerce, Associates &amp; Partners</div>
+          <div class="news-article-meta">Digital Commerce 360 · Jan 8, 2026</div>
+          <a class="news-article-link" href="https://www.digitalcommerce360.com/2026/01/08/how-walmart-is-using-ai/" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#0d47a1;color:white">Intellectia</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Walmart Explores AI Technology, Aiming for Transformation by 2026</div>
+          <div class="news-article-meta">Intellectia AI · Mar 25, 2026 · Sparky AI +35% order value</div>
+          <a class="news-article-link" href="https://intellectia.ai/news/stock/walmart-explores-ai-technology-aiming-for-transformation-by-2026" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#e65100;color:white">Markets</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Walmart's $1 Trillion AI Transformation — Retail's New Frontier</div>
+          <div class="news-article-meta">Financial Content · Feb 24, 2026 · $1T market cap milestone</div>
+          <a class="news-article-link" href="https://markets.financialcontent.com/stocks/article/marketminute-2026-2-25-retails-new-frontier-how-walmarts-1-trillion-ai-trans" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#2e7d32;color:white">Yahoo</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Walmart's AI Adoption Rises: Could Tech Productivity Drive Margins?</div>
+          <div class="news-article-meta">Yahoo Finance · Jan 27, 2026 · AI in 40%+ of new code</div>
+          <a class="news-article-link" href="https://finance.yahoo.com/news/walmarts-ai-adoption-rises-could-125100884.html" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#6a1b9a;color:white">Corporate</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Walmart Unveils AI-Powered Tools to Empower 1.5 Million Associates</div>
+          <div class="news-article-meta">Walmart Corporate · Jun 24, 2025 · MyAssistant + M365</div>
+          <a class="news-article-link" href="https://corporate.walmart.com/news/2025/06/24/walmart-unveils-new-ai-powered-tools-to-empower-1-5-million-associates" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATERPILLAR REVIEW MODAL -->
+<div class="modal-overlay" id="cat-modal" onclick="closeModalOutside(event,'cat-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('cat-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">🏗️</div>
+      <div class="modal-title">Caterpillar</div>
+      <div class="modal-sub">Manufacturing &amp; Mobility · AI Plays · Microsoft Cloud</div>
+    </div>
+    <div class="modal-body">
+      <div class="consumption-gauge">
+        <div class="gauge-row"><div class="gauge-label">Azure Commitment Consumed</div><div class="gauge-value" style="color:var(--ms-green)">68%</div></div>
+        <div class="gauge-track"><div class="gauge-fill good" style="width:68%"></div></div>
+        <div style="font-size:11px;color:var(--ms-neutral-60);margin-top:5px">Healthy consumption — 3 pilots ready to scale to production</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Caterpillar + Microsoft + NVIDIA</div>
+        <ul class="detail-bullets">
+          <li>Caterpillar's cloud &amp; software stack runs on Microsoft Azure</li>
+          <li>Helios platform aggregates 1.5M connected assets + 16 petabytes data</li>
+          <li>Cat AI Assistant: NVIDIA Jetson Thor on Cat 306 CR Mini Excavator</li>
+          <li>NVIDIA AI Factory for manufacturing &amp; supply chain automation</li>
+          <li>GTC 2026: Nscale + Microsoft + NVIDIA + Caterpillar — 1.35GW AI Factory</li>
+          <li>Digital twin of construction sites using NVIDIA Omniverse</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Scale-Up Plays</div>
+        <ul class="detail-bullets">
+          <li>Helios data platform → Microsoft Fabric unification</li>
+          <li>Cat AI Assistant rollout to full fleet — Azure Managed AI</li>
+          <li>Dealer &amp; customer network analytics — Copilot in Power BI</li>
+          <li>$25M training commitment — Microsoft Learn + AI Skills</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Your Next Move</div>
+        <div class="exec-action-text">Lead with the GTC 2026 joint announcement. Position Helios + Microsoft Fabric as the enterprise intelligence layer. Reference the 11 billion tons of autonomous mining as proof that Caterpillar AI is production-grade, not a pilot.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATERPILLAR NEWS MODAL (real links) -->
+<div class="modal-overlay" id="cat-news-modal" onclick="closeModalOutside(event,'cat-news-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('cat-news-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">📰</div>
+      <div class="modal-title">Caterpillar — In the News</div>
+      <div class="modal-sub">Live articles · Jan–Mar 2026</div>
+    </div>
+    <div class="modal-body">
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#1565c0;color:white">TechCrunch</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Caterpillar Taps NVIDIA to Bring AI to Construction Equipment</div>
+          <div class="news-article-meta">TechCrunch · Jan 6, 2026 · Cat AI Assistant + Jetson Thor</div>
+          <a class="news-article-link" href="https://techcrunch.com/2026/01/07/caterpillar-taps-nvidia-to-bring-ai-to-its-construction-equipment/" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#e65100;color:white">Cat.com</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Caterpillar CES 2026 Keynote — Cat AI Assistant &amp; Helios Platform</div>
+          <div class="news-article-meta">Caterpillar Official · Jan 5, 2026 · Industrial AI + Autonomy</div>
+          <a class="news-article-link" href="https://www.caterpillar.com/en/news/corporate-press-releases/h/cat-ces-2026.html" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#2e7d32;color:white">LinkedIn</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Caterpillar's AI Vision Takes Shape with Data, Cloud &amp; Microsoft</div>
+          <div class="news-article-meta">LinkedIn · Jan 25, 2026 · Microsoft + Snowflake + NVIDIA stack</div>
+          <a class="news-article-link" href="https://www.linkedin.com/pulse/caterpillars-ai-vision-takes-shape-data-cloud-focus-wdmjc" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#6a1b9a;color:white">Nscale</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Nscale + Microsoft + NVIDIA + Caterpillar — 1.35GW AI Factory</div>
+          <div class="news-article-meta">PRNewswire / Nscale · Mar 16, 2026 · GTC 2026 Announcement</div>
+          <a class="news-article-link" href="https://www.nscale.com/press-releases/nscale-west-virginia-ai-factory" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#0d47a1;color:white">MarketBeat</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Caterpillar CES 2026: Helios Platform, NVIDIA AI Factory &amp; Autonomy</div>
+          <div class="news-article-meta">MarketBeat · Jan 6, 2026 · 11B tons autonomous; $25M skills</div>
+          <a class="news-article-link" href="https://www.marketbeat.com/instant-alerts/caterpillar-ces-2026-keynote-unveils-cat-ai-assistant-helios-platform-and-next-gen-aut" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHEVRON REVIEW MODAL -->
+<div class="modal-overlay" id="chevron-modal" onclick="closeModalOutside(event,'chevron-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('chevron-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">⚡</div>
+      <div class="modal-title">Chevron</div>
+      <div class="modal-sub">Energy &amp; Resources · Azure IoT + AI Strategy</div>
+    </div>
+    <div class="modal-body">
+      <div class="consumption-gauge">
+        <div class="gauge-row"><div class="gauge-label">Azure Commitment Consumed</div><div class="gauge-value" style="color:var(--ms-orange)">54%</div></div>
+        <div class="gauge-track"><div class="gauge-fill medium" style="width:54%"></div></div>
+        <div style="font-size:11px;color:var(--ms-neutral-60);margin-top:5px">On pace — nuclear AI and data center power plays create expansion opportunity</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">What's in Motion</div>
+        <ul class="detail-bullets">
+          <li>Azure IoT Operations + Azure Arc at remote Chevron edge facilities (2025)</li>
+          <li>Chevron + GE Vernova + Engine No. 1: 4GW off-grid natural gas AI data centers</li>
+          <li>First power foundry using 7 GE Vernova 7HA turbines — late 2026 delivery</li>
+          <li>West Texas: 2.5GW plant planned — exclusive data center customer negotiation</li>
+          <li>Microsoft + NVIDIA nuclear AI lifecycle partnership — announced CERAWeek 2026</li>
+          <li>Permian Basin: AI for extraction efficiency — $5B investment</li>
+          <li>SLB + Chevron + Microsoft: E&amp;P cloud AI decision acceleration (Nov 2024)</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Azure Expansion Plays</div>
+        <ul class="detail-bullets">
+          <li>Data center power foundry infrastructure → Azure Arc hybrid cloud management</li>
+          <li>Permian Basin AI operations → Azure AI + Copilot in production ops</li>
+          <li>SLB DELFI platform on Azure — petrotechnical workflow modernization</li>
+          <li>Energy dominance + AI dominance narrative — align to Judson's Frontier</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Your Next Move</div>
+        <div class="exec-action-text">Chevron CEO Mike Wirth: "Convert energy into intelligence." Use this quote. The nuclear AI + data center power play is a massive expansion lever. Request CERAWeek follow-up meeting. Lead with Azure IoT + nuclear AI lifecycle as strategic differentiation vs. GCP.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHEVRON NEWS MODAL (real links) -->
+<div class="modal-overlay" id="chevron-news-modal" onclick="closeModalOutside(event,'chevron-news-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('chevron-news-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">📰</div>
+      <div class="modal-title">Chevron — In the News</div>
+      <div class="modal-sub">Live articles · 2025–2026</div>
+    </div>
+    <div class="modal-body">
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#1565c0;color:white">NYT</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Chevron Joins Race to Generate Power for A.I.</div>
+          <div class="news-article-meta">New York Times · Jan 28, 2025 · Off-grid data center power play</div>
+          <a class="news-article-link" href="https://www.nytimes.com/2025/01/28/business/energy-environment/chevron-power-plant-ai.html" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#e65100;color:white">FoxBiz</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Chevron CEO: Strategy to Power AI Data Centers Without the Grid</div>
+          <div class="news-article-meta">Fox Business · Feb 1, 2026 · "Energy into intelligence" — Mike Wirth</div>
+          <a class="news-article-link" href="https://www.foxbusiness.com/media/chevron-ceo-details-strategy-shield-consumers-from-soaring-ai-power-costs" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#2e7d32;color:white">Microsoft</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Chevron Plans Facilities of the Future with Azure IoT Operations</div>
+          <div class="news-article-meta">Microsoft · Mar 2025 · Azure Arc + IoT at edge facilities</div>
+          <a class="news-article-link" href="https://www.microsoft.com/en/customers/story/22849-chevron-iot-operations" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#6a1b9a;color:white">SPE/JPT</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Chevron + GE Vernova + Engine No. 1: Power Up AI Data Centers</div>
+          <div class="news-article-meta">SPE Journal · Feb 5, 2025 · 4GW power foundries for data centers</div>
+          <a class="news-article-link" href="https://jpt.spe.org/chevron-partners-with-ge-vernova-and-engine-no-1-to-power-up-ai-data-centers-in-us" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="news-article-card">
+        <span class="news-source-badge" style="background:#0d47a1;color:white">Yahoo</span>
+        <div class="news-article-body">
+          <div class="news-article-title">Chevron's Pivot to Data Centers Signals a New Growth Frontier</div>
+          <div class="news-article-meta">Yahoo Finance · Nov 27, 2025 · 2.5GW West Texas plant exclusive talks</div>
+          <a class="news-article-link" href="https://finance.yahoo.com/news/chevrons-pivot-data-centers-signals-125600525.html" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NVIDIA MODAL -->
+<div class="modal-overlay" id="nvidia-modal" onclick="closeModalOutside(event,'nvidia-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('nvidia-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">⚡</div>
+      <div class="modal-title">NVIDIA Partnership</div>
+      <div class="modal-sub">AI Superfactories · Blackwell Ultra · Nuclear AI · GTC 2026</div>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <div class="detail-section-title">What's Happening Now</div>
+        <ul class="detail-bullets">
+          <li>Nscale + Microsoft signed LOI for 1.35GW AI compute with NVIDIA Vera Rubin NVL72 GPUs — GTC Mar 2026</li>
+          <li>Microsoft AI Superfactories using hundreds of thousands of Blackwell GPUs</li>
+          <li>NVIDIA NIM microservices now available in Azure AI Foundry</li>
+          <li>Microsoft + NVIDIA nuclear AI lifecycle partnership announced CERAWeek 2026</li>
+          <li>Caterpillar + Microsoft + NVIDIA = industrial AI factory in West Virginia</li>
+          <li>NVIDIA Jetson Thor powering Cat AI Assistant on Azure-connected machines</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Your Industry GTM Angle</div>
+        <ul class="detail-bullets">
+          <li>Retail: NVIDIA-powered demand forecasting + inventory AI on Azure Fabric</li>
+          <li>Manufacturing: Physical AI agents (Cat, AVEVA) running NVIDIA + Azure edge</li>
+          <li>Energy: Nuclear AI lifecycle (permitting, design, ops) — NVIDIA + Microsoft + Chevron narrative</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Talking Point</div>
+        <div class="exec-action-text">"NVIDIA's Nico Caprez said: 'AI is becoming essential infrastructure for every industry.' Azure + NVIDIA = the only platform that delivers both compute and enterprise intelligence at scale."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ANTHROPIC MODAL -->
+<div class="modal-overlay" id="anthropic-modal" onclick="closeModalOutside(event,'anthropic-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('anthropic-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">🤝</div>
+      <div class="modal-title">Anthropic Partnership</div>
+      <div class="modal-sub">$30B Azure Commitment · Claude on Azure · Model Diversity Win</div>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <div class="detail-section-title">The Win</div>
+        <ul class="detail-bullets">
+          <li>Triple partnership: Microsoft + NVIDIA + Anthropic — Nov 2025</li>
+          <li>Anthropic committed $30B in Azure compute capacity</li>
+          <li>1GW of dedicated compute for Anthropic's Claude models</li>
+          <li>Anthropic valuation hit $350B+ — largest cloud AI commitment ever</li>
+          <li>Claude now available natively in Azure AI Foundry alongside OpenAI models</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">GTM Value for USCI</div>
+        <ul class="detail-bullets">
+          <li>Model diversity is the killer differentiator vs. GCP (Google-only lock-in)</li>
+          <li>Retail: Claude for long-context product catalog and customer support</li>
+          <li>Manufacturing: Anthropic safety-focused models for industrial AI ops</li>
+          <li>Energy: Claude for regulatory documents + exploration data analysis</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Competitive Angle</div>
+        <div class="exec-action-text">Google can't offer Claude. Microsoft offers OpenAI + Claude + Mistral + Meta Llama through Azure AI Foundry. Model choice is trust. This is your enterprise AI platform win.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AVEVA MODAL -->
+<div class="modal-overlay" id="aveva-modal" onclick="closeModalOutside(event,'aveva-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('aveva-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">🏭</div>
+      <div class="modal-title">AVEVA Win</div>
+      <div class="modal-sub">2025 Manufacturing Partner of the Year · Azure + Fabric + Gen AI</div>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <div class="detail-section-title">Impact Metrics</div>
+        <ul class="detail-bullets">
+          <li>98% reduction in unplanned machine failures using Azure AI predictive maintenance</li>
+          <li>8% energy savings across industrial facilities</li>
+          <li>20% reduction in maintenance labor hours</li>
+          <li>Generative AI live in production across industrial operations</li>
+          <li>Azure + Fabric as unified industrial data + AI platform</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Use in Manufacturing Meetings</div>
+        <div class="exec-action-text">Lead with the 98% failure reduction figure — it's extraordinary. Position AVEVA + Microsoft Fabric as the proof point for production-grade industrial AI. Reference this in every CAT, Dow, and industrial account meeting.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FRACTAL MODAL -->
+<div class="modal-overlay" id="fractal-modal" onclick="closeModalOutside(event,'fractal-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('fractal-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">🛍️</div>
+      <div class="modal-title">Fractal Analytics Win</div>
+      <div class="modal-sub">2025 Retail &amp; Consumer Goods Partner of the Year</div>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <div class="detail-section-title">The Win</div>
+        <ul class="detail-bullets">
+          <li>Fractal named 2025 Microsoft Retail &amp; Consumer Goods Partner of the Year</li>
+          <li>Azure AI Foundry powering consumer personalization at scale</li>
+          <li>Fractal + Microsoft co-sell motion active across retail vertical</li>
+          <li>AI-driven demand sensing + inventory optimization on Azure</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ GTM Play for Retail Accounts</div>
+        <div class="exec-action-text">Lead with Fractal as the proof point for consumer AI on Azure. Co-sell with Fractal into Walmart, Target, and consumer goods accounts. Fractal's AI credibility + Azure's platform = enterprise-grade retail AI story.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPETE MODAL -->
+<div class="modal-overlay" id="compete-modal" onclick="closeModalOutside(event,'compete-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('compete-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">⚔️</div>
+      <div class="modal-title">Compete vs. Google Gemini</div>
+      <div class="modal-sub">Enterprise Cloud AI · Positioning Guide · March 2026</div>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <div style="flex:1;background:var(--ms-blue-xlight);border-radius:var(--r12);padding:12px;text-align:center">
+          <div style="font-size:20px;font-weight:900;color:var(--ms-blue)">21%</div>
+          <div style="font-size:10px;color:var(--ms-neutral-60);font-weight:600;text-transform:uppercase">Azure Market Share</div>
+        </div>
+        <div style="flex:1;background:var(--ms-red-bg);border-radius:var(--r12);padding:12px;text-align:center">
+          <div style="font-size:20px;font-weight:900;color:var(--ms-red)">12%</div>
+          <div style="font-size:10px;color:var(--ms-neutral-60);font-weight:600;text-transform:uppercase">GCP Market Share</div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Google's Vulnerabilities</div>
+        <ul class="detail-bullets">
+          <li>Gemini rising from 12.8% → 15.7% but enterprise trust still lagging Microsoft</li>
+          <li>Google Workspace vs. Microsoft 365: 85% of Fortune 500 still on M365</li>
+          <li>Gemini RAG quality issues in regulated industries (finance, energy, healthcare)</li>
+          <li>Google cannot offer Claude, Mistral, or Llama — Azure AI Foundry can</li>
+          <li>11+ senior Google AI executives moved to Microsoft in FY26</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Your Win Narrative</div>
+        <ul class="detail-bullets">
+          <li>MACC financial moat: Competitors cannot match Azure's scale of committed spend</li>
+          <li>Azure compliance + security certifications: the deepest in enterprise cloud</li>
+          <li>Copilot + Agent 365 governance: unique observability and AI safety layer</li>
+          <li>Multi-model choice: Azure AI Foundry = OpenAI + Anthropic + open source</li>
+          <li>Industry-specific AI: Energy, Manufacturing, Retail use cases with proof points</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ The Winning Line</div>
+        <div class="exec-action-text">"Google wants your data to train their models. Microsoft's AI runs inside your data, inside your governance, inside your tenant. That's the trust difference."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FRONTIER MODAL -->
+<div class="modal-overlay" id="frontier-modal" onclick="closeModalOutside(event,'frontier-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('frontier-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">🚀</div>
+      <div class="modal-title">Frontier Transformation</div>
+      <div class="modal-sub">Judson Althoff · Jan–Mar 2026 Key Themes</div>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <div class="detail-section-title">The Intelligence Framework</div>
+        <ul class="detail-bullets">
+          <li><strong>Work IQ</strong> — AI in the flow of human work; Copilot, M365, Teams intelligence</li>
+          <li><strong>Fabric IQ</strong> — Unified data intelligence layer; Fabric + OneLake + real-time analytics</li>
+          <li><strong>Foundry IQ</strong> — Build your own AI; Azure AI Foundry, custom agents, model choice</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">3 Traits of a Frontier Organization</div>
+        <ul class="detail-bullets">
+          <li>AI in the flow of human ambition — not bolted on, built in</li>
+          <li>Become Customer Zero before asking customers to transform</li>
+          <li>Responsible AI is a business imperative, not a compliance checkbox</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Agent 365 — Control Plane</div>
+        <ul class="detail-bullets">
+          <li>Governance layer for all enterprise AI agents across Microsoft stack</li>
+          <li>Observability, audit trail, and policy enforcement at org level</li>
+          <li>Only 47% of enterprises have AI security controls — Agent 365 is your win</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ CTO Alignment Pitch</div>
+        <div class="exec-action-text">Every customer conversation starts with Intelligence + Trust. Which of the 3 IQ layers is their biggest gap? That's where you enter. The Frontier framework is your opening, your middle, and your close.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AZURE REVENUE MODAL -->
+<div class="modal-overlay" id="azure-revenue-modal" onclick="closeModalOutside(event,'azure-revenue-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('azure-revenue-modal')">✕</button>
+      <div style="font-size:22px;margin-bottom:4px">☁️</div>
+      <div class="modal-title">Azure Momentum</div>
+      <div class="modal-sub">$50B Quarter · 39% Growth · Q2 FY26</div>
+    </div>
+    <div class="modal-body">
+      <div class="win-stat-row" style="margin-bottom:14px">
+        <div class="win-stat"><div class="win-stat-val blue">39%</div><div class="win-stat-label">Azure Growth</div></div>
+        <div class="win-stat"><div class="win-stat-val green">$26B</div><div class="win-stat-label">AI Run-Rate</div></div>
+        <div class="win-stat"><div class="win-stat-val orange">$625B</div><div class="win-stat-label">RPO</div></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Platform Leadership</div>
+        <ul class="detail-bullets">
+          <li>85% of Fortune 500 companies now on Azure</li>
+          <li>80,000+ organizations using Azure AI Foundry</li>
+          <li>RPO doubled YoY to $625B — unprecedented enterprise commitment</li>
+          <li>AI services running on hundreds of thousands of NVIDIA Blackwell GPUs</li>
+          <li>OpenAI + Anthropic + Llama — broadest AI model catalog in cloud</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MEGAN MODAL -->
+<div class="modal-overlay" id="megan-modal" onclick="closeModalOutside(event,'megan-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('megan-modal')">✕</button>
+      <div class="megan-top" style="padding:0">
+        <div class="megan-avatar">WG</div>
+        <div>
+          <div class="megan-name">Wade Graham</div>
+          <div class="megan-role">Your Executive Strategy Partner</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div style="background:linear-gradient(135deg,var(--ms-blue-xlight),#f0f7ff);border-radius:var(--r12);padding:14px;margin-bottom:16px;border-left:4px solid var(--ms-blue)">
+        <div style="font-size:11px;font-weight:800;color:var(--ms-blue);margin-bottom:6px;text-transform:uppercase">Today's Snapshot</div>
+        <div style="font-size:13px;color:var(--ms-neutral-80);line-height:1.6">Your top priority today: <strong>Walmart MACC alert</strong> — only 20% consumed with 8 months left. An expansion play deck is ready. Your next meeting is Caterpillar on Helios scaling. The NVIDIA GTC 2026 announcement opens a new joint story for all 3 of your top accounts.</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Recommended Actions</div>
+        <ul class="detail-bullets">
+          <li>Request EBC with Walmart's John Furner team — bring MACC expansion roadmap</li>
+          <li>Schedule CTO-to-CTO call with Caterpillar — reference Helios + Fabric scale play</li>
+          <li>Prepare CERAWeek follow-up for Chevron — nuclear AI lifecycle + data center power</li>
+          <li>Brief your team on Judson's 3 IQ layers before next week's QBR</li>
+          <li>Update compete deck with Anthropic + model diversity vs. Google Gemini</li>
+        </ul>
+      </div>
+      <div style="background:var(--ms-red-bg);border-radius:var(--r12);padding:12px;border-left:4px solid var(--ms-red)">
+        <div style="font-size:11px;font-weight:800;color:var(--ms-red);margin-bottom:4px;text-transform:uppercase">⚠️ Competitive Alert</div>
+        <div style="font-size:12px;color:var(--ms-neutral-80);line-height:1.5">Google actively targeting Walmart and Target with Gemini discounting. Reference Azure incumbency, MACC financial lock, and multi-model advantage. The trust gap is your strategic lever.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS MODAL -->
+<div class="modal-overlay" id="notifications-modal" onclick="closeModalOutside(event,'notifications-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('notifications-modal')">✕</button>
+      <div class="modal-title">Notifications</div>
+      <div class="modal-sub">Alerts &amp; updates for your accounts</div>
+    </div>
+    <div class="modal-body">
+      <div class="news-item"><div class="news-dot orange"></div><div><div class="news-text"><strong>Walmart MACC Alert</strong> — Only 20% consumed. 8 months remaining. Action needed.</div><div class="news-date">Today</div></div></div>
+      <div class="news-item"><div class="news-dot blue"></div><div><div class="news-text"><strong>NVIDIA GTC 2026</strong> — Nscale + Microsoft + NVIDIA + Caterpillar 1.35GW AI Factory announced.</div><div class="news-date">Mar 16, 2026</div></div></div>
+      <div class="news-item"><div class="news-dot green"></div><div><div class="news-text"><strong>Nuclear AI Partnership</strong> — Microsoft + NVIDIA announced CERAWeek Houston.</div><div class="news-date">Mar 2026</div></div></div>
+      <div class="news-item"><div class="news-dot orange"></div><div><div class="news-text"><strong>Google Gemini Alert</strong> — Unilever migration signal detected. Competitive monitoring active.</div><div class="news-date">This week</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profile-modal" onclick="closeModalOutside(event,'profile-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+      <div class="modal-title">Wade · CTO, USCI</div>
+      <div class="modal-sub">US Commercial Industries · Microsoft</div>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--ms-blue),var(--ms-teal));display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:800">W</div>
+        <div>
+          <div style="font-size:16px;font-weight:800">Wade</div>
+          <div style="font-size:12px;color:var(--ms-neutral-60)">CTO, US Commercial Industries</div>
+          <div class="megan-status">Active</div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Your Mandate</div>
+        <ul class="detail-bullets">
+          <li>Customer-first technology leadership across all US Industries</li>
+          <li>Drive Frontier Transformation aligned to Judson Althoff's vision</li>
+          <li>Build GTM credibility across Microsoft sales organization</li>
+          <li>Grow pipeline and accelerate Azure + AI consumption across accounts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS MODAL -->
+<div class="modal-overlay" id="news-modal" onclick="closeModalOutside(event,'news-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('news-modal')">✕</button>
+      <div class="modal-title">Industry Scan</div>
+      <div class="modal-sub">Latest news across all your accounts</div>
+    </div>
+    <div class="modal-body">
+      <div class="news-item"><div class="news-dot blue"></div><div><div class="news-text"><strong>Caterpillar + Microsoft + NVIDIA GTC 2026</strong> — 1.35GW AI Factory announced. West Virginia Monarch Campus.</div><a class="news-article-link" href="https://www.nscale.com/press-releases/nscale-west-virginia-ai-factory" target="_blank">Read →</a></div></div>
+      <div class="news-item"><div class="news-dot orange"></div><div><div class="news-text"><strong>Walmart AI Transformation</strong> — $1T market cap milestone. Sparky AI agent live. Agentic commerce with ChatGPT.</div><a class="news-article-link" href="https://www.digitalcommerce360.com/2026/01/08/how-walmart-is-using-ai/" target="_blank">Read →</a></div></div>
+      <div class="news-item"><div class="news-dot green"></div><div><div class="news-text"><strong>Chevron — Nuclear AI Partnership</strong> — Microsoft + NVIDIA to accelerate nuclear permitting and design.</div><a class="news-article-link" href="https://www.foxbusiness.com/media/chevron-ceo-details-strategy-shield-consumers-from-soaring-ai-power-costs" target="_blank">Read →</a></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+let activeDeckFilters = new Set(['all']);
+
+function toggleDeckFilter(el) {
+  const value = el.getAttribute('data-filter');
+  if (!value) return;
+
+  if (value === 'all') {
+    activeDeckFilters = new Set(['all']);
+  } else {
+    activeDeckFilters.delete('all');
+    if (activeDeckFilters.has(value)) {
+      activeDeckFilters.delete(value);
+    } else {
+      activeDeckFilters.add(value);
+    }
+    if (activeDeckFilters.size === 0) activeDeckFilters = new Set(['all']);
+  }
+  renderDeckFilters();
+}
+
+function renderDeckFilters() {
+  document.querySelectorAll('#deck-filters .chip').forEach(chip => {
+    const v = chip.getAttribute('data-filter');
+    chip.classList.toggle('active', activeDeckFilters.has(v));
+  });
+
+  const cards = document.querySelectorAll('.deck-card');
+  cards.forEach(card => {
+    const tags = (card.getAttribute('data-tag') || '').split(/\s+/).filter(Boolean);
+    if (activeDeckFilters.has('all')) {
+      card.classList.remove('hidden');
+    } else {
+      const show = [...activeDeckFilters].some(f => tags.includes(f));
+      card.classList.toggle('hidden', !show);
+    }
+  });
+}
+
+
+function updateTitleHomeState(tab) {
+  const title = document.getElementById('app-title');
+  if (!title) return;
+  if (tab === 'home') {
+    title.classList.add('home-disabled');
+    title.classList.remove('home-enabled');
+    title.style.cursor = 'default';
+    title.title = '';
+  } else {
+    title.classList.remove('home-disabled');
+    title.classList.add('home-enabled');
+    title.style.cursor = 'pointer';
+    title.title = 'Go to homepage';
+  }
+}
+
+function titleGoHome() {
+  const homePage = document.getElementById('page-home');
+  if (homePage && !homePage.classList.contains('active')) {
+    navTo('home');
+  }
+}
+
+function navTo(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + tab);
+  const nav = document.getElementById('nav-' + tab);
+  if (page) page.classList.add('active');
+  if (nav) nav.classList.add('active');
+  updateTitleHomeState(tab);
+  document.getElementById('main-scroll').scrollTop = 0;
+}
+
+function openModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal(id) {
+  const overlay = document.getElementById(id);
+  if (overlay) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function closeModalOutside(e, id) {
+  if (e.target.id === id) closeModal(id);
+}
+
+// keyboard support
+function toggleQuickNav(event) {
+  event.stopPropagation();
+  const menu = document.getElementById('quick-nav-menu');
+  if (menu) menu.classList.toggle('open');
+}
+
+function closeQuickNav() {
+  const menu = document.getElementById('quick-nav-menu');
+  if (menu) menu.classList.remove('open');
+}
+
+function quickNavTo(tab) {
+  closeQuickNav();
+  navTo(tab);
+}
+
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('quick-nav-menu');
+  const trigger = document.getElementById('waffle-trigger');
+  if (!menu || !trigger) return;
+  if (!menu.contains(e.target) && !trigger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => {
+      m.classList.remove('open');
+    });
+    closeQuickNav();
+    document.body.style.overflow = '';
+  }
+});
+
+// Close on swipe down for modals
+document.querySelectorAll('.modal-sheet').forEach(sheet => {
+  let startY = 0;
+  sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+  sheet.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].clientY - startY;
+    if (diff > 60) {
+      const overlay = sheet.closest('.modal-overlay');
+      if (overlay) { overlay.classList.remove('open'); document.body.style.overflow = ''; }
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => { renderDeckFilters(); updateTitleHomeState('home'); });
+</script>
+
+
+<!-- ═══ MSX DRILL-DOWN MODALS ═══ -->
+
+<!-- QUOTA MODAL -->
+<div class="modal-overlay" id="quota-modal" onclick="closeModalOutside(event,'quota-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('quota-modal')">✕</button>
+      <div class="modal-title">📊 Quota Attainment Deep Dive</div>
+      <div class="modal-sub">Q3 FY26 · US Commercial Industries</div>
+    </div>
+    <div class="modal-body">
+      <div class="kpi-drilldown-hero">
+        <div class="kpi-big-circle">76%</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">On Track for Q3</div>
+          <div style="font-size:12px;opacity:.85;margin-top:3px">Q3 quota attainment — ahead of FY26 midpoint pace. 10 weeks to close out the quarter strong.</div>
+        </div>
+      </div>
+      <div class="kpi-drilldown-stat-row">
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#0078d4">$890M</div><div class="kpi-drilldown-stat-label">Q3 Attained</div></div>
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#107c10">+18%</div><div class="kpi-drilldown-stat-label">YoY Growth</div></div>
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#ca5010">$280M</div><div class="kpi-drilldown-stat-label">Gap to Close</div></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Where the Pipeline Lives</div>
+        <ul class="detail-bullets">
+          <li><strong>Retail:</strong> Walmart + Target near-term negotiate stage — $340M+ in close range</li>
+          <li><strong>Manufacturing:</strong> Caterpillar Helios scale + AVEVA pipeline — $210M next 60 days</li>
+          <li><strong>Energy:</strong> Chevron nuclear AI + Permian Basin operations — $185M Q4 target</li>
+          <li><strong>Cross-industry AI:</strong> 12 active AI Foundry POVs converting to production contracts</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ CTO Action: Close the Gap</div>
+        <div class="exec-action-text">Your fastest path to Q3 close: executive-to-executive interlocks at Walmart and Caterpillar. A single EBC with C-suite sponsors accelerates procurement cycles by 30–40%. Request CRO support now — don't wait for QBR.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REVENUE MODAL -->
+<div class="modal-overlay" id="revenue-modal" onclick="closeModalOutside(event,'revenue-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('revenue-modal')">✕</button>
+      <div class="modal-title">💰 Revenue Closed — FY26 YTD</div>
+      <div class="modal-sub">$4.2B Closed · +18% YoY · USCI</div>
+    </div>
+    <div class="modal-body">
+      <div class="kpi-drilldown-hero" style="background:linear-gradient(135deg,#107c10,#13a10e)">
+        <div class="kpi-big-circle">$4.2B</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">Revenue Closed YTD</div>
+          <div style="font-size:12px;opacity:.85;margin-top:3px">18% ahead of prior year. Azure + AI workloads driving 65% of new revenue. Consumption-based deals compounding.</div>
+        </div>
+      </div>
+      <div class="kpi-drilldown-stat-row">
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#0078d4">65%</div><div class="kpi-drilldown-stat-label">Azure/AI Mix</div></div>
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#107c10">21%</div><div class="kpi-drilldown-stat-label">Margin Expansion</div></div>
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#ca5010">47</div><div class="kpi-drilldown-stat-label">Active Accounts</div></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Revenue by Industry Vertical</div>
+        <div class="win-bar-wrap"><div class="win-bar-row"><span>Retail &amp; Consumer Goods</span><span>$1.4B</span></div><div class="win-bar-track"><div class="win-bar-fill blue" style="width:90%;background:linear-gradient(90deg,#0078d4,#00b7c3)"></div></div></div>
+        <div class="win-bar-wrap" style="margin-top:8px"><div class="win-bar-row"><span>Manufacturing &amp; Mobility</span><span>$1.1B</span></div><div class="win-bar-track"><div class="win-bar-fill" style="width:70%;background:linear-gradient(90deg,#ca5010,#ff8c00)"></div></div></div>
+        <div class="win-bar-wrap" style="margin-top:8px"><div class="win-bar-row"><span>Energy &amp; Resources</span><span>$940M</span></div><div class="win-bar-track"><div class="win-bar-fill" style="width:60%;background:linear-gradient(90deg,#107c10,#13a10e)"></div></div></div>
+        <div class="win-bar-wrap" style="margin-top:8px"><div class="win-bar-row"><span>Other Industries</span><span>$760M</span></div><div class="win-bar-track"><div class="win-bar-fill" style="width:48%;background:linear-gradient(90deg,#5c2d91,#8764b8)"></div></div></div>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Talking Point for Your Team</div>
+        <div class="exec-action-text">We're not selling cloud. We're converting industrial-scale data into competitive advantage. The revenue story IS the AI story — and USCI is the proof point for every other Microsoft industry vertical.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AZURE ALERTS MODAL -->
+<div class="modal-overlay" id="azure-modal" onclick="closeModalOutside(event,'azure-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('azure-modal')">✕</button>
+      <div class="modal-title">⚠️ Azure Commitment Alerts</div>
+      <div class="modal-sub">3 accounts require CTO-level intervention</div>
+    </div>
+    <div class="modal-body">
+      <div style="background:#fde7e9;border-radius:14px;padding:14px;margin-bottom:14px;border-left:4px solid #a4262c">
+        <div style="font-size:12px;font-weight:800;color:#a4262c;margin-bottom:4px">🚨 CRITICAL — Act Within 30 Days</div>
+        <div style="font-size:12px;color:#323130;line-height:1.5">Three MACC accounts are behind consumption pace. If unaddressed, this triggers contract renegotiation risk and erodes renewal leverage heading into FY27.</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Account #1 — Walmart (Highest Risk)</div>
+        <ul class="detail-bullets">
+          <li>Only 20% consumed of $1.2B commitment — 8 months remaining</li>
+          <li>Expansion plays ready: Sparky AI scaling + Copilot for 1.5M associates</li>
+          <li>Action: Request EBC with Suresh Kumar (CTO) + John Furner (CEO) before end of Q3</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Account #2 — Regional Energy Co.</div>
+        <ul class="detail-bullets">
+          <li>35% consumed — 6 months left on $400M commitment</li>
+          <li>Azure IoT Operations expansion + nuclear AI play not yet activated</li>
+          <li>Action: Schedule technical workshop — CTO to CTO to unblock procurement</li>
+        </ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Account #3 — Consumer Goods Co.</div>
+        <ul class="detail-bullets">
+          <li>41% consumed — 7 months remaining on $280M</li>
+          <li>Fractal Analytics co-sell play not presented to C-suite yet</li>
+          <li>Action: Intro call — bring Fractal partner and Azure AI Foundry demo</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ CTO Power Move</div>
+        <div class="exec-action-text">These aren't sales problems. They're transformation velocity problems. Your CTO credibility with these accounts is the unlocker. One executive conversation with the right framing turns a consumption alert into an expansion story that resets the trajectory for FY27.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI OPPS MODAL -->
+<div class="modal-overlay" id="ai-modal" onclick="closeModalOutside(event,'ai-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('ai-modal')">✕</button>
+      <div class="modal-title">🤖 AI Opportunities — 12 Active</div>
+      <div class="modal-sub">Identified this month · Azure AI Foundry plays</div>
+    </div>
+    <div class="modal-body">
+      <div class="kpi-drilldown-hero" style="background:linear-gradient(135deg,#5c2d91,#8764b8)">
+        <div class="kpi-big-circle" style="font-size:18px">12<br><span style="font-size:10px;font-weight:600">AI OPPs</span></div>
+        <div>
+          <div style="font-size:18px;font-weight:900">$2.1B Total TCV</div>
+          <div style="font-size:12px;opacity:.85;margin-top:3px">Across Retail, Manufacturing, Energy. 7 in active qualification. 5 in technical discovery.</div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Highest Conviction AI Plays</div>
+        <ul class="detail-bullets">
+          <li><strong>Walmart Sparky AI Scale:</strong> Azure OpenAI Service + Copilot — $340M TCV</li>
+          <li><strong>Caterpillar Helios → Fabric IQ:</strong> Unified data intelligence at fleet scale — $210M</li>
+          <li><strong>Chevron Permian Basin AI Ops:</strong> Azure AI + IoT — $185M TCV</li>
+          <li><strong>Target Commerce AI:</strong> Competitive vs. GCP — $95M, 60-day close window</li>
+          <li><strong>Dow Chemical Safety AI:</strong> Azure AI + Defender — $78M TCV</li>
+          <li><strong>ADM Food Supply Chain AI:</strong> Azure Fabric + AI Foundry — $65M</li>
+          <li><strong>7+ emerging POVs</strong> converting from pilots to production across USCI accounts</li>
+        </ul>
+      </div>
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ From POV to Production</div>
+        <div class="exec-action-text">The enterprise AI supercycle is now. Every week a pilot stays in sandbox is a week a competitor inches closer. Your job: convert technical proof to C-suite conviction. Lead with outcomes — cost-per-unit, cycle time, workforce productivity. Not architecture diagrams.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PIPELINE HOME MODAL -->
+<div class="modal-overlay" id="pipeline-modal-home" onclick="closeModalOutside(event,'pipeline-modal-home')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('pipeline-modal-home')">✕</button>
+      <div class="modal-title">📈 $18.7B Pipeline — Incoming</div>
+      <div class="modal-sub">Next 12 months · USCI · Healthy coverage</div>
+    </div>
+    <div class="modal-body">
+      <div class="kpi-drilldown-hero" style="background:linear-gradient(135deg,#00b7c3,#0078d4)">
+        <div class="kpi-big-circle" style="font-size:16px">$18.7B</div>
+        <div>
+          <div style="font-size:18px;font-weight:900">Pipeline Coverage: 4.5x</div>
+          <div style="font-size:12px;opacity:.85;margin-top:3px">World-class coverage ratio. AI-driven deals represent 55% of total pipeline — up from 28% a year ago.</div>
+        </div>
+      </div>
+      <div class="kpi-drilldown-stat-row">
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#0078d4">55%</div><div class="kpi-drilldown-stat-label">AI-Led Deals</div></div>
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#107c10">4.5x</div><div class="kpi-drilldown-stat-label">Coverage Ratio</div></div>
+        <div class="kpi-drilldown-stat"><div class="kpi-drilldown-stat-val" style="color:#ca5010">Q3</div><div class="kpi-drilldown-stat-label">Peak Close Window</div></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Pipeline by Motion</div>
+        <ul class="detail-bullets">
+          <li><strong>Azure Commit Expansion (MACC):</strong> $7.2B — existing relationship, fastest path to close</li>
+          <li><strong>AI Foundry Net New:</strong> $5.8B — 80K+ orgs already in Foundry, high conversion rate</li>
+          <li><strong>Co-sell with NVIDIA + Anthropic:</strong> $3.4B — partner-attached deals close 2x faster</li>
+          <li><strong>Security + Compliance upsell:</strong> $2.3B — Agent 365 governance is the door-opener</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WALMART COMPANY PROFILE MODAL ═══ -->
+<div class="modal-overlay" id="walmart-profile-modal" onclick="closeModalOutside(event,'walmart-profile-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="company-profile-header">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🛒</div>
+        <div>
+          <div style="font-size:22px;font-weight:900">Walmart Inc.</div>
+          <div style="font-size:12px;opacity:.85">World's Largest Retailer · Fortune #1 · Bentonville, AR</div>
+        </div>
+      </div>
+      <div class="company-stats-grid">
+        <div class="company-stat"><div class="company-stat-val">$1T+</div><div class="company-stat-label">Market Cap</div></div>
+        <div class="company-stat"><div class="company-stat-val">2.1M</div><div class="company-stat-label">Associates</div></div>
+        <div class="company-stat"><div class="company-stat-val">$680B</div><div class="company-stat-label">Revenue FY26</div></div>
+        <div class="company-stat"><div class="company-stat-val">150M</div><div class="company-stat-label">Customers/Week</div></div>
+        <div class="company-stat"><div class="company-stat-val">4,600+</div><div class="company-stat-label">US Stores</div></div>
+        <div class="company-stat"><div class="company-stat-val">17</div><div class="company-stat-label">Countries</div></div>
+      </div>
+      <div style="font-size:12px;opacity:.85;line-height:1.5">People Led, Tech Powered. Walmart is executing the largest AI-driven retail transformation in history — 1.5M AI-assisted associates, agentic commerce with Sparky, and a $1T market cap powered by data intelligence.</div>
+    </div>
+
+    <div style="padding:0 16px">
+      <div class="org-section-label">Executive Leadership — Feb 2026</div>
+
+      <!-- CEO -->
+      <div class="exec-card-ceo" onclick="window.open('https://www.linkedin.com/in/furner','_blank')">
+        <div class="exec-avatar" style="background:rgba(255,255,255,.25);color:white;font-size:16px">JF</div>
+        <div style="flex:1">
+          <div class="exec-name-lg">John Furner</div>
+          <div class="exec-title-lg">President &amp; CEO, Walmart Inc.</div>
+          <div class="exec-since">CEO since Feb 1, 2026 · 30+ year Walmart career</div>
+        </div>
+        <div style="font-size:20px">in</div>
+      </div>
+
+      <!-- C-Suite Grid -->
+      <div class="exec-grid">
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#0078d4,#00b7c3)">SK</div>
+          <div class="exec-name-sm">Suresh Kumar</div>
+          <div class="exec-title-sm">EVP, Global CTO &amp; CDO — Your Primary Contact</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/in/suresh-kumar-cto" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#107c10,#13a10e)">JR</div>
+          <div class="exec-name-sm">John David Rainey</div>
+          <div class="exec-title-sm">EVP &amp; CFO — Owns MACC financial decisions</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/in/john-david-rainey" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#ca5010,#ff8c00)">DG</div>
+          <div class="exec-name-sm">David Guggina</div>
+          <div class="exec-title-sm">President &amp; CEO, Walmart U.S. — AI + eComm lead</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/in/david-guggina-7a706415" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#5c2d91,#8764b8)">SD</div>
+          <div class="exec-name-sm">Seth Dallaire</div>
+          <div class="exec-title-sm">EVP &amp; Chief Growth Officer — Controls Walmart Connect, Data Ventures, Walmart+</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/in/seth-dallaire" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#d13438,#f35325)">DM</div>
+          <div class="exec-name-sm">Donna Morris</div>
+          <div class="exec-title-sm">EVP &amp; Chief People Officer — AI workforce transformation (2.1M associates)</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/in/donnamorris2" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#00b7c3,#0078d4)">CN</div>
+          <div class="exec-name-sm">Chris Nicholas</div>
+          <div class="exec-title-sm">President &amp; CEO, Walmart International — 17 countries</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/search/results/all/?keywords=Chris+Nicholas+Walmart" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#107c10,#76b900)">LW</div>
+          <div class="exec-name-sm">Latriece Watkins</div>
+          <div class="exec-title-sm">President &amp; CEO, Sam's Club U.S.</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/search/results/all/?keywords=Latriece+Watkins+Walmart" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+        <div class="exec-card">
+          <div class="exec-avatar-sm" style="background:linear-gradient(135deg,#ca5010,#5c2d91)">WW</div>
+          <div class="exec-name-sm">William White</div>
+          <div class="exec-title-sm">Chief Marketing Officer — Reports to Dallaire</div>
+          <div class="exec-action-row">
+            <a class="exec-action-btn linkedin" href="https://www.linkedin.com/search/results/all/?keywords=William+White+Walmart+CMO" target="_blank">in</a>
+            <a class="exec-action-btn call" href="tel:+1">📞</a>
+            <a class="exec-action-btn sms" href="sms:+1">💬</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="org-section-label">Strategic Priorities — Your Opportunity Map</div>
+      <ul class="detail-bullets" style="margin-bottom:16px">
+        <li><strong>AI-First Retail:</strong> Sparky agentic AI · MyAssistant for associates · OpenAI partnership</li>
+        <li><strong>Walmart Connect:</strong> $6.4B ad revenue, 46% YoY — data platform is the engine</li>
+        <li><strong>Supply Chain Automation:</strong> Digital twins + robotics across 12 next-gen fulfillment centers</li>
+        <li><strong>People Led, Tech Powered:</strong> AI upskilling for 2.1M associates — Copilot expansion play</li>
+        <li><strong>Platform Centralization:</strong> Marketplace, Walmart+, VIZIO, Data Ventures — unified under Dallaire</li>
+      </ul>
+
+      <div class="exec-action-box">
+        <div class="exec-action-title">⚡ Wade's CTO Power Play</div>
+        <div class="exec-action-text">Your entry point is Suresh Kumar — he's a former Microsoft CVP. He speaks your language. Lead with the Azure + Fabric intelligence layer that unifies Walmart's data across 4,600 stores, 150M weekly customers, and the Walmart Connect ad platform. That conversation positions you as a peer architect, not a vendor.</div>
+      </div>
+
+      <a href="https://corporate.walmart.com/about/leadership" target="_blank" style="display:block;text-align:center;font-size:12px;color:#0078d4;font-weight:700;padding:12px 0;border-top:1px solid #edebe9;margin-top:4px;text-decoration:none">View All Walmart Leadership →</a>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+</div>
+
+<!-- ═══ KNOW BEFORE YOU GO — ARTICLES MODAL ═══ -->
+<div class="modal-overlay" id="kbyg-modal" onclick="closeModalOutside(event,'kbyg-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('kbyg-modal')">✕</button>
+      <div class="modal-title">📚 Know Before You Go</div>
+      <div class="modal-sub">Essential reading for every CTO customer conversation</div>
+    </div>
+    <div class="modal-body">
+
+      <div style="font-size:11px;font-weight:800;color:#0078d4;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #deecf9">Walmart — Retail Intelligence</div>
+
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#1565c0;color:white">Fortune</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">How Walmart CEO John Furner Is Using His Leadership Lessons from the Sales Floor</div>
+          <div class="kbyg-meta">Fortune · Mar 9, 2026 · New CEO vision + AI-first retail strategy</div>
+          <a class="kbyg-link" href="https://www.linkedin.com/posts/fortune_how-walmart-ceo-john-furner-is-using-his-activity-7437271070883151872-rPsA" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#e65100;color:white">Walmart Tech</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Always Moving Forward — Doug McMillon + Suresh Kumar Reflect on Digital Transformation</div>
+          <div class="kbyg-meta">Walmart Global Tech · Jan 22, 2026 · 3 stages of Walmart's tech evolution</div>
+          <a class="kbyg-link" href="https://tech.walmart.com/content/walmart-global-tech/en_us/blog/post/always-moving-forward.html" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#2e7d32;color:white">Pioneers AI</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">The Future of Walmart with AI — CTO Suresh Kumar Deep Dive</div>
+          <div class="kbyg-meta">Pioneers of AI · Dec 2025 · Agentic AI, OpenAI partnership, store ops</div>
+          <a class="kbyg-link" href="https://www.youtube.com/watch?v=dmZCgMD8Osg" target="_blank">Watch episode ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#0a66c2;color:white">Business Insider</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Walmart Shuffles Leadership as AI Rapidly Reshapes Retail</div>
+          <div class="kbyg-meta">Business Insider · Jan 15, 2026 · Full executive org reshuffle + rationale</div>
+          <a class="kbyg-link" href="https://www.businessinsider.com/walmart-shuffles-top-leadership-team-as-ai-rapidly-reshapes-retail-2026-1" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#6a1b9a;color:white">Morgan Stanley</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Walmart Inc. — Morgan Stanley TMT Conference 2026 Transcript</div>
+          <div class="kbyg-meta">Walmart IR · Mar 3, 2026 · CFO Rainey on AI investment thesis</div>
+          <a class="kbyg-link" href="https://corporate.walmart.com/content/dam/corporate/documents/newsroom/events/2026-morgan-stanley-technology-media-telecom-confe" target="_blank">Read transcript ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#0d47a1;color:white">Charter Works</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">How Walmart Is Preparing 2 Million Workers for an AI Future</div>
+          <div class="kbyg-meta">Charter · Feb 25, 2026 · Donna Morris on AI workforce transformation</div>
+          <a class="kbyg-link" href="https://www.charterworks.com/how-walmart-is-preparing-two-million-workers-for-an-ai-future/" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:800;color:#0078d4;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 10px;padding-bottom:6px;border-bottom:2px solid #deecf9">Caterpillar — Manufacturing Intelligence</div>
+
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#e65100;color:white">TechCrunch</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Caterpillar Taps NVIDIA to Bring AI to Construction Equipment</div>
+          <div class="kbyg-meta">TechCrunch · Jan 6, 2026 · Cat AI + Jetson Thor + NVIDIA Omniverse</div>
+          <a class="kbyg-link" href="https://techcrunch.com/2026/01/07/caterpillar-taps-nvidia-to-bring-ai-to-its-construction-equipment/" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#2e7d32;color:white">Nscale</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Nscale + Microsoft + NVIDIA + Caterpillar — 1.35GW AI Factory, West Virginia</div>
+          <div class="kbyg-meta">PRNewswire · Mar 15, 2026 · GTC 2026 AI Factory announcement</div>
+          <a class="kbyg-link" href="https://www.nscale.com/press-releases/nscale-west-virginia-ai-factory" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:800;color:#0078d4;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 10px;padding-bottom:6px;border-bottom:2px solid #deecf9">Chevron — Energy Intelligence</div>
+
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#1565c0;color:white">NYT</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Chevron Joins Race to Generate Power for A.I.</div>
+          <div class="kbyg-meta">New York Times · Jan 28, 2025 · Off-grid data center strategy</div>
+          <a class="kbyg-link" href="https://www.nytimes.com/2025/01/28/business/energy-environment/chevron-power-plant-ai.html" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#0d47a1;color:white">Fox Business</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Chevron CEO: "Convert Energy Into Intelligence" — AI Data Center Power Strategy</div>
+          <div class="kbyg-meta">Fox Business · Feb 1, 2026 · Mike Wirth CERAWeek strategy keynote</div>
+          <a class="kbyg-link" href="https://www.foxbusiness.com/media/chevron-ceo-details-strategy-shield-consumers-from-soaring-ai-power-costs" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#2e7d32;color:white">Microsoft</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Chevron Plans Facilities of the Future with Azure IoT Operations</div>
+          <div class="kbyg-meta">Microsoft Customer Story · Mar 2025 · Azure Arc + IoT at edge</div>
+          <a class="kbyg-link" href="https://www.microsoft.com/en/customers/story/22849-chevron-iot-operations" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:800;color:#0078d4;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 10px;padding-bottom:6px;border-bottom:2px solid #deecf9">Judson's Frontier Vision — Required Reading</div>
+
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#0078d4;color:white">Microsoft</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">Microsoft Q2 FY26 Earnings — Satya + Judson Intelligence + Trust Framework</div>
+          <div class="kbyg-meta">Microsoft Investor Relations · Jan 2026 · $50B cloud quarter, $26B AI run-rate</div>
+          <a class="kbyg-link" href="https://www.microsoft.com/en-us/investor/earnings/fy-2026-q2/press-release-and-webcast" target="_blank">Read transcript ↗</a>
+        </div>
+      </div>
+      <div class="kbyg-article">
+        <span class="kbyg-source" style="background:#ca5010;color:white">Nscale</span>
+        <div class="kbyg-body">
+          <div class="kbyg-title">GTC 2026 — Microsoft + NVIDIA Nuclear AI Partnership + AI Superfactories</div>
+          <div class="kbyg-meta">PRNewswire · Mar 2026 · The biggest infrastructure signal of FY26</div>
+          <a class="kbyg-link" href="https://www.prnewswire.com/news-releases/nscale-and-microsoft-announce-collaboration-with-nvidia-and-caterpillar-to-deliver-1-35" target="_blank">Read full article ↗</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ GEMINI COMPETE MODAL ═══ -->
+<div class="modal-overlay" id="gemini-compete-modal" onclick="closeModalOutside(event,'gemini-compete-modal')">
+  <div class="modal-sheet">
+    <span class="modal-handle"></span>
+    <div class="modal-header" style="border-bottom:2px solid #fde7e9">
+      <button class="modal-close" onclick="closeModal('gemini-compete-modal')">✕</button>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="font-size:20px">🚨</span>
+        <div class="modal-title" style="color:#a4262c">Google Gemini — Active Compete</div>
+      </div>
+      <div class="modal-sub">Walmart · Target · Jan 2026 · Your counter-play is ready</div>
+    </div>
+    <div class="modal-body">
+
+      <!-- WHAT GOOGLE IS DOING -->
+      <div class="detail-section">
+        <div class="detail-section-title" style="color:#a4262c;border-color:#fde7e9">What Google Is Selling Right Now</div>
+        <ul class="detail-bullets">
+          <li><strong>Universal Commerce Protocol (UCP)</strong> — open agentic commerce standard Google co-built with Target, Walmart, Shopify, Etsy, Wayfair. Announced NRF 2026 by Sundar Pichai &amp; John Furner jointly. Lets shoppers buy directly inside Gemini chat — no redirect.</li>
+          <li><strong>Walmart + Gemini shopping integration (live in US)</strong> — Gemini auto-surfaces Walmart + Sam's Club products in real-time during AI conversations. Customers link Walmart+ accounts; past purchase history powers personalization. Drone delivery via Wing to 270 Walmart locations coast-to-coast.</li>
+          <li><strong>Target co-developed UCP</strong> — Target EVP Prat Vemana is a co-architect. Target products browsable and purchasable without leaving Gemini. Google's AI Mode in Search + Gemini app. Google Pay + Wallet checkout.</li>
+          <li><strong>Gemini Enterprise for Customer Experience</strong> — platform for agentic retail: shopping assistant, support bot, agentic search, and merchandising AI in one. Preview available now. Built on open UCP standard. McDonald's, Home Depot, Kroger also onboarding.</li>
+          <li><strong>Google's pitch</strong>: "We're not replacing your eCommerce — we're becoming the discovery and decision layer above it." This is a channel insertion play, not a cloud deal.</li>
+        </ul>
+      </div>
+
+      <!-- SOURCE LINKS -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:800;color:#a4262c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;padding-bottom:5px;border-bottom:2px solid #fde7e9">📰 Source Intelligence</div>
+        <div class="news-item"><div class="news-dot" style="background:#a4262c"></div><div><div class="news-text"><strong>Walmart Official:</strong> Walmart &amp; Google Turn AI Discovery Into Effortless Shopping Experiences</div><a class="news-article-link" href="https://corporate.walmart.com/news/2026/01/11/walmart-and-google-turn-ai-discovery-into-effortless-shopping-experiences" target="_blank">Read →</a></div></div>
+        <div class="news-item"><div class="news-dot" style="background:#a4262c"></div><div><div class="news-text"><strong>Target Official:</strong> About Target's New Frictionless Checkout in Google Gemini</div><a class="news-article-link" href="https://corporate.target.com/press/fact-sheet/2026/01/google-gemini-2026" target="_blank">Read →</a></div></div>
+        <div class="news-item"><div class="news-dot" style="background:#a4262c"></div><div><div class="news-text"><strong>Fortune:</strong> Walmart Teams with Alphabet for AI-Assisted Shopping on Gemini</div><a class="news-article-link" href="https://fortune.com/2026/01/11/walmart-alphabet-partnership-ai-assisted-shopping-gemini/" target="_blank">Read →</a></div></div>
+        <div class="news-item"><div class="news-dot" style="background:#a4262c"></div><div><div class="news-text"><strong>Forbes:</strong> Why Google and Walmart Are Focusing on AI Agentic Commerce</div><a class="news-article-link" href="https://www.forbes.com/sites/claraludmir/2026/01/14/google-and-walmarts-big-ai-bet-is-on-agentic-commerce/" target="_blank">Read →</a></div></div>
+        <div class="news-item"><div class="news-dot" style="background:#a4262c"></div><div><div class="news-text"><strong>Google Blog:</strong> Sundar Pichai's NRF 2026 Remarks — "The AI Platform Shift"</div><a class="news-article-link" href="https://blog.google/company-news/inside-google/message-ceo/nrf-2026-remarks/" target="_blank">Read →</a></div></div>
+        <div class="news-item"><div class="news-dot" style="background:#a4262c"></div><div><div class="news-text"><strong>CNBC:</strong> What Gap's Gemini AI Partnership Says About the Future of Retail</div><a class="news-article-link" href="https://www.cnbc.com/video/2026/03/24/what-gaps-gemini-ai-partnership-says-about-the-future-of-retail.html" target="_blank">Read →</a></div></div>
+      </div>
+
+      <!-- COMPETITIVE MATRIX -->
+      <div class="detail-section">
+        <div class="detail-section-title" style="color:#0078d4;border-color:#deecf9">Microsoft vs. Google — Walmart &amp; Target Matrix</div>
+        <div style="overflow-x:auto;margin-bottom:4px">
+          <table style="width:100%;border-collapse:collapse;font-size:11px">
+            <thead>
+              <tr style="background:#0078d4;color:white">
+                <th style="padding:8px 10px;text-align:left;border-radius:8px 0 0 0;font-weight:800;font-size:10px;text-transform:uppercase">Capability</th>
+                <th style="padding:8px 10px;text-align:center;font-weight:800;font-size:10px;text-transform:uppercase">Microsoft ✅</th>
+                <th style="padding:8px 10px;text-align:center;border-radius:0 8px 0 0;font-weight:800;font-size:10px;text-transform:uppercase;background:#a4262c">Google ⚠️</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:#faf9f8">
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">Agentic Commerce Layer</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">Copilot + OpenAI + ChatGPT integration (Sparky AI)</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#a4262c;font-weight:700">Gemini + UCP (live, NRF 2026)</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">Enterprise Data Platform</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">Microsoft Fabric + OneLake — unified across all Walmart data</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#605e5c">BigQuery + Looker — siloed, not Fabric-depth</td>
+              </tr>
+              <tr style="background:#faf9f8">
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">Associate AI (1.5M workers)</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">M365 Copilot + MyAssistant — live at Walmart today</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#605e5c">Workspace AI — not deployed at Walmart</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">Model Choice</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">OpenAI + Claude + Llama + Mistral via Azure AI Foundry</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#a4262c;font-weight:700">Gemini only — no Claude, no Llama</td>
+              </tr>
+              <tr style="background:#faf9f8">
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">AI Governance &amp; Security</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">Agent 365 control plane — observability, audit, policy inside tenant</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#a4262c;font-weight:700">Data used to train Google models — trust gap</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">MACC Financial Commitment</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">$1.2B committed — contractual moat, FY27 leverage</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#605e5c">Commerce integration deal — not a cloud commitment</td>
+              </tr>
+              <tr style="background:#faf9f8">
+                <td style="padding:8px 10px;font-weight:700;border-bottom:1px solid #edebe9">Supply Chain &amp; Operations AI</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#107c10;font-weight:700">Azure Digital Twins + IoT Operations — 12 next-gen DCs</td>
+                <td style="padding:8px 10px;text-align:center;border-bottom:1px solid #edebe9;color:#605e5c">No equivalent production deployment at Walmart</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;font-weight:700">Retail Media / Ad Platform</td>
+                <td style="padding:8px 10px;text-align:center;color:#107c10;font-weight:700">Azure AI powers Walmart Connect — $6.4B, 46% YoY growth</td>
+                <td style="padding:8px 10px;text-align:center;color:#a4262c;font-weight:700">Google Ads competes directly with Walmart Connect</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="font-size:10px;color:#605e5c;margin-top:6px;font-style:italic">⚠️ Walmart Connect and Google Ads are direct competitors for retail media spend — a structural conflict in the Google partnership.</div>
+      </div>
+
+      <!-- ONE THING THAT WINS WALMART -->
+      <div style="background:linear-gradient(135deg,#0078d4,#005a9e);border-radius:16px;padding:16px;margin-bottom:4px;color:white;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+        <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.7px;opacity:.85;margin-bottom:6px">⚡ The One Thing That Wins Walmart</div>
+        <div style="font-size:15px;font-weight:900;line-height:1.4;margin-bottom:10px">Walmart Connect vs. Google Ads — Microsoft has no conflict of interest.</div>
+        <div style="font-size:12px;opacity:.9;line-height:1.6">Google sells advertising that <em>competes directly with Walmart Connect</em> — a $6.4B business growing 46% YoY. When you walk into Suresh Kumar's office, lead with this: <strong>"Google is your commerce partner and your biggest advertising competitor. Microsoft is not."</strong><br><br>Azure powers Walmart Connect. Microsoft Fabric is the intelligence layer under it. Every dollar Walmart invests in the Azure platform makes Walmart Connect more powerful — and more competitive against Google. That's not a feature comparison. That's a strategic alignment story no Google executive can counter.</div>
+        <div style="margin-top:12px;background:rgba(255,255,255,.15);border-radius:10px;padding:10px 12px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;opacity:.8;margin-bottom:3px">Your Opening Line to Suresh Kumar</div>
+          <div style="font-size:12px;font-weight:700;font-style:italic">"Suresh, Google is helping you sell camping gear in Gemini while simultaneously selling ads that compete with Walmart Connect. Microsoft's entire incentive is to make your platform win."</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
