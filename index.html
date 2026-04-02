@@ -16,12 +16,16 @@ a { text-decoration: none; }
 button { font-family: inherit; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-thumb { background: #c8c6c4; border-radius: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.article-card { animation: fadeIn 0.25s ease both; }
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useRef, useEffect } = React;
+const { useState, useRef, useEffect, useCallback } = React;
 
 const LT = { bg:"#f3f2f1",surf:"#fff",alt:"#faf9f8",border:"#e0e0e0",txt:"#201f1e",txt2:"#605e5c",muted:"#a19f9d",pri:"#0078d4",priLt:"#deecf9",grn:"#107c10",grnLt:"#dff6dd",org:"#ca5010",orgLt:"#fff4e5",red:"#a4262c",redLt:"#fde7e9",yel:"#7a6000",yelLt:"#fff8c5",pur:"#5c2d91",purLt:"#f2eafa",nav:"#fff",shadow:"0 1px 3px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.05)" };
 const DK = { bg:"#1b1a19",surf:"#2b2a29",alt:"#323130",border:"#3b3a39",txt:"#f3f2f1",txt2:"#c8c6c4",muted:"#797775",pri:"#2899f5",priLt:"rgba(40,153,245,0.14)",grn:"#6cbf6c",grnLt:"rgba(108,191,108,0.1)",org:"#f4a261",orgLt:"rgba(244,162,97,0.1)",red:"#f47474",redLt:"rgba(244,116,116,0.1)",yel:"#ffd700",yelLt:"rgba(255,215,0,0.1)",pur:"#c8a0f0",purLt:"rgba(200,160,240,0.1)",nav:"#201f1e",shadow:"0 1px 4px rgba(0,0,0,0.4)" };
@@ -41,6 +45,7 @@ const KPI_CARDS = [
 
 const ACCOUNTS = [
   { id:"walmart", name:"Walmart", industry:"Retail", icon:"🛒", clr:"yel", cardType:"Azure Commitment Alert", metric:"20% Consumed", badge:"Behind Plan", badgeClr:"red",
+    newsQuery:"Walmart AI technology cloud Microsoft Azure 2026",
     whyItMatters:"Consumption is trailing annual pace. At current rate, $18M in committed Azure spend will go unused this year. Walmart's CTO Suresh Kumar has issued an aggressive AI-first mandate and just created two new EVP AI roles — the best executive access window in years.",
     last90Days:["Announced $3B investment in AI-driven supply chain — two new EVP AI roles created","Q1 e-commerce grew 22% — AI personalization now board-level priority","Walmart+ membership surpassed 20M — real-time data and AI mandate accelerating","Daniel Danker hired as EVP AI Acceleration, Product & Design — reports to CEO McMillon"],
     currentMotion:["Azure Data Lake active for supply chain analytics — 4 petabytes under management","M365 Copilot pilot — 500 corporate users, 19% productivity gain","Sentinel security modernization in progress","Dynamics 365 deployed in 8 distribution centers — expansion planned"],
@@ -57,6 +62,7 @@ const ACCOUNTS = [
     ]
   },
   { id:"jci", name:"Johnson Controls", industry:"Manufacturing", icon:"🏭", clr:"pur", cardType:"AI Opportunity", metric:"3 Expansion Paths", badge:"CTO Review", badgeClr:"pur",
+    newsQuery:"Johnson Controls AI digital twins technology strategy 2026",
     whyItMatters:"Johnson Controls operates 130+ manufacturing facilities globally with confirmed FY26 AI budget. Three distinct Azure expansion paths — predictive maintenance, building intelligence, and supply chain AI — each with active Microsoft motion and competitive pressure creating urgency.",
     last90Days:["Announced $500M OpenBlue smart building AI initiative — seeking enterprise AI platform partner","Q4 earnings: operational efficiency named as top-3 FY26 priority by new CEO Weidemanis","Net zero 2035 mandate issued — AI carbon tracking now a board requirement","Schneider Electric building AI partnership announced — competitive pressure on Microsoft's position"],
     currentMotion:["Azure IoT Hub monitoring 2,200 HVAC systems across 14 priority facilities","GitHub Copilot deployed to 800 engineering staff — high satisfaction","Azure OpenAI POC for predictive maintenance — 91% accuracy, exceeds baseline","Microsoft Defender for OT securing priority manufacturing facilities"],
@@ -72,6 +78,7 @@ const ACCOUNTS = [
     ]
   },
   { id:"chevron", name:"Chevron", industry:"Energy", icon:"⚡", clr:"org", cardType:"Strategic Account", metric:"+18% Potential", badge:"Expand Now", badgeClr:"grn",
+    newsQuery:"Chevron AI technology cloud energy digital strategy 2026",
     whyItMatters:"Chevron has active cloud mandate and confirmed AI budget for FY26. An 18% consumption growth opportunity exists in seismic AI, sustainability, and field operations — all within the current Microsoft relationship. A Google competitive announcement makes this time-sensitive.",
     last90Days:["Announced AI-first exploration strategy — $2B committed over 3 years","Net zero 2050 commitment accelerated — sustainability AI now board-level","Q1: operational efficiency through digitization cited by CFO as top capital priority","Google–Chevron exploration AI partnership announced — direct competitive signal"],
     currentMotion:["Azure active for upstream data processing — 4 petabytes under management","M365 Copilot rolling out to 12,000 engineers globally","Azure OpenAI seismic data analysis POC — 34% improvement over baseline model","Microsoft Purview for data governance across global operations"],
@@ -173,10 +180,278 @@ function LIBtn({url}){
   );
 }
 
+// ── ARTICLE READER ─────────────────────────────────────────────────────────
+function ArticleReader({article, acct, t, onClose}){
+  const [content, setContent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(()=>{
+    let cancelled = false;
+    async function fetchArticle(){
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({
+            model:"claude-sonnet-4-20250514",
+            max_tokens:1000,
+            tools:[{type:"web_search_20250305",name:"web_search"}],
+            messages:[{
+              role:"user",
+              content:`Please fetch and present the full article at this URL: ${article.url}
+
+If you cannot access it directly, search for the exact headline "${article.headline}" from ${article.source} and present the full article content you find.
+
+Format your response as:
+**[Full headline]**
+*[Author] · [Publication] · [Date]*
+
+[Full article text, preserving all key facts, quotes, and details. Do not summarize — present the complete content.]`
+            }]
+          })
+        });
+        const data = await res.json();
+        if(cancelled) return;
+        const text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+        if(text.trim()){
+          setContent(text);
+        } else {
+          setError("Article content could not be loaded. Open the original link below.");
+        }
+      } catch(e){
+        if(!cancelled) setError("Connection error. Try opening the original article.");
+      }
+      if(!cancelled) setLoading(false);
+    }
+    fetchArticle();
+    return ()=>{ cancelled=true; };
+  },[article.url]);
+
+  // Parse markdown-style bold/italic for display
+  function renderContent(text){
+    if(!text) return null;
+    return text.split('\n').map((line,i)=>{
+      if(line.startsWith('**') && line.endsWith('**')){
+        return <div key={i} style={{color:t.txt,fontSize:18,fontWeight:700,lineHeight:1.35,marginBottom:8,marginTop:i>0?16:0}}>{line.replace(/\*\*/g,'')}</div>;
+      }
+      if(line.startsWith('*') && line.endsWith('*')){
+        return <div key={i} style={{color:t.muted,fontSize:12,fontStyle:'italic',marginBottom:16}}>{line.replace(/\*/g,'')}</div>;
+      }
+      if(line.startsWith('##')){
+        return <div key={i} style={{color:t.txt,fontSize:15,fontWeight:700,marginTop:20,marginBottom:6}}>{line.replace(/^##\s*/,'')}</div>;
+      }
+      if(line.startsWith('#')){
+        return <div key={i} style={{color:t.txt,fontSize:17,fontWeight:700,marginTop:20,marginBottom:8}}>{line.replace(/^#\s*/,'')}</div>;
+      }
+      if(line.trim()==='') return <div key={i} style={{height:12}}/>;
+      return <div key={i} style={{color:t.txt,fontSize:14,lineHeight:1.8,marginBottom:2}}>{line}</div>;
+    });
+  }
+
+  return (
+    <div style={{position:"fixed",inset:0,background:t.bg,zIndex:500,display:"flex",flexDirection:"column"}}>
+      {/* Header */}
+      <div style={{background:cb(acct.clr,t),padding:"16px 16px 14px",borderBottom:`1px solid ${t.border}`,flexShrink:0}}>
+        <Back t={t} label="Back to News" onBack={onClose}/>
+        <div style={{display:"flex",gap:6,alignItems:"center",marginBottom:6,flexWrap:"wrap"}}>
+          <Badge label={article.source} clr={acct.clr} t={t}/>
+          <span style={{color:t.muted,fontSize:11}}>{article.date}</span>
+          {article.readTime && <span style={{color:t.muted,fontSize:11}}>· {article.readTime}</span>}
+        </div>
+        <div style={{color:t.txt,fontSize:16,fontWeight:700,lineHeight:1.35}}>{article.headline}</div>
+      </div>
+
+      {/* Body */}
+      <div style={{flex:1,overflowY:"auto",padding:"20px 16px 30px"}}>
+        {loading && (
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"60px 0",gap:16}}>
+            <div style={{width:32,height:32,border:`3px solid ${t.border}`,borderTop:`3px solid ${cv(acct.clr,t)}`,borderRadius:"50%",animation:"spin 0.8s linear infinite"}}/>
+            <div style={{color:t.muted,fontSize:13}}>Fetching article…</div>
+          </div>
+        )}
+        {error && !loading && (
+          <div style={{textAlign:"center",padding:"40px 0"}}>
+            <div style={{fontSize:32,marginBottom:12}}>📰</div>
+            <div style={{color:t.txt2,fontSize:14,marginBottom:6}}>{error}</div>
+            <div style={{color:t.muted,fontSize:12}}>{article.summary}</div>
+          </div>
+        )}
+        {content && !loading && (
+          <div style={{maxWidth:680}}>
+            {renderContent(content)}
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div style={{padding:"12px 16px",borderTop:`1px solid ${t.border}`,background:t.surf,flexShrink:0,display:"flex",gap:10}}>
+        <button onClick={onClose} style={{flex:1,background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"11px",color:t.txt2,fontSize:13,fontWeight:600,cursor:"pointer"}}>
+          ← All News
+        </button>
+        <a href={article.url} target="_blank" rel="noreferrer" style={{flex:2,background:cv(acct.clr,t),border:"none",borderRadius:2,padding:"11px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",textAlign:"center",display:"block"}}>
+          Open Original ↗
+        </a>
+      </div>
+    </div>
+  );
+}
+
+// ── NEWS TAB ────────────────────────────────────────────────────────────────
+function NewsTab({acct, t}){
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selArticle, setSelArticle] = useState(null);
+  const hasFetched = useRef(false);
+
+  const fetchNews = useCallback(async()=>{
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:1000,
+          tools:[{type:"web_search_20250305",name:"web_search"}],
+          messages:[{
+            role:"user",
+            content:`Search for the 4 most recent and relevant news articles about ${acct.name} related to AI, technology, cloud computing, digital transformation, or business strategy published in 2025 or 2026. Focus on articles that would matter to a Microsoft technology executive preparing for an executive meeting with this company.
+
+Return ONLY a valid JSON array with no other text, no markdown code fences, no preamble:
+[{"headline":"full article headline","source":"publication name","date":"month day year or relative like '2 days ago'","url":"full https url","summary":"2 sentence executive-level summary of why this matters for the Microsoft relationship","readTime":"X min read"}]`
+          }]
+        })
+      });
+      const data = await res.json();
+      const text = (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("");
+      const jsonMatch = text.match(/\[[\s\S]*?\]/);
+      if(jsonMatch){
+        const parsed = JSON.parse(jsonMatch[0]);
+        setArticles(parsed);
+      } else {
+        setError("No articles found. Try refreshing.");
+      }
+    } catch(e){
+      setError("Could not load news. Check your connection and try again.");
+    }
+    setLoading(false);
+  },[acct.id]);
+
+  useEffect(()=>{
+    if(!hasFetched.current){
+      hasFetched.current = true;
+      fetchNews();
+    }
+  },[fetchNews]);
+
+  if(selArticle){
+    return <ArticleReader article={selArticle} acct={acct} t={t} onClose={()=>setSelArticle(null)}/>;
+  }
+
+  return (
+    <div>
+      {/* Header row */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <div>
+          <SLabel t={t} style={{marginBottom:2}}>Live intelligence</SLabel>
+          <div style={{color:t.txt2,fontSize:12}}>Latest news on {acct.name} · tap any article to read in-app</div>
+        </div>
+        <button onClick={fetchNews} disabled={loading} style={{background:loading?t.alt:cb(acct.clr,t),border:`1px solid ${loading?t.border:cv(acct.clr,t)+"44"}`,borderRadius:2,color:loading?t.muted:cv(acct.clr,t),fontSize:11,fontWeight:700,padding:"6px 12px",cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",gap:5}}>
+          <span style={{display:"inline-block",animation:loading?"spin 0.8s linear infinite":"none"}}>↻</span>
+          {loading?"Loading…":"Refresh"}
+        </button>
+      </div>
+
+      {/* Loading skeleton */}
+      {loading && articles.length===0 && (
+        <div>
+          {[1,2,3,4].map(i=>(
+            <div key={i} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px 16px",marginBottom:10,borderLeft:`3px solid ${t.border}`}}>
+              <div style={{height:10,width:"40%",background:t.border,borderRadius:2,marginBottom:10,animation:"pulse 1.5s ease infinite"}}/>
+              <div style={{height:14,width:"90%",background:t.border,borderRadius:2,marginBottom:8,animation:"pulse 1.5s ease infinite",animationDelay:`${i*0.1}s`}}/>
+              <div style={{height:12,width:"70%",background:t.border,borderRadius:2,marginBottom:8,animation:"pulse 1.5s ease infinite",animationDelay:`${i*0.15}s`}}/>
+              <div style={{height:11,width:"30%",background:t.border,borderRadius:2,animation:"pulse 1.5s ease infinite",animationDelay:`${i*0.2}s`}}/>
+            </div>
+          ))}
+          <div style={{textAlign:"center",padding:"8px 0"}}>
+            <div style={{color:t.muted,fontSize:12,fontStyle:"italic"}}>Searching for the latest {acct.name} news…</div>
+          </div>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && !loading && (
+        <div style={{background:t.redLt,border:`1px solid ${t.red}33`,borderRadius:2,padding:"14px 16px",marginBottom:16}}>
+          <div style={{color:t.red,fontSize:13,fontWeight:600,marginBottom:4}}>⚠️ {error}</div>
+          <button onClick={fetchNews} style={{background:"none",border:"none",color:t.pri,fontSize:12,fontWeight:600,cursor:"pointer",padding:0}}>Try again →</button>
+        </div>
+      )}
+
+      {/* Articles */}
+      {articles.map((article, i)=>(
+        <div
+          key={i}
+          className="article-card"
+          onClick={()=>setSelArticle(article)}
+          style={{
+            background:t.surf,
+            border:`1px solid ${t.border}`,
+            borderRadius:2,
+            padding:"14px 16px",
+            marginBottom:10,
+            cursor:"pointer",
+            borderLeft:`3px solid ${cv(acct.clr,t)}`,
+            boxShadow:t.shadow,
+            animationDelay:`${i*0.06}s`,
+            transition:"box-shadow 0.15s ease,transform 0.1s ease"
+          }}
+          onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 16px rgba(0,0,0,0.12)";e.currentTarget.style.transform="translateY(-1px)";}}
+          onMouseLeave={e=>{e.currentTarget.style.boxShadow=t.shadow;e.currentTarget.style.transform="";}}
+        >
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:6,flexWrap:"wrap"}}>
+                <span style={{color:cv(acct.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.06em"}}>{article.source}</span>
+                <span style={{color:t.muted,fontSize:10}}>·</span>
+                <span style={{color:t.muted,fontSize:10}}>{article.date}</span>
+                {article.readTime && <>
+                  <span style={{color:t.muted,fontSize:10}}>·</span>
+                  <span style={{color:t.muted,fontSize:10}}>{article.readTime}</span>
+                </>}
+              </div>
+              <div style={{color:t.txt,fontSize:14,fontWeight:700,lineHeight:1.35,marginBottom:6}}>{article.headline}</div>
+              <div style={{color:t.txt2,fontSize:12,lineHeight:1.55,marginBottom:10}}>{article.summary}</div>
+              <div style={{display:"inline-flex",alignItems:"center",gap:4,color:t.pri,fontSize:11,fontWeight:700}}>
+                <span>Read in-app</span>
+                <span>→</span>
+              </div>
+            </div>
+            <div style={{width:36,height:36,background:cb(acct.clr,t),borderRadius:2,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <span style={{fontSize:18}}>{acct.icon}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {/* Footer note */}
+      {articles.length > 0 && !loading && (
+        <div style={{color:t.muted,fontSize:11,textAlign:"center",padding:"8px 0",fontStyle:"italic"}}>
+          Powered by live web search · Tap any article to read in-app without leaving
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── ACCOUNT DETAIL ──────────────────────────────────────────────────────────
 function AccountDetail({acct,t,onClose}){
   const [tab,setTab]=useState(0);
-  const tabs=["Why It Matters","Org Chart","Last 90 Days","Current Motion","Expand","Next Move"];
+  const tabs=["Why It Matters","Org Chart","Last 90 Days","Current Motion","Expand","Next Move","📰 News"];
   return (
     <div style={{position:"fixed",inset:0,background:t.bg,zIndex:300,display:"flex",flexDirection:"column"}}>
       <div style={{background:cb(acct.clr,t),padding:"16px 16px 0",flexShrink:0,borderBottom:`1px solid ${t.border}`}}>
@@ -188,9 +463,24 @@ function AccountDetail({acct,t,onClose}){
           </div>
           <div style={{textAlign:"right"}}><Badge label={acct.badge} clr={acct.badgeClr} t={t}/><div style={{color:cv(acct.clr,t),fontSize:16,fontWeight:700,marginTop:4}}>{acct.metric}</div></div>
         </div>
-        <div style={{display:"flex",overflowX:"auto"}}>
+        <div style={{display:"flex",overflowX:"auto",gap:0}}>
           {tabs.map((lbl,i)=>(
-            <button key={i} onClick={()=>setTab(i)} style={{background:"none",border:"none",borderBottom:`2px solid ${tab===i?cv(acct.clr,t):"transparent"}`,color:tab===i?cv(acct.clr,t):t.txt2,padding:"10px 12px",fontSize:12,fontWeight:tab===i?700:400,cursor:"pointer",whiteSpace:"nowrap"}}>{lbl}</button>
+            <button key={i} onClick={()=>setTab(i)} style={{
+              background:"none",
+              border:"none",
+              borderBottom:`2px solid ${tab===i?cv(acct.clr,t):"transparent"}`,
+              color:tab===i?cv(acct.clr,t):t.txt2,
+              padding:"10px 12px",
+              fontSize:12,
+              fontWeight:tab===i?700:400,
+              cursor:"pointer",
+              whiteSpace:"nowrap",
+              position:"relative"
+            }}>
+              {lbl}
+              {/* News tab has a live indicator dot */}
+              {i===6 && <span style={{position:"absolute",top:8,right:6,width:6,height:6,borderRadius:"50%",background:cv(acct.clr,t),opacity:tab===6?0:1}}/>}
+            </button>
           ))}
         </div>
       </div>
@@ -243,6 +533,7 @@ function AccountDetail({acct,t,onClose}){
         {tab===3 && <div><SLabel t={t}>Active Microsoft work</SLabel>{acct.currentMotion.map((item,i)=><div key={i} style={{display:"flex",gap:10,marginBottom:10,padding:"11px 13px",background:t.surf,borderRadius:2,border:`1px solid ${t.border}`,alignItems:"flex-start"}}><span style={{color:cv(acct.clr,t),fontSize:11,marginTop:2,flexShrink:0}}>▶</span><div style={{color:t.txt,fontSize:14,lineHeight:1.6}}>{item}</div></div>)}</div>}
         {tab===4 && <div><SLabel t={t}>Azure & AI expansion plays</SLabel>{acct.expand.map((item,i)=><div key={i} style={{display:"flex",gap:10,marginBottom:10,padding:"12px 14px",background:cb(acct.clr,t),borderRadius:2,border:`1px solid ${cv(acct.clr,t)}33`,alignItems:"flex-start"}}><span style={{color:cv(acct.clr,t),fontWeight:700,fontSize:14,flexShrink:0}}>{i+1}</span><div style={{color:t.txt,fontSize:14,lineHeight:1.6}}>{item}</div></div>)}</div>}
         {tab===5 && <div style={{background:cb(acct.clr,t),borderRadius:2,padding:"18px",border:`1px solid ${cv(acct.clr,t)}44`}}><div style={{color:cv(acct.clr,t),fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>⚡ Executive Next Move</div><div style={{color:t.txt,fontSize:15,lineHeight:1.8}}>{acct.nextMove}</div></div>}
+        {tab===6 && <NewsTab acct={acct} t={t}/>}
       </div>
       <div style={{padding:"14px 16px",borderTop:`1px solid ${t.border}`,background:t.surf,flexShrink:0}}>
         <button onClick={onClose} style={{width:"100%",background:cv(acct.clr,t),border:"none",borderRadius:2,padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Done</button>
@@ -625,4 +916,170 @@ function BriefingsPage({t,setSelAcct}){
   return (
     <div style={{padding:"16px",paddingBottom:30}}>
       {selBrief && <BriefingDetail brief={selBrief} t={t} onClose={()=>setSelBrief(null)}/>}
-      <div style={{color:t.txt,fontSize:20
+      <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:4}}>Know Before You Go.</div>
+      <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Live signals, competitive moves, and analyst context. Tap for recommended action.</div>
+      {BRIEFINGS.map((b,i)=>(
+        <div key={i} onClick={()=>setSelBrief(b)} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"12px 14px",marginBottom:10,cursor:"pointer",borderLeft:`3px solid ${cv(b.clr,t)}`,boxShadow:t.shadow}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}><Badge label={b.type} clr={b.clr} t={t}/>{b.priority==="urgent"&&<Badge label="⚠️ Urgent" clr="red" t={t}/>}</div>
+              <div style={{color:t.txt,fontSize:14,fontWeight:600,lineHeight:1.35,marginBottom:4}}>{b.headline}</div>
+              <div style={{color:t.muted,fontSize:11,marginBottom:6}}>{b.account} · {b.time}</div>
+              <div style={{color:t.txt2,fontSize:12,lineHeight:1.5}}>{b.note}</div>
+            </div>
+            <span style={{color:t.muted,fontSize:18,marginLeft:8,flexShrink:0}}>›</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── PROJECTS ─────────────────────────────────────────────────────────────────
+function ProjectsPage({t,setSelAcct}){
+  const [selProj,setSelProj]=useState(null);
+  return (
+    <div style={{padding:"16px",paddingBottom:30}}>
+      {selProj && <ProjectDetail proj={selProj} t={t} onClose={()=>setSelProj(null)}/>}
+      <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:4}}>Run the Motion.</div>
+      <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Industry Agent deployments and account projects. Tap for milestones and next steps.</div>
+      {PROJECTS.map((proj,i)=>(
+        <div key={i} onClick={()=>setSelProj(proj)} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px 16px",marginBottom:10,cursor:"pointer",borderLeft:`3px solid ${cv(proj.clr,t)}`,boxShadow:t.shadow}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}>
+                <Badge label={proj.phase} clr={proj.clr} t={t}/>
+                {proj.risk==="High"&&<Badge label="⚠️ At Risk" clr="red" t={t}/>}
+              </div>
+              <div style={{color:t.txt,fontSize:14,fontWeight:700}}>{proj.icon} {proj.name}</div>
+              <div style={{color:t.muted,fontSize:11,marginTop:3}}>{proj.account} · {proj.owner}</div>
+            </div>
+            <div style={{color:cv(proj.clr,t),fontSize:22,fontWeight:700,marginLeft:12}}>{proj.pct}%</div>
+          </div>
+          <ProgBar pct={proj.pct} clr={proj.clr} t={t}/>
+          <div style={{color:t.muted,fontSize:11,marginTop:8}}>Next: {proj.milestone}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── ASK MEGHAN ────────────────────────────────────────────────────────────────
+function MeganPage({t}){
+  const [msgs,setMsgs]=useState([{role:"assistant",content:"What do you need, Wade? Pipeline status, account prep, competitive intel, or next move on a specific deal — I've got it."}]);
+  const [input,setInput]=useState("");
+  const [loading,setLoading]=useState(false);
+  const endRef=useRef(null);
+
+  useEffect(()=>{ endRef.current?.scrollIntoView({behavior:"smooth"}); },[msgs]);
+
+  async function send(){
+    if(!input.trim()||loading) return;
+    const userMsg={role:"user",content:input.trim()};
+    const history=[...msgs,userMsg];
+    setMsgs(history);
+    setInput("");
+    setLoading(true);
+    try {
+      const res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:1000,
+          system:MEGAN_SYS,
+          messages:history.map(m=>({role:m.role,content:m.content}))
+        })
+      });
+      const data=await res.json();
+      const reply=data.content?.[0]?.text||"No response.";
+      setMsgs([...history,{role:"assistant",content:reply}]);
+    } catch(e){
+      setMsgs([...history,{role:"assistant",content:"Connection error. Try again."}]);
+    }
+    setLoading(false);
+  }
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+      <div style={{flex:1,overflowY:"auto",padding:"16px"}}>
+        <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:2}}>Ask Meghan.</div>
+        <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Pipeline, prep, competitive intel, and next moves — ask anything.</div>
+        {msgs.map((m,i)=>(
+          <div key={i} style={{marginBottom:14,display:"flex",flexDirection:"column",alignItems:m.role==="user"?"flex-end":"flex-start"}}>
+            {m.role==="assistant"&&<div style={{color:t.muted,fontSize:10,fontWeight:700,marginBottom:4,textTransform:"uppercase",letterSpacing:"0.05em"}}>Meghan</div>}
+            <div style={{background:m.role==="user"?"#0078d4":t.surf,color:m.role==="user"?"#fff":t.txt,borderRadius:m.role==="user"?"8px 8px 2px 8px":"8px 8px 8px 2px",padding:"12px 14px",fontSize:14,lineHeight:1.65,maxWidth:"88%",border:m.role==="assistant"?`1px solid ${t.border}`:"none",boxShadow:t.shadow,whiteSpace:"pre-wrap"}}>
+              {m.content}
+            </div>
+          </div>
+        ))}
+        {loading&&<div style={{display:"flex",gap:6,padding:"12px 14px",background:t.surf,border:`1px solid ${t.border}`,borderRadius:"8px 8px 8px 2px",width:60}}>{[0,1,2].map(i=><div key={i} style={{width:6,height:6,borderRadius:"50%",background:t.muted,animation:`pulse 1s ease ${i*0.15}s infinite`}}/>)}</div>}
+        <div ref={endRef}/>
+      </div>
+      <div style={{padding:"12px 16px",borderTop:`1px solid ${t.border}`,background:t.surf,display:"flex",gap:8}}>
+        <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&!e.shiftKey&&send()} placeholder="Ask about pipeline, accounts, next moves…" style={{flex:1,border:`1px solid ${t.border}`,borderRadius:2,padding:"10px 12px",fontSize:14,background:t.alt,color:t.txt,outline:"none"}}/>
+        <button onClick={send} disabled={loading||!input.trim()} style={{background:loading||!input.trim()?t.border:"#0078d4",color:"#fff",border:"none",borderRadius:2,padding:"10px 16px",fontSize:13,fontWeight:700,cursor:loading||!input.trim()?"not-allowed":"pointer"}}>→</button>
+      </div>
+    </div>
+  );
+}
+
+// ── APP SHELL ────────────────────────────────────────────────────────────────
+function App(){
+  const [page,setPage]=useState("home");
+  const [dark,setDark]=useState(false);
+  const [waffle,setWaffle]=useState(false);
+  const [selAcct,setSelAcct]=useState(null);
+  const t=dark?DK:LT;
+
+  const pageLabel={home:"Home",pipeline:"Pipeline",decks:"Decks",briefings:"Briefings",projects:"Projects",megan:"Ask Meghan"}[page]||page;
+
+  return (
+    <div style={{height:"100%",display:"flex",flexDirection:"column",background:t.bg,color:t.txt,maxWidth:500,margin:"0 auto",position:"relative"}}>
+      {/* Top bar */}
+      <div style={{background:t.nav,borderBottom:`1px solid ${t.border}`,padding:"0 16px",display:"flex",alignItems:"center",justifyContent:"space-between",height:52,flexShrink:0,boxShadow:t.shadow,zIndex:10}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <button onClick={()=>setWaffle(true)} style={{background:"none",border:"none",padding:4,cursor:"pointer",display:"flex",alignItems:"center"}}>
+            <svg width="18" height="18" viewBox="0 0 18 18"><rect x="0" y="0" width="7" height="7" fill="#F25022" rx="0.5"/><rect x="10" y="0" width="7" height="7" fill="#7FBA00" rx="0.5"/><rect x="0" y="10" width="7" height="7" fill="#00A4EF" rx="0.5"/><rect x="10" y="10" width="7" height="7" fill="#FFB900" rx="0.5"/></svg>
+          </button>
+          <div>
+            <div style={{color:t.txt,fontSize:13,fontWeight:700,lineHeight:1.1}}>Office of the CTO</div>
+            <div style={{color:t.muted,fontSize:10}}>USCI · {pageLabel}</div>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+          <button onClick={()=>setDark(d=>!d)} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"5px 10px",fontSize:11,color:t.txt2,cursor:"pointer"}}>{dark?"☀️":"🌙"}</button>
+        </div>
+      </div>
+
+      {/* Account detail overlay */}
+      {selAcct && <AccountDetail acct={selAcct} t={t} onClose={()=>setSelAcct(null)}/>}
+      {waffle && <WaffleMenu t={t} onClose={()=>setWaffle(false)} setPage={setPage}/>}
+
+      {/* Page content */}
+      <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column"}}>
+        {page==="home"&&<HomePage t={t} setPage={setPage} setSelAcct={setSelAcct}/>}
+        {page==="pipeline"&&<PipelinePage t={t} setSelAcct={setSelAcct}/>}
+        {page==="decks"&&<DecksPage t={t}/>}
+        {page==="briefings"&&<BriefingsPage t={t} setSelAcct={setSelAcct}/>}
+        {page==="projects"&&<ProjectsPage t={t} setSelAcct={setSelAcct}/>}
+        {page==="megan"&&<MeganPage t={t}/>}
+      </div>
+
+      {/* Bottom nav */}
+      <div style={{background:t.nav,borderTop:`1px solid ${t.border}`,display:"flex",flexShrink:0,zIndex:10}}>
+        {[{icon:"🏠",label:"Home",p:"home"},{icon:"📈",label:"Pipeline",p:"pipeline"},{icon:"📂",label:"Decks",p:"decks"},{icon:"📰",label:"Briefings",p:"briefings"},{icon:"💬",label:"Meghan",p:"megan"}].map(n=>(
+          <button key={n.p} onClick={()=>setPage(n.p)} style={{flex:1,background:"none",border:"none",padding:"10px 4px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",borderTop:`2px solid ${page===n.p?t.pri:"transparent"}`}}>
+            <span style={{fontSize:16}}>{n.icon}</span>
+            <span style={{fontSize:10,fontWeight:page===n.p?700:400,color:page===n.p?t.pri:t.muted}}>{n.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>, document.getElementById("root"));
+</script>
+</body>
+</html>
