@@ -1,157 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>The Office of the CTO – USCI</title>
-  <meta name="description" content="USCI CTO Command Center — Pipeline, Accounts, Decks & AI Intelligence">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body, #root { height: 100%; }
-    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f3f2f1; }
-    a { text-decoration: none; }
-    button { font-family: inherit; }
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #c8c6c4; border-radius: 4px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Office of the CTO – USCI</title>
+<meta name="description" content="USCI CTO Command Center — Pipeline, Accounts, Decks & AI Intelligence">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body, #root { height: 100%; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f3f2f1; }
+a { text-decoration: none; }
+button { font-family: inherit; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: #c8c6c4; border-radius: 4px; }
+</style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const { useState, useRef, useEffect } = React;
 
-/* ── THEMES ─────────────────────────────────────────────────────────── */
-const LIGHT = {
-  bg:"#f3f2f1",surf:"#fff",alt:"#faf9f8",border:"#e0e0e0",
-  txt:"#201f1e",txt2:"#605e5c",muted:"#a19f9d",
-  pri:"#0078d4",priLt:"#deecf9",
-  grn:"#107c10",grnLt:"#dff6dd",
-  org:"#ca5010",orgLt:"#fff4e5",
-  red:"#a4262c",redLt:"#fde7e9",
-  yel:"#7a6000",yelLt:"#fff8c5",
-  pur:"#5c2d91",purLt:"#f2eafa",
-  nav:"#fff",shadow:"0 1px 3px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.05)"
-};
-const DARK = {
-  bg:"#1b1a19",surf:"#2b2a29",alt:"#323130",border:"#3b3a39",
-  txt:"#f3f2f1",txt2:"#c8c6c4",muted:"#797775",
-  pri:"#2899f5",priLt:"rgba(40,153,245,0.14)",
-  grn:"#6cbf6c",grnLt:"rgba(108,191,108,0.1)",
-  org:"#f4a261",orgLt:"rgba(244,162,97,0.1)",
-  red:"#f47474",redLt:"rgba(244,116,116,0.1)",
-  yel:"#ffd700",yelLt:"rgba(255,215,0,0.1)",
-  pur:"#c8a0f0",purLt:"rgba(200,160,240,0.1)",
-  nav:"#201f1e",shadow:"0 1px 4px rgba(0,0,0,0.4)"
-};
+const LT = { bg:"#f3f2f1",surf:"#fff",alt:"#faf9f8",border:"#e0e0e0",txt:"#201f1e",txt2:"#605e5c",muted:"#a19f9d",pri:"#0078d4",priLt:"#deecf9",grn:"#107c10",grnLt:"#dff6dd",org:"#ca5010",orgLt:"#fff4e5",red:"#a4262c",redLt:"#fde7e9",yel:"#7a6000",yelLt:"#fff8c5",pur:"#5c2d91",purLt:"#f2eafa",nav:"#fff",shadow:"0 1px 3px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.05)" };
+const DK = { bg:"#1b1a19",surf:"#2b2a29",alt:"#323130",border:"#3b3a39",txt:"#f3f2f1",txt2:"#c8c6c4",muted:"#797775",pri:"#2899f5",priLt:"rgba(40,153,245,0.14)",grn:"#6cbf6c",grnLt:"rgba(108,191,108,0.1)",org:"#f4a261",orgLt:"rgba(244,162,97,0.1)",red:"#f47474",redLt:"rgba(244,116,116,0.1)",yel:"#ffd700",yelLt:"rgba(255,215,0,0.1)",pur:"#c8a0f0",purLt:"rgba(200,160,240,0.1)",nav:"#201f1e",shadow:"0 1px 4px rgba(0,0,0,0.4)" };
 
-/* ── DATA ─────────────────────────────────────────────────────────────── */
+function cv(k,t){ return ({pri:t.pri,grn:t.grn,org:t.org,red:t.red,yel:t.yel,pur:t.pur})[k]||t.pri; }
+function cb(k,t){ return ({pri:t.priLt,grn:t.grnLt,org:t.orgLt,red:t.redLt,yel:t.yelLt,pur:t.purLt})[k]||t.priLt; }
+
+// ── DATA ──────────────────────────────────────────────────────────────────────
 const KPI_CARDS = [
   {label:"Quota Attainment",value:"78%",sub:"Q1 FY26 · On Track",badge:"On Track",clr:"grn",detail:"$147M closed of $189M target. Healthcare and FS leading. Retail trailing by 12 points. On pace to close Q1 at 82%."},
   {label:"Revenue Closed",value:"$147M",sub:"Q1 YTD · 22 accounts",badge:"YTD",clr:"pri",detail:"Top closers: First National $28M, Providence $18M, Chevron $12M. 6 accounts closed in March alone."},
   {label:"Pipeline Coming",value:"$312M",sub:"90-day view",badge:"90 Days",clr:"pur",detail:"Walmart expansion $42M, Chevron AI Platform $35M, JCI Digital Twins $28M at front. 3 deals in final negotiation."},
   {label:"MSX Momentum",value:"94",sub:"active accounts",badge:"Active",clr:"grn",detail:"94 accounts with active motion. 18 opened in last 30 days. 7 require executive sponsorship to advance."},
   {label:"AI Opportunities",value:"23",sub:"accounts · Review needed",badge:"Review",clr:"org",detail:"23 accounts with identified AI expansion paths not yet in active motion. Highest value: Walmart, JCI, Chevron."},
-  {label:"Azure Commitment Alert",value:"3",sub:"accounts behind plan",badge:"Urgent",clr:"red",detail:"Walmart (20%), Northwind (34%), Target (41%) consumed vs committed. Combined at-risk value: $74M in unused commitment."},
+  {label:"Azure Alert",value:"3",sub:"accounts behind plan",badge:"Urgent",clr:"red",detail:"Walmart (20%), Northwind (34%), Target (41%) consumed vs committed. Combined at-risk value: $74M in unused commitment."},
 ];
 
 const ACCOUNTS = [
-  {id:"walmart",name:"Walmart",industry:"Retail",icon:"🛒",clr:"yel",
-    cardType:"Azure Commitment Alert",metric:"20% Consumed",badge:"Behind Plan",badgeClr:"red",
+  { id:"walmart", name:"Walmart", industry:"Retail", icon:"🛒", clr:"yel", cardType:"Azure Commitment Alert", metric:"20% Consumed", badge:"Behind Plan", badgeClr:"red",
     whyItMatters:"Consumption is trailing annual pace. At current rate, $18M in committed Azure spend will go unused this year. Walmart's CTO Suresh Kumar has issued an aggressive AI-first mandate and just created two new EVP AI roles — the best executive access window in years.",
-    last90Days:["Announced $3B investment in AI-driven supply chain — new EVP AI roles created","Q1 earnings: e-commerce grew 22% — AI personalization now board-level priority","Walmart+ membership surpassed 20M — real-time data and AI personalization mandate accelerating","Daniel Danker hired as EVP AI Acceleration, Product & Design — reports to CEO McMillon"],
-    currentMotion:["Azure Data Lake active for supply chain analytics — 4 petabytes under management","M365 Copilot pilot — 500 corporate users, 19% productivity gain","Sentinel security modernization in progress across retail operations","Dynamics 365 deployed in 8 distribution centers — expansion planned"],
-    expand:["AI Foundry for demand forecasting across all 4,700 stores — ROI model ready","Azure Digital Twins for supply chain simulation","Copilot for retail associate workflows — 40% task reduction demonstrated in pilot","Microsoft Fabric for unified retail data platform consolidating 12 existing tools","Azure OpenAI for Walmart+ personalization at scale"],
-    nextMove:"Wade should request a direct introduction to Suresh Kumar tied to Walmart's new AI mandate. One executive conversation framed around their AI Platforms EVP search can unlock 3 expansion workloads already within their committed spend — no new budget required.",
+    last90Days:["Announced $3B investment in AI-driven supply chain — two new EVP AI roles created","Q1 e-commerce grew 22% — AI personalization now board-level priority","Walmart+ membership surpassed 20M — real-time data and AI mandate accelerating","Daniel Danker hired as EVP AI Acceleration, Product & Design — reports to CEO McMillon"],
+    currentMotion:["Azure Data Lake active for supply chain analytics — 4 petabytes under management","M365 Copilot pilot — 500 corporate users, 19% productivity gain","Sentinel security modernization in progress","Dynamics 365 deployed in 8 distribution centers — expansion planned"],
+    expand:["AI Foundry for demand forecasting across all 4,700 stores","Azure Digital Twins for supply chain simulation","Copilot for retail associate workflows — 40% task reduction demonstrated","Microsoft Fabric for unified retail data platform","Azure OpenAI for Walmart+ personalization at scale"],
+    nextMove:"Wade should request a direct introduction to Suresh Kumar tied to Walmart's new AI mandate. One executive conversation framed around their AI Platforms EVP search can unlock 3 expansion workloads already within committed spend — no new budget required.",
     orgChart:[
-      {name:"Doug McMillon",title:"President & CEO",dept:"Executive",relevance:"Ultimate executive sponsor — approves enterprise AI strategy",li:"https://linkedin.com/in/dougmcmillon",email:"doug.mcmillon@walmart.com",badge:"CEO",clr:"grn",tier:1},
-      {name:"Suresh Kumar",title:"EVP, Global CTO & Chief Development Officer",dept:"Technology",relevance:"Primary target — owns Azure relationship, AI mandate, and committed spend",li:"https://linkedin.com/in/sureshkumar99",email:"suresh.kumar@walmart.com",badge:"Primary Contact",clr:"pri",tier:2},
-      {name:"Daniel Danker",title:"EVP, AI Acceleration, Product & Design",dept:"AI & Product",relevance:"New hire leading Walmart's 4 AI super-agent consolidation. Best door-opener for AI Foundry conversation",li:"https://linkedin.com/in/danieldanker",email:"daniel.danker@walmart.com",badge:"AI Lead",clr:"org",tier:2},
-      {name:"EVP, AI Platforms",title:"EVP, AI Platforms (Role Open)",dept:"Technology — AI",relevance:"Open role reporting to Suresh Kumar — actively recruiting. Position Microsoft as platform of choice before this person is hired",li:"—",email:"—",badge:"Open Role",clr:"red",tier:2},
-      {name:"John Furner",title:"President & CEO, Walmart U.S.",dept:"Business",relevance:"US operations owner — sponsor for store AI and supply chain plays",li:"https://linkedin.com/in/johnfurner",email:"john.furner@walmart.com",badge:"US Business",clr:"pur",tier:2},
-      {name:"Chris Nicholas",title:"President & CEO, Sam's Club",dept:"Business",relevance:"Sam's Club AI personalization and member experience opportunity",li:"https://linkedin.com/in/chrisnicholas",email:"chris.nicholas@walmart.com",badge:"Sam's Club",clr:"tel",tier:2},
-      {name:"Kathryn McLay",title:"President & CEO, Walmart International",dept:"Business",relevance:"International Azure expansion — supply chain and retail AI at global scale",li:"https://linkedin.com/in/kathrynmclay",email:"kathryn.mclay@walmart.com",badge:"International",clr:"yel",tier:2},
+      {name:"Doug McMillon",title:"President & CEO",dept:"Executive",relevance:"Ultimate executive sponsor — approves enterprise AI strategy",li:"https://www.linkedin.com/search/results/people/?keywords=Doug+McMillon+Walmart+CEO",email:"doug.mcmillon@walmart.com",badge:"CEO",clr:"grn",tier:1},
+      {name:"Suresh Kumar",title:"EVP, Global CTO & Chief Development Officer",dept:"Technology",relevance:"Primary target — owns Azure relationship, AI mandate, and committed spend",li:"https://www.linkedin.com/in/suresh-kumar-cto/",email:"suresh.kumar@walmart.com",badge:"Primary Contact",clr:"pri",tier:2},
+      {name:"Daniel Danker",title:"EVP, AI Acceleration, Product & Design",dept:"AI & Product",relevance:"New hire leading Walmart's 4 AI super-agent consolidation. Best door-opener for AI Foundry conversation",li:"https://www.linkedin.com/search/results/people/?keywords=Daniel+Danker+Walmart+AI",email:"daniel.danker@walmart.com",badge:"AI Lead",clr:"org",tier:2},
+      {name:"EVP, AI Platforms",title:"EVP, AI Platforms (Role Open — Actively Recruiting)",dept:"Technology",relevance:"Open role reporting to Suresh Kumar. Position Microsoft as the platform of choice before this person is hired",li:"—",email:"—",badge:"Open Role",clr:"red",tier:2},
+      {name:"John Furner",title:"President & CEO, Walmart U.S.",dept:"Business",relevance:"US operations owner — sponsor for store AI and supply chain plays",li:"https://www.linkedin.com/search/results/people/?keywords=John+Furner+Walmart+US",email:"john.furner@walmart.com",badge:"US Business",clr:"pur",tier:2},
+      {name:"Chris Nicholas",title:"President & CEO, Sam's Club",dept:"Business",relevance:"Sam's Club AI personalization and member experience opportunity",li:"https://www.linkedin.com/search/results/people/?keywords=Chris+Nicholas+Sams+Club+Walmart",email:"chris.nicholas@walmart.com",badge:"Sam's Club",clr:"tel",tier:2},
+      {name:"Kathryn McLay",title:"President & CEO, Walmart International",dept:"Business",relevance:"International Azure expansion — retail AI at global scale",li:"https://www.linkedin.com/search/results/people/?keywords=Kathryn+McLay+Walmart+International",email:"kathryn.mclay@walmart.com",badge:"International",clr:"yel",tier:2},
     ]
   },
-  {id:"jci",name:"Johnson Controls",industry:"Manufacturing",icon:"🏭",clr:"pur",
-    cardType:"AI Opportunity",metric:"3 Expansion Paths",badge:"CTO Review",badgeClr:"pur",
-    whyItMatters:"Johnson Controls operates 130+ manufacturing facilities globally with confirmed FY26 AI budget. Three distinct Azure expansion paths exist — predictive maintenance, building intelligence, and supply chain AI — each with active Microsoft motion and competitive pressure creating urgency.",
+  { id:"jci", name:"Johnson Controls", industry:"Manufacturing", icon:"🏭", clr:"pur", cardType:"AI Opportunity", metric:"3 Expansion Paths", badge:"CTO Review", badgeClr:"pur",
+    whyItMatters:"Johnson Controls operates 130+ manufacturing facilities globally with confirmed FY26 AI budget. Three distinct Azure expansion paths — predictive maintenance, building intelligence, and supply chain AI — each with active Microsoft motion and competitive pressure creating urgency.",
     last90Days:["Announced $500M OpenBlue smart building AI initiative — seeking enterprise AI platform partner","Q4 earnings: operational efficiency named as top-3 FY26 priority by new CEO Weidemanis","Net zero 2035 mandate issued — AI carbon tracking now a board requirement","Schneider Electric building AI partnership announced — competitive pressure on Microsoft's position"],
     currentMotion:["Azure IoT Hub monitoring 2,200 HVAC systems across 14 priority facilities","GitHub Copilot deployed to 800 engineering staff — high satisfaction","Azure OpenAI POC for predictive maintenance — 91% accuracy, exceeds baseline","Microsoft Defender for OT securing priority manufacturing facilities"],
-    expand:["Azure Digital Twins for full facility modeling — direct OpenBlue integration","AI Foundry predictive maintenance at enterprise scale across all 130 facilities","Sustainability Manager for real-time carbon tracking tied to 2035 net zero mandate","Azure AI for building energy optimization — measurable utility cost reduction","Microsoft Fabric + Power BI executive dashboard for global operations"],
+    expand:["Azure Digital Twins for full facility modeling — direct OpenBlue integration","AI Foundry predictive maintenance at enterprise scale across all 130 facilities","Sustainability Manager for real-time carbon tracking tied to 2035 net zero mandate","Azure AI for building energy optimization","Microsoft Fabric + Power BI executive dashboard for global operations"],
     nextMove:"Sponsor the Digital Twins expansion — converting the current 14-facility Defender deployment into a full AI operations platform. One executive motion unlocks an estimated $22M in net-new Azure consumption from JCI's existing FY26 budget, with Schneider competitive pressure creating urgency.",
     orgChart:[
-      {name:"Joakim Weidemanis",title:"Chief Executive Officer",dept:"Executive",relevance:"New CEO (March 2025) — operational efficiency is his stated top FY26 priority. Best framed as a CEO-level ROI conversation",li:"https://linkedin.com/in/joakimweidemanis",email:"joakim.weidemanis@jci.com",badge:"CEO",clr:"grn",tier:1},
-      {name:"Vijay Sankaran",title:"VP & Chief Digital & Information Officer (CDIO)",dept:"Digital & Technology",relevance:"Primary contact — owns digital transformation, Azure relationship, and OpenBlue AI integration",li:"https://linkedin.com/in/vijaysankaran",email:"vijay.sankaran@jci.com",badge:"Primary Contact",clr:"pri",tier:2},
-      {name:"Katie McGinty",title:"VP & Chief Sustainability & External Relations Officer",dept:"Sustainability",relevance:"Sustainability Manager + AI carbon tracking conversation — owns the net zero 2035 mandate and ESG board reporting",li:"https://linkedin.com/in/katiemcginty",email:"katie.mcginty@jci.com",badge:"Sustainability",clr:"grn",tier:2},
-      {name:"Marc Vandiepenbeeck",title:"Executive VP & CFO",dept:"Finance",relevance:"CFO approval needed for enterprise Azure expansion. Lead with the ROI model and Month 8 break-even",li:"https://linkedin.com/in/marcvandiepenbeeck",email:"marc.vandiepenbeeck@jci.com",badge:"CFO",clr:"org",tier:2},
-      {name:"Terry Huchel",title:"VP, Global Procurement & Supply Chain",dept:"Operations",relevance:"Supply chain AI and procurement optimization — secondary expansion path worth $8M+",li:"—",email:"terry.huchel@jci.com",badge:"Operations",clr:"pur",tier:3},
-      {name:"John Donofrio",title:"Executive VP & General Counsel",dept:"Legal",relevance:"AI governance, responsible AI, and contract review — Tier 1 governance stakeholder for Agent deployments",li:"https://linkedin.com/in/johndonofrio",email:"john.donofrio@jci.com",badge:"Legal",clr:"tel",tier:3},
+      {name:"Joakim Weidemanis",title:"Chief Executive Officer",dept:"Executive",relevance:"New CEO (March 2025) — operational efficiency is his stated top FY26 priority. Frame as a CEO-level ROI conversation",li:"https://www.linkedin.com/in/joakim-weidemanis-30a4986/",email:"joakim.weidemanis@jci.com",badge:"CEO",clr:"grn",tier:1},
+      {name:"Vijay Sankaran",title:"VP & Chief Digital & Information Officer",dept:"Digital & Technology",relevance:"Primary contact — owns digital transformation, Azure relationship, and OpenBlue AI integration",li:"https://www.linkedin.com/in/vijay-sankaran-762a9",email:"vijay.sankaran@jci.com",badge:"Primary Contact",clr:"pri",tier:2},
+      {name:"Katie McGinty",title:"VP & Chief Sustainability & External Relations Officer",dept:"Sustainability",relevance:"Sustainability Manager + AI carbon tracking — owns the net zero 2035 mandate and ESG board reporting",li:"https://www.linkedin.com/search/results/people/?keywords=Katie+McGinty+Johnson+Controls+Sustainability",email:"katie.mcginty@jci.com",badge:"Sustainability",clr:"grn",tier:2},
+      {name:"Marc Vandiepenbeeck",title:"Executive VP & CFO",dept:"Finance",relevance:"CFO approval needed for enterprise Azure expansion. Lead with the ROI model and Month 8 break-even",li:"https://www.linkedin.com/search/results/people/?keywords=Marc+Vandiepenbeeck+Johnson+Controls+CFO",email:"marc.vandiepenbeeck@jci.com",badge:"CFO",clr:"org",tier:2},
+      {name:"Terry Huchel",title:"VP, Global Procurement & Supply Chain",dept:"Operations",relevance:"Supply chain AI and procurement optimization — secondary expansion path worth $8M+",li:"https://www.linkedin.com/search/results/people/?keywords=Terry+Huchel+Johnson+Controls+Supply+Chain",email:"terry.huchel@jci.com",badge:"Operations",clr:"pur",tier:3},
+      {name:"John Donofrio",title:"Executive VP & General Counsel",dept:"Legal",relevance:"AI governance, responsible AI, and contract review — Tier 1 governance stakeholder for Agent deployments",li:"https://www.linkedin.com/search/results/people/?keywords=John+Donofrio+Johnson+Controls+General+Counsel",email:"john.donofrio@jci.com",badge:"Legal",clr:"tel",tier:3},
     ]
   },
-  {id:"chevron",name:"Chevron",industry:"Energy",icon:"⚡",clr:"org",
-    cardType:"Strategic Account",metric:"+18% Potential",badge:"Expand Now",badgeClr:"grn",
-    whyItMatters:"Chevron has active cloud mandate and confirmed AI budget for FY26. An 18% consumption growth opportunity exists in seismic AI, sustainability, and field operations workloads — all within the current Microsoft relationship. A Google competitive announcement makes this time-sensitive.",
+  { id:"chevron", name:"Chevron", industry:"Energy", icon:"⚡", clr:"org", cardType:"Strategic Account", metric:"+18% Potential", badge:"Expand Now", badgeClr:"grn",
+    whyItMatters:"Chevron has active cloud mandate and confirmed AI budget for FY26. An 18% consumption growth opportunity exists in seismic AI, sustainability, and field operations — all within the current Microsoft relationship. A Google competitive announcement makes this time-sensitive.",
     last90Days:["Announced AI-first exploration strategy — $2B committed over 3 years","Net zero 2050 commitment accelerated — sustainability AI now board-level","Q1: operational efficiency through digitization cited by CFO as top capital priority","Google–Chevron exploration AI partnership announced — direct competitive signal"],
-    currentMotion:["Azure active for upstream data processing — 4 petabytes under management","M365 Copilot rolling out to 12,000 engineers globally","Azure OpenAI seismic data analysis POC — 34% improvement over baseline model","Microsoft Purview for data governance across global upstream and downstream operations"],
+    currentMotion:["Azure active for upstream data processing — 4 petabytes under management","M365 Copilot rolling out to 12,000 engineers globally","Azure OpenAI seismic data analysis POC — 34% improvement over baseline model","Microsoft Purview for data governance across global operations"],
     expand:["Scale Azure OpenAI seismic analysis to full exploration portfolio — 10x current scope","Sustainability Manager for real-time emissions tracking tied to net zero mandate","Azure Digital Twins for refinery simulation and safety optimization","Intelligent field operations AI — reduce unplanned downtime across 40 offshore platforms","Microsoft Fabric for unified energy data platform"],
     nextMove:"Wade should position the 34% seismic accuracy improvement as the proof point for a CDO-level enterprise expansion conversation. Converting this POC to enterprise scale is the fastest path to closing the $35M proposal — and it directly counters the Google partnership announcement.",
     orgChart:[
-      {name:"Mike Wirth",title:"Chairman & Chief Executive Officer",dept:"Executive",relevance:"Executive sponsor for enterprise AI strategy — best reached through the net zero and operational efficiency angle",li:"https://linkedin.com/in/mikewirth",email:"mwirth@chevron.com",badge:"CEO",clr:"grn",tier:1},
-      {name:"Eimear Bonner",title:"Executive VP & Chief Financial Officer",dept:"Finance",relevance:"CFO controls capital allocation for AI expansion. Lead with the 34% seismic accuracy ROI and $35M pipeline",li:"https://linkedin.com/in/eimear-bonner",email:"epbonner@chevron.com",badge:"CFO",clr:"org",tier:1},
-      {name:"Ryder Booth",title:"Chief Technology & Engineering Officer",dept:"Technology & Engineering",relevance:"Primary technical target — owns AI, engineering tech stack, and the seismic AI POC relationship with Microsoft",li:"—",email:"rtbooth@chevron.com",badge:"Primary Contact",clr:"pri",tier:2},
-      {name:"Mark Nelson",title:"Vice Chairman & EVP, Oil, Products & Gas",dept:"Business",relevance:"Upstream and downstream operations owner — key sponsor for field operations AI and refinery Digital Twins",li:"https://linkedin.com/in/markanelson",email:"manelson@chevron.com",badge:"Operations",clr:"pur",tier:2},
-      {name:"R. Hewitt Pate",title:"VP & Chief Legal Officer",dept:"Legal",relevance:"AI governance, responsible AI compliance, and contract authority for enterprise Azure expansion",li:"—",email:"rhpate@chevron.com",badge:"Legal",clr:"tel",tier:2},
-      {name:"CIO (Current)",title:"VP & Chief Information Officer",dept:"IT",relevance:"Bill Braun retired Feb 2025 — current CIO is key Azure relationship owner. Confirm name with account team",li:"—",email:"—",badge:"Confirm Name",clr:"red",tier:2},
-      {name:"Jeff Gustavson",title:"President, New Energies",dept:"Energy Transition",relevance:"Sustainability Manager + AI for new energies — net zero 2050 and hydrogen/carbon capture AI opportunities",li:"https://linkedin.com/in/jeffreygustavson",email:"jbgustavson@chevron.com",badge:"Sustainability",clr:"grn",tier:3},
+      {name:"Mike Wirth",title:"Chairman & Chief Executive Officer",dept:"Executive",relevance:"Executive sponsor for enterprise AI strategy — best reached through the net zero and operational efficiency angle",li:"https://www.linkedin.com/search/results/people/?keywords=Mike+Wirth+Chevron+CEO+Chairman",email:"mwirth@chevron.com",badge:"CEO",clr:"grn",tier:1},
+      {name:"Eimear Bonner",title:"Executive VP & Chief Financial Officer",dept:"Finance",relevance:"CFO controls capital allocation for AI expansion. Lead with the 34% seismic accuracy ROI and $35M pipeline",li:"https://www.linkedin.com/search/results/people/?keywords=Eimear+Bonner+Chevron+CFO",email:"epbonner@chevron.com",badge:"CFO",clr:"org",tier:1},
+      {name:"Ryder Booth",title:"Chief Technology & Engineering Officer",dept:"Technology & Engineering",relevance:"Primary technical target — owns AI, engineering tech stack, and the seismic AI POC relationship with Microsoft",li:"https://www.linkedin.com/search/results/people/?keywords=Ryder+Booth+Chevron+Technology+Engineering",email:"rtbooth@chevron.com",badge:"Primary Contact",clr:"pri",tier:2},
+      {name:"Mark Nelson",title:"Vice Chairman & EVP, Oil, Products & Gas",dept:"Business",relevance:"Upstream and downstream operations owner — key sponsor for field operations AI and refinery Digital Twins",li:"https://www.linkedin.com/search/results/people/?keywords=Mark+Nelson+Chevron+EVP+Oil",email:"manelson@chevron.com",badge:"Operations",clr:"pur",tier:2},
+      {name:"R. Hewitt Pate",title:"VP & Chief Legal Officer",dept:"Legal",relevance:"AI governance, responsible AI compliance, and contract authority for enterprise Azure expansion",li:"https://www.linkedin.com/search/results/people/?keywords=Hewitt+Pate+Chevron+Legal",email:"rhpate@chevron.com",badge:"Legal",clr:"tel",tier:2},
+      {name:"CIO — Verify with Account Team",title:"VP & Chief Information Officer",dept:"IT",relevance:"Bill Braun retired Feb 2025 — current CIO is key Azure relationship owner. Confirm name with account team before outreach",li:"—",email:"—",badge:"Confirm Name",clr:"red",tier:2},
+      {name:"Jeff Gustavson",title:"President, New Energies",dept:"Energy Transition",relevance:"Sustainability Manager + AI for new energies — net zero 2050 and carbon capture AI opportunities",li:"https://www.linkedin.com/search/results/people/?keywords=Jeff+Gustavson+Chevron+New+Energies",email:"jbgustavson@chevron.com",badge:"Sustainability",clr:"grn",tier:3},
     ]
   },
 ];
 
 const PIPELINE_DEALS = [
-  {name:"Walmart AI Expansion",value:42,stage:"Proposal",risk:"Medium",icon:"🛒",clr:"yel",acctId:"walmart"},
-  {name:"Chevron AI Platform Scale",value:35,stage:"POC Review",risk:"Low",icon:"⚡",clr:"org",acctId:"chevron"},
-  {name:"JCI Digital Twins",value:28,stage:"Negotiation",risk:"Low",icon:"🏭",clr:"pur",acctId:"jci"},
-  {name:"CVS Health Azure Migration",value:19,stage:"Discovery",risk:"High",icon:"🏥",clr:"red",acctId:null},
-  {name:"Target Retail AI Pilot",value:14,stage:"At Risk",risk:"High",icon:"🛒",clr:"red",acctId:null},
-  {name:"Adatum Energy Sustainability",value:11,stage:"Active",risk:"Low",icon:"⚡",clr:"org",acctId:null},
-  {name:"First National AI Governance",value:28,stage:"Closed Won",risk:"None",icon:"🏦",clr:"grn",acctId:null},
-  {name:"Providence Health AI Foundry",value:18,stage:"Closed Won",risk:"None",icon:"🏥",clr:"grn",acctId:null},
+  {id:"walmart-ai",name:"Walmart AI Expansion",value:42,stage:"Proposal",risk:"Medium",icon:"🛒",clr:"yel",acctId:"walmart"},
+  {id:"chevron-ai",name:"Chevron AI Platform Scale",value:35,stage:"POC Review",risk:"Low",icon:"⚡",clr:"org",acctId:"chevron"},
+  {id:"jci-twins",name:"JCI Digital Twins",value:28,stage:"Negotiation",risk:"Low",icon:"🏭",clr:"pur",acctId:"jci"},
+  {id:"cvs",name:"CVS Health Azure Migration",value:19,stage:"Discovery",risk:"High",icon:"🏥",clr:"red",acctId:null},
+  {id:"target",name:"Target Retail AI Pilot",value:14,stage:"At Risk",risk:"High",icon:"🛒",clr:"red",acctId:null},
+  {id:"adatum",name:"Adatum Energy Sustainability",value:11,stage:"Active",risk:"Low",icon:"⚡",clr:"org",acctId:null},
+  {id:"firstnat",name:"First National AI Governance",value:28,stage:"Closed Won",risk:"None",icon:"🏦",clr:"grn",acctId:null},
+  {id:"providence",name:"Providence Health AI Foundry",value:18,stage:"Closed Won",risk:"None",icon:"🏥",clr:"grn",acctId:null},
 ];
 
+const DEAL_DETAILS = {
+  cvs:{ icon:"🏥",clr:"red",customer:"CVS Health",summary:"CVS Health is evaluating Azure for a multi-cloud migration across pharmacy, health services, and retail operations. The $19M engagement covers Azure OpenAI for pharmacy automation and Purview for HIPAA data governance.",contacts:["Karen Lynch — CEO","Prem Shah — President, Pharmacy & Consumer Wellness","Dan Finke — President, Health Care Benefits"],signals:["CVS Q1 earnings showed 8% retail decline — digital transformation is now a CEO mandate","New Chief Digital Officer hired in Q4 2025 — AI and cloud modernization is top priority","Competing with Amazon Pharmacy — urgency for AI-powered pharmacy experience is high"],nextMove:"Engage the new CDO directly with an Azure OpenAI pharmacy automation POC. CVS's HIPAA requirements make Microsoft Purview the natural governance layer — lead with compliance, not just AI."},
+  target:{ icon:"🛒",clr:"red",customer:"Target Corporation",summary:"A $14M retail AI pilot covering demand forecasting and store operations is at risk due to budget pressure and an internal reorg. NPS has dropped to 41%. Deployment delays are eroding confidence. Executive intervention is needed this week.",contacts:["Brian Cornell — CEO","Brett Craig — EVP & CIO","Christina Hennington — EVP & Chief Growth Officer"],signals:["Target delayed digital transformation roadmap in Q1 — budget pressure cited","NPS at 41% — deployment delays creating frustration at IT leadership level","Walmart + Amazon AI announcements creating urgency to catch up — or kill the program"],nextMove:"Wade needs to call Brett Craig (CIO) this week. Acknowledge the delays, own the recovery plan, and present a simplified 30-day deployment path that shows results fast. Do not let this go another week without executive contact."},
+  adatum:{ icon:"⚡",clr:"org",customer:"Adatum Energy",summary:"Adatum Energy has deployed Sustainability Manager and real-time AI carbon tracking across 12 facilities. The $11M engagement is active and healthy — NPS is strong and the CDO is a vocal Microsoft advocate. Expansion into OT/IT operations AI is the next motion.",contacts:["CDO — active Microsoft champion (confirm name with account team)","VP Operations — OT/IT integration stakeholder","Chief Sustainability Officer — ESG and Sustainability Manager champion"],signals:["Adatum published ESG report citing Microsoft Sustainability Manager — earned media opportunity","3-week setup vs. industry average of 12 weeks — strong proof point for field use","OT/IT convergence roadmap approved — Phase 2 ready to scope"],nextMove:"Use Adatum as your reference case in every energy conversation. Work with the CDO to develop a joint case study and get them speaking at a Microsoft energy forum. Then scope Phase 2 OT/IT operations AI — estimated $8M additional."},
+  firstnat:{ icon:"🏦",clr:"grn",customer:"First National Financial",summary:"$28M TCV closed. First National's 12 AI compliance agents are live across 8 regulatory domains. The OCC audit passed — the first bank AI system to do so under the new guidance. This is now Microsoft's most-cited FS AI governance reference globally.",contacts:["CDO — active Microsoft champion, speaking at Microsoft FS Summit","Chief Compliance Officer — Led OCC exam, now a Responsible AI advocate","CFO — Approved the $28M, validated by $23M annual savings projection"],signals:["First National CDO confirmed speaker at Microsoft Financial Services Summit","OCC released updated AI guidance citing First National's approach as a model","3 new compliance workloads now in scope — AML, fraud detection, risk scoring"],nextMove:"Activate First National as your reference account across all FS conversations. Set up CDO reference calls for every FS prospect in pipeline. Scope the expansion workloads — AML + fraud detection + risk scoring estimated at $12M additional TCV."},
+  providence:{ icon:"🏥",clr:"grn",customer:"Providence Health System",summary:"$18M EA closed. Azure AI Foundry is live across 42 Providence facilities processing 2.3M clinical notes monthly. Physicians report 2 hours per day returned to patient care. CMO speaking at Microsoft Build May 19. Providence is Microsoft's #1 global healthcare AI reference.",contacts:["CMO — Active Microsoft champion, keynoting at Build May 19","CTO — Azure AI Foundry primary technical sponsor","CEO — Approved enterprise agreement, direct Wade relationship"],signals:["Providence CMO keynoting at Microsoft Build 2026 — May 19 in Seattle","Published: '40% reduction in clinical documentation time' — field-use asset ready","3 new AI workloads approved: discharge planning, readmission prediction, care gap analysis"],nextMove:"Make Build May 19 a moment. Wade should be present for the Providence CMO keynote. Then use that visibility to accelerate 3 additional healthcare prospects in pipeline. Providence's story is the most powerful AI healthcare narrative in the market right now."},
+};
+
 const DECKS = [
-  {name:"Frontier Transformation — USCI Master Pitch",co:"All Industries",type:"Deck",icon:"🚀",clr:"pri",status:"Final",slides:30,updated:"Apr 3",use:"Frame every customer conversation with Judson's Frontier language before any industry dive."},
-  {name:"Walmart — Retail AI Executive Briefing",co:"Walmart",type:"Deck",icon:"🛒",clr:"yel",status:"Final",slides:24,updated:"Apr 1",use:"Retail CTO/CDO opener — lead with demand forecasting and supply chain AI ROI."},
-  {name:"Johnson Controls — Manufacturing AI Story",co:"Johnson Controls",type:"Deck",icon:"🏭",clr:"pur",status:"Final",slides:28,updated:"Mar 18",use:"Open with savings headline. Show the Digital Twins expansion path. COO/CTO audience."},
-  {name:"Chevron — Energy AI Strategy",co:"Chevron",type:"Deck",icon:"⚡",clr:"org",status:"Final",slides:20,updated:"Mar 30",use:"Lead with 34% seismic accuracy improvement. Strongest POC result in USCI energy."},
-  {name:"AI Governance Operating Model",co:"All Industries",type:"Deck",icon:"🛡️",clr:"grn",status:"Final",slides:20,updated:"Mar 15",use:"Universal opener for governance conversations. Every industry needs this. Start here."},
-  {name:"CTO Executive Briefing Template",co:"All Industries",type:"Template",icon:"📋",clr:"pri",status:"Final",slides:12,updated:"Mar 22",use:"Pull 24 hours before any exec meeting. Swap in logo + 3 data points. Done."},
-  {name:"CFO ROI Playbook — Copilot M365",co:"Cross-Industry",type:"Deck",icon:"💰",clr:"grn",status:"Final",slides:16,updated:"Mar 20",use:"Send ahead of any CFO meeting. Ask them to choose their ROI scenario before you arrive."},
-  {name:"Azure Commitment Recovery Plays",co:"All Industries",type:"Playbook",icon:"📊",clr:"red",status:"Final",slides:10,updated:"Apr 2",use:"Use for any behind-plan Azure account. Walmart, Northwind, Target all apply right now."},
-  {name:"Industry Agent Blueprint — Financial Services",co:"First National Financial",type:"Deck",icon:"🏦",clr:"pri",status:"Final",slides:18,updated:"Mar 25",use:"Lead every FS CTO meeting with the OCC audit result on slide 4. Removes regulatory fear."},
-  {name:"Healthcare AI Governance Guide",co:"Providence Health",type:"One-Pager",icon:"🏥",clr:"grn",status:"Final",slides:1,updated:"Mar 28",use:"Drop in every healthcare exec leave-behind. Answers the board question before they ask."},
+  {id:"frontier",name:"Frontier Transformation — USCI Master Pitch",co:"All Industries",type:"Deck",icon:"🚀",clr:"pri",slides:30,updated:"Apr 3",use:"Frame every customer conversation with Judson's Frontier language before any industry dive.",summary:"The master narrative for Frontier Transformation across all 5 USCI industries. Opens with Judson's exact language from Ignite 2025 and March 2026 blog. Covers all customer proof points.",keySlides:["Slide 1: Frontier Transformation — Judson's vision and the defining moment","Slide 4: The gap — why AI stalls (Gartner data)","Slide 8: USCI industry momentum map","Slide 14: Providence, First National, Contoso proof points","Slide 22: The 7-stage Industry Agent GTM motion","Slide 28: Frontier Firm outcomes — what customers achieve"]},
+  {id:"walmart-deck",name:"Walmart — Retail AI Executive Briefing",co:"Walmart",type:"Deck",icon:"🛒",clr:"yel",slides:24,updated:"Apr 1",use:"Retail CTO/CDO opener — lead with demand forecasting and supply chain AI ROI.",summary:"Built for the Suresh Kumar introduction call. Opens with Walmart's AI mandate, connects to the Azure commitment gap, and walks through 3 concrete expansion workloads already within committed spend.",keySlides:["Slide 2: Walmart's AI mandate — Suresh Kumar's vision","Slide 6: Azure commitment status — the opportunity","Slide 10: AI Foundry for demand forecasting — ROI model","Slide 16: Walmart+ personalization — Azure OpenAI architecture","Slide 20: Next 90 days — proposed motion"]},
+  {id:"jci-deck",name:"Johnson Controls — Manufacturing AI Story",co:"Johnson Controls",type:"Deck",icon:"🏭",clr:"pur",slides:28,updated:"Mar 18",use:"Open with savings headline. Show the Digital Twins expansion path. COO/CTO audience.",summary:"Covers the Azure IoT → Digital Twins expansion path for JCI's 130 facilities. Uses the Contoso Manufacturing reference story as proof, then maps directly to JCI's OpenBlue platform.",keySlides:["Slide 1: The $12M savings headline — what's possible","Slide 5: JCI's OpenBlue + Azure Digital Twins integration","Slide 12: 3 expansion paths — predictive maintenance, building AI, supply chain","Slide 18: Sustainability Manager + net zero 2035 mandate","Slide 24: Proposed enterprise agreement structure"]},
+  {id:"chevron-deck",name:"Chevron — Energy AI Strategy",co:"Chevron",type:"Deck",icon:"⚡",clr:"org",slides:20,updated:"Mar 30",use:"Lead with 34% seismic accuracy improvement. Strongest POC result in USCI energy.",summary:"Opens with the seismic AI POC result — 34% improvement over baseline. Then counters the Google partnership announcement with Microsoft's superior governance and Azure data platform story.",keySlides:["Slide 2: 34% seismic accuracy improvement — the proof point","Slide 6: Google vs. Microsoft — governance and enterprise trust","Slide 10: Net zero mandate — Sustainability Manager architecture","Slide 15: Field operations AI — 40 offshore platform opportunity","Slide 18: Enterprise expansion motion — $35M proposal"]},
+  {id:"governance",name:"AI Governance Operating Model",co:"All Industries",type:"Deck",icon:"🛡️",clr:"grn",slides:20,updated:"Mar 15",use:"Universal opener for governance conversations. Every industry needs this. Start here.",summary:"The 3-tier governance pyramid, 7-stage Industry Agent journey, and Meghan's Tier 2 GTM role. Used in every Industry Agent kickoff. Providence and First National are live proof points.",keySlides:["Slide 1: Governance is the spine, not the checkpoint","Slide 4: 3-tier model — Executive, Governance, Delivery","Slide 9: 7-stage Industry Agent journey","Slide 14: First National OCC audit — governance in action","Slide 18: How to embed governance from Day 0"]},
+  {id:"cto-template",name:"CTO Executive Briefing Template",co:"All Industries",type:"Template",icon:"📋",clr:"pri",slides:12,updated:"Mar 22",use:"Pull 24 hours before any exec meeting. Swap in logo + 3 data points. Done.",summary:"12-slide modular template. Situation → Insight → Recommendation. Used for every C-suite and board engagement. Sections swap in 30 minutes with customer-specific data.",keySlides:["Slide 1: Customer situation — what we heard","Slide 4: The Frontier Transformation opportunity for this org","Slide 7: What Microsoft is already doing (current motion)","Slide 10: Recommended next move — specific and time-bound","Slide 12: Governance and trust — how we protect their investment"]},
+  {id:"cfo-roi",name:"CFO ROI Playbook — Copilot M365",co:"Cross-Industry",type:"Deck",icon:"💰",clr:"grn",slides:16,updated:"Mar 20",use:"Send ahead of any CFO meeting. Ask them to choose their ROI scenario before you arrive.",summary:"3 ROI scenarios (conservative, base, optimistic) showing 22–38% productivity gains. Co-signed by Wade. The First National CFO used this to approve the $28M enterprise agreement.",keySlides:["Slide 2: The 3 ROI scenarios — choose your starting point","Slide 6: Conservative case — 22% productivity gain methodology","Slide 10: Base case — 30% gain with adoption support","Slide 13: Optimistic case — 38% gain with full deployment","Slide 15: How to calculate your own number — live calculator"]},
+  {id:"recovery",name:"Azure Commitment Recovery Plays",co:"All Industries",type:"Playbook",icon:"📊",clr:"red",slides:10,updated:"Apr 2",use:"Use for any behind-plan Azure account. Walmart, Northwind, Target all apply right now.",summary:"10-slide playbook covering the 5 most common Azure consumption recovery plays. Built from real USCI account situations. Walmart is the live case study.",keySlides:["Slide 1: How to diagnose why consumption is behind","Slide 3: Recovery Play 1 — expand existing workloads","Slide 5: Recovery Play 2 — activate unused committed services","Slide 7: Recovery Play 3 — fast-track pilot to production","Slide 9: The Walmart recovery motion — live example"]},
+  {id:"fs-blueprint",name:"Industry Agent Blueprint — Financial Services",co:"First National Financial",type:"Deck",icon:"🏦",clr:"pri",slides:18,updated:"Mar 25",use:"Lead every FS CTO meeting with the OCC audit result on slide 4. Removes regulatory fear.",summary:"The exact deck used to get First National's CDO from skeptic to board champion. The OCC audit result is the centerpiece. Azure Confidential Computing and Purview governance are the differentiators.",keySlides:["Slide 2: The FS AI governance challenge — why most banks fail","Slide 4: First National — OCC audit passed. Here's how.","Slide 8: Azure Confidential Computing architecture","Slide 12: Microsoft Purview for financial compliance","Slide 16: The 7-stage blueprint — from Discover to Scale"]},
+  {id:"healthcare-guide",name:"Healthcare AI Governance Guide",co:"Providence Health",type:"One-Pager",icon:"🏥",clr:"grn",slides:1,updated:"Mar 28",use:"Drop in every healthcare exec leave-behind. Answers the board question before they ask.",summary:"Single-page responsible AI brief originally drafted for Providence's board presentation. Zero objections from the board. Now the standard healthcare exec leave-behind for every CTO-led engagement.",keySlides:["Section 1: HIPAA-compliant AI — how Microsoft protects patient data","Section 2: Clinical AI governance — the 3-tier model in plain language","Section 3: Providence Health outcomes — what governance-first AI delivers","Section 4: Your next step — a 30-minute governance readiness conversation"]},
 ];
 
 const BRIEFINGS = [
-  {account:"Walmart",type:"Strategy",headline:"Walmart announces $3B AI supply chain initiative",time:"2 days ago",priority:"high",clr:"yel",note:"New CTO mandate creates executive access window. Tied directly to Azure consumption recovery play."},
-  {account:"Chevron",type:"Competitive",headline:"Chevron–Google exploration AI partnership announced",time:"1 week ago",priority:"urgent",clr:"red",note:"⚠️ Competitive signal. Wade's CDO engagement is time-sensitive — use seismic POC as counter."},
-  {account:"Johnson Controls",type:"Earnings",headline:"JCI Q4: Operational efficiency top FY26 priority",time:"5 days ago",priority:"high",clr:"pur",note:"Confirms Digital Twins expansion budget. Opens door for enterprise AI conversation this quarter."},
-  {account:"Providence Health",type:"Win",headline:"Providence CMO confirmed for Microsoft Build keynote — May 19",time:"Today",priority:"high",clr:"grn",note:"Biggest healthcare AI reference moment of 2026. Wade should be present and involved."},
-  {account:"Industry",type:"Analyst",headline:"Gartner: 78% of enterprises will require AI governance mandates by 2026",time:"3 days ago",priority:"medium",clr:"pri",note:"Strong setup for governance framework conversations across all 5 USCI industries."},
-  {account:"First National",type:"Regulation",headline:"OCC releases updated AI model risk guidance for banks",time:"4 days ago",priority:"medium",clr:"grn",note:"Validates First National governance story — use as proof point in every FS conversation."},
-  {account:"Target",type:"Risk",headline:"Target delays digital transformation roadmap — budget pressure",time:"1 week ago",priority:"high",clr:"red",note:"⚠️ At-risk signal for $14M pilot. Executive support needed to hold momentum."},
+  {id:"b-walmart",account:"Walmart",type:"Strategy",headline:"Walmart announces $3B AI supply chain initiative",time:"2 days ago",priority:"high",clr:"yel",note:"New CTO mandate creates executive access window. Tied directly to Azure consumption recovery play.",detail:"Walmart CEO Doug McMillon announced a $3B investment in AI-driven supply chain modernization, with Suresh Kumar leading the technical execution. Two new EVP AI roles have been created. This is the strongest signal of Walmart's AI seriousness and the best executive access window in 3 years. The Azure consumption gap makes this both urgent and addressable — the budget exists, it's just not being activated.",action:"Contact Suresh Kumar this week. Frame the conversation around Walmart's 4,700-store AI mandate — not the consumption gap. Let the expansion opportunity follow naturally from the AI strategy discussion."},
+  {id:"b-chevron",account:"Chevron",type:"Competitive",headline:"Chevron–Google exploration AI partnership announced",time:"1 week ago",priority:"urgent",clr:"red",note:"⚠️ Competitive signal. Wade's CDO engagement is time-sensitive — use seismic POC as counter.",detail:"Chevron and Google announced an exploration AI partnership focused on seismic data analysis — directly overlapping with Microsoft's active Azure OpenAI POC. The Google deal is not yet enterprise-wide and focuses on a single use case. Microsoft's 34% accuracy improvement in the existing POC is a stronger proof point. The governance story — Azure's enterprise trust, Purview, and compliance framework — is what Google cannot match.",action:"Wade should contact Ryder Booth (Chief Technology & Engineering Officer) before the April 22 CDO briefing. Lead with the POC results. Frame Microsoft as the enterprise AI partner vs. Google as a point solution vendor."},
+  {id:"b-jci",account:"Johnson Controls",type:"Earnings",headline:"JCI Q4: Operational efficiency top FY26 priority",time:"5 days ago",priority:"high",clr:"pur",note:"Confirms Digital Twins expansion budget. Opens door for enterprise AI conversation this quarter.",detail:"New CEO Joakim Weidemanis cited operational efficiency as the top FY26 priority in the Q4 earnings call — directly validating the Digital Twins expansion pitch. Vijay Sankaran (CDIO) followed with specific references to Azure as the cloud platform and agentic AI as the next phase. The budget is confirmed. The competitive window is now, before Schneider Electric's building AI partnership gains more traction.",action:"Sponsor the Phase 2 Digital Twins proposal. Wade's executive sponsorship converts this from a CDIO conversation to a CEO conversation — exactly what the $22M expansion requires."},
+  {id:"b-providence",account:"Providence Health",type:"Win",headline:"Providence CMO confirmed for Microsoft Build keynote — May 19",time:"Today",priority:"high",clr:"grn",note:"Biggest healthcare AI reference moment of 2026. Wade should be present and involved.",detail:"Providence Health's CMO has confirmed a keynote slot at Microsoft Build 2026, May 19 in Seattle. The presentation will cover the 40% clinical documentation reduction and Azure AI Foundry deployment. This is the highest-profile healthcare AI advocacy moment in 2026 and will be seen by thousands of enterprise decision-makers in the audience and millions more watching the stream.",action:"Wade must be present at this keynote. Coordinate an executive dinner with the Providence CMO and CEO for May 18 — the night before. Then use the Build visibility to accelerate 3 healthcare prospects currently in pipeline that have asked for a reference customer conversation."},
+  {id:"b-gartner",account:"Market",type:"Analyst",headline:"Gartner: 78% of enterprises will require AI governance mandates by 2026",time:"3 days ago",priority:"medium",clr:"pri",note:"Strong setup for governance framework conversations across all 5 USCI industries.",detail:"Gartner's 2026 AI governance report shows 78% of enterprises will require formal AI governance mandates within the year — driven by board pressure, regulatory signals, and a wave of AI pilot failures. This validates Microsoft's governance-first Frontier Transformation approach and gives Wade a third-party proof point for every executive conversation.",action:"Use this stat as the opening for every governance conversation in Q2. Lead with: 'Gartner says 78% of boards will require AI governance mandates this year. Here's how Microsoft's three customers already have that covered — before the mandate arrives.'"},
+  {id:"b-firstnat",account:"Financial Services",type:"Regulation",headline:"OCC releases updated AI model risk guidance for banks",time:"4 days ago",priority:"medium",clr:"grn",note:"Validates First National governance story — use as proof point in every FS conversation.",detail:"The OCC released updated guidance on AI model risk management for banks, raising the bar for explainability, bias testing, and audit trails. First National Financial's Azure-based compliance agent framework already meets every new requirement — making it the only bank AI deployment that can demonstrably pass the new OCC standard.",action:"Issue a one-page brief for the field team: 'First National passed the OCC exam. Here's what their AI governance stack looks like — and how to replicate it at your bank.' This brief alone should open 5–8 new FS conversations this quarter."},
+  {id:"b-target",account:"Target",type:"Risk",headline:"Target delays digital transformation roadmap — budget pressure",time:"1 week ago",priority:"high",clr:"red",note:"⚠️ At-risk signal for $14M pilot. Executive intervention needed to hold momentum.",detail:"Target has announced delays to its digital transformation roadmap, citing Q1 budget pressure. The Microsoft $14M retail AI pilot is directly exposed. NPS from the Target IT team is at 41% — below the threshold where deals survive without executive intervention. The internal IT sponsor has flagged that without a revised deployment timeline and executive-level commitment from Microsoft, the program will be formally paused in Q2.",action:"Wade to call Brett Craig (EVP & CIO) this week. Do not email — call. Acknowledge the delays directly, present a simplified 30-day recovery plan, and offer personal executive sponsorship. One call from Wade at this stage is worth more than six field team meetings."},
 ];
 
 const PROJECTS = [
-  {name:"Walmart Azure Consumption Recovery",account:"Walmart",status:"Active",phase:"Execution",pct:25,icon:"🛒",clr:"yel",milestone:"Wade–CTO intro call — Apr 14",risk:"Medium",owner:"Meghan + Field",acctId:"walmart"},
-  {name:"JCI Digital Twins Expansion",account:"Johnson Controls",status:"Active",phase:"Design",pct:60,icon:"🏭",clr:"pur",milestone:"Phase 2 review — Apr 18",risk:"Low",owner:"Field + CSU",acctId:"jci"},
-  {name:"Chevron Seismic AI Scale-Up",account:"Chevron",status:"Active",phase:"Proposal",pct:40,icon:"⚡",clr:"org",milestone:"CDO briefing — Apr 22",risk:"Low",owner:"Wade + Account",acctId:"chevron"},
-  {name:"Industry Agent: Healthcare — Deploy",account:"Providence Health",status:"Active",phase:"Deploy",pct:85,icon:"🏥",clr:"grn",milestone:"Go-live — May 1",risk:"Low",owner:"Meghan + CSU",acctId:null},
-  {name:"Industry Agent: Financial Services",account:"First National",status:"Active",phase:"Validate",pct:70,icon:"🏦",clr:"pri",milestone:"Governance review — Apr 10",risk:"Medium",owner:"Meghan",acctId:null},
-  {name:"Target Retail AI — Recovery Motion",account:"Target",status:"At Risk",phase:"Discovery",pct:15,icon:"🛒",clr:"red",milestone:"Executive outreach — ASAP",risk:"High",owner:"Wade needed",acctId:null},
+  {id:"walmart-proj",name:"Walmart Azure Consumption Recovery",account:"Walmart",status:"Active",phase:"Execution",pct:25,icon:"🛒",clr:"yel",milestone:"Wade–Suresh Kumar intro call — Apr 14",risk:"Medium",owner:"Meghan + Field",acctId:"walmart",detail:"Structured 90-day motion to activate $18M in committed but unconsumed Azure spend. Phase 1 is the CTO introduction. Phase 2 is activating the AI Foundry and Fabric workloads already scoped by the account team. The EVP AI Platforms open role is the fastest door-opener — position Microsoft as the platform architecture before that person is hired."},
+  {id:"jci-proj",name:"JCI Digital Twins Expansion",account:"Johnson Controls",status:"Active",phase:"Design",pct:60,icon:"🏭",clr:"pur",milestone:"Phase 2 architectural review — Apr 18",risk:"Low",owner:"Field + CSU",acctId:"jci",detail:"Converting the current 14-facility Azure Defender for OT deployment into a full Digital Twins AI operations platform across all 130 JCI facilities. Phase 2 review is April 18 — Wade's executive sponsorship converts this from a CDIO motion to a CEO-level commitment, unlocking the $22M enterprise budget."},
+  {id:"chevron-proj",name:"Chevron Seismic AI Scale-Up",account:"Chevron",status:"Active",phase:"Proposal",pct:40,icon:"⚡",clr:"org",milestone:"CDO briefing — Apr 22",risk:"Low",owner:"Wade + Account",acctId:"chevron",detail:"Scaling the Azure OpenAI seismic analysis POC from a single exploration region to Chevron's full global portfolio — a 10x expansion within their current Azure committed spend. The $35M proposal is in final review. The Google partnership announcement creates urgency — the CDO briefing on April 22 is the decision meeting."},
+  {id:"healthcare-proj",name:"Industry Agent: Healthcare — Deploy",account:"Providence Health",status:"Active",phase:"Deploy",pct:85,icon:"🏥",clr:"grn",milestone:"Full 42-facility go-live — May 1",risk:"Low",owner:"Meghan + CSU",acctId:null,detail:"Azure AI Foundry is live across 8 facilities and processing 2.3M clinical notes monthly. Full 42-facility deployment scheduled for May 1. CMO keynoting at Microsoft Build May 19. 3 new workloads (discharge planning, readmission prediction, care gap analysis) approved for Phase 2. Governance is 94% complete — all Tier 1 and Tier 2 checkpoints passed.",milestones:["✓ Discovery complete","✓ Blueprint approved","✓ Agents designed","✓ Governance checkpoints passed (Tier 1 & 2)","✓ Pilot live — 8 facilities","◎ Full 42-facility rollout — May 1 target"]},
+  {id:"fs-proj",name:"Industry Agent: Financial Services",account:"First National",status:"Active",phase:"Validate",pct:70,icon:"🏦",clr:"pri",milestone:"Tier 2 governance review — Apr 10",risk:"Medium",owner:"Meghan",acctId:null,detail:"12 AI compliance agents are built and in validation. The OCC audit passed. Tier 2 governance review is April 10 — two checkpoints pending sign-off from First National's Chief Compliance Officer. Once cleared, the Deploy phase begins and all 12 agents go live across all 12 LOBs.",milestones:["✓ Discovery complete","✓ Personas built","✓ Blueprint approved","✓ Agents designed","◎ Validate — Tier 2 governance review Apr 10","○ Deploy — pending validation","○ Scale"]},
+  {id:"target-proj",name:"Target Retail AI — Recovery Motion",account:"Target",status:"At Risk",phase:"Discovery",pct:15,icon:"🛒",clr:"red",milestone:"Wade executive outreach — THIS WEEK",risk:"High",owner:"Wade Graham — needed NOW",acctId:null,detail:"$14M retail AI pilot at serious risk of cancellation. NPS is 41%. Deployment delays have eroded IT leadership confidence. The internal Microsoft account team has flagged that without executive intervention from Wade this week, Target will formally pause the program in Q2. One call from Wade to Brett Craig (EVP & CIO) changes the trajectory.",milestones:["✓ Discovery complete","◎ Personas — partial, delayed","✗ Blueprint — blocked by budget review","✗ Agent design — not started","○ Validate","○ Deploy","○ Scale"]},
 ];
 
 const JUDSON = [
@@ -161,62 +147,272 @@ const JUDSON = [
   {phrase:"Work IQ + Fabric IQ",note:"The intelligence layer. Microsoft's differentiation from model-only vendors.",clr:"org"},
 ];
 
-const MEGAN_SYS = `You are "Ask Meghan" — Meghan Fasano's digital executive assistant built for Wade Graham, CTO of US Commercial Industries at Microsoft.
+const MEGAN_SYS = `You are "Ask Meghan" — Meghan Fasano's digital executive assistant for Wade Graham, CTO of US Commercial Industries at Microsoft. Be extremely concise — Wade reads fast. Use Microsoft business language. Lead with the single most important thing. Sound like a sharp executive advisor, not a chatbot.
 
-Current context: Q1 FY26 Quota: 78% ($147M closed of $189M target). 90-day pipeline: $312M (Walmart $42M, Chevron $35M, JCI $28M at front). Azure Commitment Alerts: Walmart 20% consumed (behind plan), Northwind 34%, Target 41%. Competitive: Chevron-Google exploration AI deal just announced. Active wins: First National $28M (OCC audit passed), Providence Health $18M (CMO speaking at Build May 19). Industry Agents: Healthcare/Providence (Deploy, 85%), FS/First National (Validate, 70%). Judson priorities: Frontier Transformation, Intelligence + Trust, Frontier Firms, Work IQ.
+Context: Q1 FY26 Quota 78% ($147M/$189M). 90-day pipeline $312M. Azure Alerts: Walmart 20%, Northwind 34%, Target 41%. Competitive: Chevron-Google deal just announced. Wins: First National $28M (OCC audit passed), Providence $18M (CMO at Build May 19). Judson priorities: Frontier Transformation, Intelligence + Trust, Frontier Firms, Work IQ.`;
 
-Be extremely concise — Wade reads fast. Use Microsoft business language. Lead with the single most important thing. Sound like a sharp executive advisor, not an AI chatbot.`;
+// ── BASE COMPONENTS ─────────────────────────────────────────────────────────
+function Badge({label,clr,t}){ return <span style={{background:cb(clr,t),color:cv(clr,t),fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:2,display:"inline-block"}}>{label}</span>; }
+function SLabel({t,children,style}){ return <div style={{fontSize:11,fontWeight:700,color:t.muted,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,...style}}>{children}</div>; }
+function Back({t,label,onBack}){ return <button onClick={onBack} style={{background:"none",border:"none",color:t.pri,fontSize:13,fontWeight:600,cursor:"pointer",padding:"0 0 14px",display:"block"}}>← {label}</button>; }
+function ProgBar({pct,clr,t}){ return <div style={{height:4,background:t.border,borderRadius:2,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,background:cv(clr,t),borderRadius:2}}/></div>; }
 
-/* ── HELPERS ──────────────────────────────────────────────────────────── */
-function cv(k, t) { return ({pri:t.pri,grn:t.grn,org:t.org,red:t.red,yel:t.yel,pur:t.pur})[k] || t.pri; }
-function cb(k, t) { return ({pri:t.priLt,grn:t.grnLt,org:t.orgLt,red:t.redLt,yel:t.yelLt,pur:t.purLt})[k] || t.priLt; }
-
-/* ── BASE COMPONENTS ──────────────────────────────────────────────────── */
-function Badge({label, clr, t}) {
-  return <span style={{background:cb(clr,t),color:cv(clr,t),fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:2,display:"inline-block"}}>{label}</span>;
-}
-function SLabel({t, children, style}) {
-  return <div style={{fontSize:11,fontWeight:700,color:t.muted,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10,...style}}>{children}</div>;
-}
-function Back({t, label, onBack}) {
-  return <button onClick={onBack} style={{background:"none",border:"none",color:t.pri,fontSize:13,fontWeight:600,cursor:"pointer",padding:"0 0 14px",display:"block"}}>← {label}</button>;
-}
-function ProgBar({pct, clr, t}) {
-  return <div style={{height:4,background:t.border,borderRadius:2,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,background:cv(clr,t),borderRadius:2}}/></div>;
+function Toast({msg,t}){
+  if(!msg) return null;
+  return <div style={{position:"fixed",bottom:80,left:"50%",transform:"translateX(-50%)",background:"#107c10",color:"#fff",fontSize:13,fontWeight:700,padding:"10px 20px",borderRadius:2,zIndex:999,boxShadow:"0 4px 12px rgba(0,0,0,0.25)",whiteSpace:"nowrap"}}>{msg}</div>;
 }
 
-/* ── WAFFLE MENU ──────────────────────────────────────────────────────── */
-function WaffleMenu({t, onClose, setPage}) {
-  const items = [
-    {icon:"🏠",label:"Home",page:"home"},
-    {icon:"📈",label:"Pipeline",page:"pipeline"},
-    {icon:"📂",label:"Decks",page:"decks"},
-    {icon:"📰",label:"Briefings",page:"briefings"},
-    {icon:"⚡",label:"Projects",page:"projects"},
-    {icon:"💬",label:"Ask Meghan",page:"megan"},
-  ];
+// ── LINKEDIN BUTTON ─────────────────────────────────────────────────────────
+function LIBtn({url}){
+  if(url==="—") return null;
   return (
-    <div onClick={e => e.target===e.currentTarget && onClose()} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.45)",zIndex:400,display:"flex"}}>
-      <div style={{background:t.surf,width:260,height:"100%",overflowY:"auto",boxShadow:"4px 0 20px rgba(0,0,0,0.2)",display:"flex",flexDirection:"column"}}>
-        <div style={{background:"#0078d4",padding:"20px 20px 16px"}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:2}}>
-            <svg width="22" height="22" viewBox="0 0 22 22">
-              <rect x="0" y="0" width="9" height="9" fill="#F25022" rx="1"/>
-              <rect x="13" y="0" width="9" height="9" fill="#7FBA00" rx="1"/>
-              <rect x="0" y="13" width="9" height="9" fill="#00A4EF" rx="1"/>
-              <rect x="13" y="13" width="9" height="9" fill="#FFB900" rx="1"/>
-            </svg>
+    <a href={url} target="_blank" rel="noreferrer" style={{display:"flex",alignItems:"center",gap:5,background:"#0077b518",border:"1px solid #0077b544",borderRadius:2,padding:"6px 12px"}}>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="#0077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      <span style={{color:"#0077b5",fontSize:11,fontWeight:700}}>View on LinkedIn</span>
+    </a>
+  );
+}
+
+// ── ACCOUNT DETAIL ──────────────────────────────────────────────────────────
+function AccountDetail({acct,t,onClose}){
+  const [tab,setTab]=useState(0);
+  const tabs=["Why It Matters","Org Chart","Last 90 Days","Current Motion","Expand","Next Move"];
+  return (
+    <div style={{position:"fixed",inset:0,background:t.bg,zIndex:300,display:"flex",flexDirection:"column"}}>
+      <div style={{background:cb(acct.clr,t),padding:"16px 16px 0",flexShrink:0,borderBottom:`1px solid ${t.border}`}}>
+        <Back t={t} label="Back" onBack={onClose}/>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+          <div>
+            <div style={{color:t.txt2,fontSize:11,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>{acct.industry} · {acct.cardType}</div>
+            <div style={{color:t.txt,fontSize:22,fontWeight:700}}>{acct.icon} {acct.name}</div>
+          </div>
+          <div style={{textAlign:"right"}}><Badge label={acct.badge} clr={acct.badgeClr} t={t}/><div style={{color:cv(acct.clr,t),fontSize:16,fontWeight:700,marginTop:4}}>{acct.metric}</div></div>
+        </div>
+        <div style={{display:"flex",overflowX:"auto"}}>
+          {tabs.map((lbl,i)=>(
+            <button key={i} onClick={()=>setTab(i)} style={{background:"none",border:"none",borderBottom:`2px solid ${tab===i?cv(acct.clr,t):"transparent"}`,color:tab===i?cv(acct.clr,t):t.txt2,padding:"10px 12px",fontSize:12,fontWeight:tab===i?700:400,cursor:"pointer",whiteSpace:"nowrap"}}>{lbl}</button>
+          ))}
+        </div>
+      </div>
+      <div style={{flex:1,overflowY:"auto",padding:"20px 16px"}}>
+        {tab===0 && <div style={{color:t.txt,fontSize:15,lineHeight:1.8}}>{acct.whyItMatters}</div>}
+        {tab===1 && (
+          <div>
+            <SLabel t={t} style={{marginBottom:14}}>Executive contacts — {acct.name}</SLabel>
+            {[1,2,3].map(tier=>{
+              const people=acct.orgChart.filter(p=>p.tier===tier);
+              if(!people.length) return null;
+              return (
+                <div key={tier} style={{marginBottom:18}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+                    <div style={{height:1,flex:1,background:t.border}}/>
+                    <span style={{color:t.muted,fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em"}}>{tier===1?"C-Suite":tier===2?"VP / SVP / EVP":"Director Level"}</span>
+                    <div style={{height:1,flex:1,background:t.border}}/>
+                  </div>
+                  {people.map((p,i)=>(
+                    <div key={i} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px 16px",marginBottom:8,borderLeft:`3px solid ${cv(p.clr,t)}`,boxShadow:t.shadow}}>
+                      <div style={{display:"flex",gap:6,alignItems:"center",marginBottom:4,flexWrap:"wrap"}}>
+                        <span style={{color:t.txt,fontSize:14,fontWeight:700}}>{p.name}</span>
+                        <Badge label={p.badge} clr={p.clr} t={t}/>
+                      </div>
+                      <div style={{color:t.txt2,fontSize:12,marginBottom:4}}>{p.title}</div>
+                      <div style={{color:t.muted,fontSize:11,fontWeight:600,textTransform:"uppercase",letterSpacing:"0.05em",marginBottom:8}}>{p.dept}</div>
+                      <div style={{background:cb(p.clr,t),borderRadius:2,padding:"8px 10px",marginBottom:10,border:`1px solid ${cv(p.clr,t)}33`}}>
+                        <div style={{color:cv(p.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:3}}>Why Wade needs this person</div>
+                        <div style={{color:t.txt,fontSize:12,lineHeight:1.55}}>{p.relevance}</div>
+                      </div>
+                      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                        {p.email!=="—" && <a href={`mailto:${p.email}`} style={{display:"flex",alignItems:"center",gap:5,background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"6px 12px"}}><span style={{fontSize:13}}>✉️</span><span style={{color:t.pri,fontSize:11,fontWeight:700}}>{p.email}</span></a>}
+                        <LIBtn url={p.li}/>
+                        {(p.email==="—"||p.li==="—") && <div style={{display:"flex",alignItems:"center",gap:5,background:t.redLt,border:`1px solid ${t.red}44`,borderRadius:2,padding:"6px 12px"}}><span style={{fontSize:12}}>⚠️</span><span style={{color:t.red,fontSize:11,fontWeight:600}}>Verify with account team</span></div>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+            <div style={{background:t.alt,borderRadius:2,padding:"12px 14px",border:`1px solid ${t.border}`}}><div style={{color:t.muted,fontSize:11,lineHeight:1.6}}>⚠️ Emails shown are based on publicly known contact patterns. Always verify through the account team before outreach.</div></div>
+          </div>
+        )}
+        {tab===2 && acct.last90Days.map((item,i)=>(
+          <div key={i} style={{display:"flex",gap:10,marginBottom:14,alignItems:"flex-start"}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:cv(acct.clr,t),marginTop:8,flexShrink:0}}/>
+            <div style={{color:t.txt,fontSize:14,lineHeight:1.65}}>{item}</div>
+          </div>
+        ))}
+        {tab===3 && <div><SLabel t={t}>Active Microsoft work</SLabel>{acct.currentMotion.map((item,i)=><div key={i} style={{display:"flex",gap:10,marginBottom:10,padding:"11px 13px",background:t.surf,borderRadius:2,border:`1px solid ${t.border}`,alignItems:"flex-start"}}><span style={{color:cv(acct.clr,t),fontSize:11,marginTop:2,flexShrink:0}}>▶</span><div style={{color:t.txt,fontSize:14,lineHeight:1.6}}>{item}</div></div>)}</div>}
+        {tab===4 && <div><SLabel t={t}>Azure & AI expansion plays</SLabel>{acct.expand.map((item,i)=><div key={i} style={{display:"flex",gap:10,marginBottom:10,padding:"12px 14px",background:cb(acct.clr,t),borderRadius:2,border:`1px solid ${cv(acct.clr,t)}33`,alignItems:"flex-start"}}><span style={{color:cv(acct.clr,t),fontWeight:700,fontSize:14,flexShrink:0}}>{i+1}</span><div style={{color:t.txt,fontSize:14,lineHeight:1.6}}>{item}</div></div>)}</div>}
+        {tab===5 && <div style={{background:cb(acct.clr,t),borderRadius:2,padding:"18px",border:`1px solid ${cv(acct.clr,t)}44`}}><div style={{color:cv(acct.clr,t),fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>⚡ Executive Next Move</div><div style={{color:t.txt,fontSize:15,lineHeight:1.8}}>{acct.nextMove}</div></div>}
+      </div>
+      <div style={{padding:"14px 16px",borderTop:`1px solid ${t.border}`,background:t.surf,flexShrink:0}}>
+        <button onClick={onClose} style={{width:"100%",background:cv(acct.clr,t),border:"none",borderRadius:2,padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Done</button>
+      </div>
+    </div>
+  );
+}
+
+// ── DEAL DETAIL ─────────────────────────────────────────────────────────────
+function DealDetail({deal,t,onClose}){
+  const d=DEAL_DETAILS[deal.id];
+  if(!d) return null;
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:400,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div style={{background:t.surf,borderRadius:"12px 12px 0 0",width:"100%",maxWidth:500,maxHeight:"80vh",display:"flex",flexDirection:"column"}}>
+        <div style={{background:cb(deal.clr,t),padding:"18px 20px 14px",borderRadius:"12px 12px 0 0",borderBottom:`1px solid ${t.border}`}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
             <div>
-              <div style={{color:"#fff",fontSize:14,fontWeight:700}}>The Office of the CTO</div>
-              <div style={{color:"rgba(255,255,255,0.8)",fontSize:11}}>US Commercial Industries</div>
+              <div style={{display:"flex",gap:8,marginBottom:6}}><Badge label={deal.stage} clr={deal.risk==="High"||deal.stage==="At Risk"?"red":deal.stage==="Closed Won"?"grn":deal.clr} t={t}/></div>
+              <div style={{color:t.txt,fontSize:18,fontWeight:700}}>{deal.icon} {d.customer}</div>
+              <div style={{color:cv(deal.clr,t),fontSize:16,fontWeight:700}}>${deal.value}M</div>
+            </div>
+            <button onClick={onClose} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,color:t.txt2,width:32,height:32,cursor:"pointer",fontSize:18}}>✕</button>
+          </div>
+        </div>
+        <div style={{overflowY:"auto",flex:1,padding:"20px"}}>
+          <div style={{color:t.txt,fontSize:14,lineHeight:1.75,marginBottom:18}}>{d.summary}</div>
+          <SLabel t={t}>Key Contacts</SLabel>
+          {d.contacts.map((c,i)=><div key={i} style={{display:"flex",gap:8,marginBottom:8,padding:"10px 12px",background:t.alt,borderRadius:2,border:`1px solid ${t.border}`}}><span style={{fontSize:12}}>👤</span><span style={{color:t.txt,fontSize:13}}>{c}</span></div>)}
+          <SLabel t={t} style={{marginTop:16}}>Live Signals</SLabel>
+          {d.signals.map((s,i)=><div key={i} style={{display:"flex",gap:8,marginBottom:10,alignItems:"flex-start"}}><div style={{width:6,height:6,borderRadius:"50%",background:cv(deal.clr,t),marginTop:6,flexShrink:0}}/><div style={{color:t.txt,fontSize:13,lineHeight:1.6}}>{s}</div></div>)}
+          <div style={{background:cb(deal.clr,t),borderRadius:2,padding:"14px",border:`1px solid ${cv(deal.clr,t)}44`,marginTop:16}}>
+            <div style={{color:cv(deal.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:6}}>⚡ Next Move</div>
+            <div style={{color:t.txt,fontSize:13,lineHeight:1.65}}>{d.nextMove}</div>
+          </div>
+        </div>
+        <div style={{padding:"14px 20px",borderTop:`1px solid ${t.border}`}}>
+          <button onClick={onClose} style={{width:"100%",background:cv(deal.clr,t),border:"none",borderRadius:2,padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── BRIEFING DETAIL ─────────────────────────────────────────────────────────
+function BriefingDetail({brief,t,onClose}){
+  const b=BRIEFINGS.find(x=>x.id===brief.id);
+  if(!b) return null;
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:400,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div style={{background:t.surf,borderRadius:"12px 12px 0 0",width:"100%",maxWidth:500,maxHeight:"78vh",display:"flex",flexDirection:"column"}}>
+        <div style={{background:cb(b.clr,t),padding:"18px 20px 14px",borderRadius:"12px 12px 0 0",borderBottom:`1px solid ${t.border}`}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+            <div>
+              <div style={{display:"flex",gap:6,marginBottom:6}}><Badge label={b.type} clr={b.clr} t={t}/>{b.priority==="urgent"&&<Badge label="⚠️ Urgent" clr="red" t={t}/>}</div>
+              <div style={{color:t.txt,fontSize:15,fontWeight:700,lineHeight:1.3}}>{b.headline}</div>
+              <div style={{color:t.muted,fontSize:11,marginTop:4}}>{b.account} · {b.time}</div>
+            </div>
+            <button onClick={onClose} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,color:t.txt2,width:32,height:32,cursor:"pointer",fontSize:18,marginLeft:10,flexShrink:0}}>✕</button>
+          </div>
+        </div>
+        <div style={{overflowY:"auto",flex:1,padding:"20px"}}>
+          <SLabel t={t}>What this means</SLabel>
+          <div style={{color:t.txt,fontSize:14,lineHeight:1.75,marginBottom:20}}>{b.detail}</div>
+          <div style={{background:cb(b.clr,t),borderRadius:2,padding:"14px",border:`1px solid ${cv(b.clr,t)}44`}}>
+            <div style={{color:cv(b.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:6}}>⚡ Recommended action</div>
+            <div style={{color:t.txt,fontSize:13,lineHeight:1.65}}>{b.action}</div>
+          </div>
+        </div>
+        <div style={{padding:"14px 20px",borderTop:`1px solid ${t.border}`}}>
+          <button onClick={onClose} style={{width:"100%",background:cv(b.clr,t),border:"none",borderRadius:2,padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── PROJECT DETAIL ──────────────────────────────────────────────────────────
+function ProjectDetail({proj,t,onClose}){
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:400,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div style={{background:t.surf,borderRadius:"12px 12px 0 0",width:"100%",maxWidth:500,maxHeight:"80vh",display:"flex",flexDirection:"column"}}>
+        <div style={{background:cb(proj.clr,t),padding:"18px 20px 14px",borderRadius:"12px 12px 0 0",borderBottom:`1px solid ${t.border}`}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+            <div>
+              <div style={{display:"flex",gap:6,marginBottom:6}}><Badge label={proj.phase} clr={proj.clr} t={t}/>{proj.risk==="High"&&<Badge label="⚠️ At Risk" clr="red" t={t}/>}</div>
+              <div style={{color:t.txt,fontSize:16,fontWeight:700}}>{proj.icon} {proj.name}</div>
+              <div style={{color:t.muted,fontSize:12,marginTop:4}}>{proj.account} · {proj.owner}</div>
+            </div>
+            <div style={{textAlign:"right",marginLeft:12}}>
+              <div style={{color:cv(proj.clr,t),fontSize:28,fontWeight:700}}>{proj.pct}%</div>
+              <button onClick={onClose} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,color:t.txt2,width:32,height:32,cursor:"pointer",fontSize:16,marginTop:6}}>✕</button>
             </div>
           </div>
         </div>
+        <div style={{overflowY:"auto",flex:1,padding:"20px"}}>
+          <div style={{marginBottom:14}}><ProgBar pct={proj.pct} clr={proj.clr} t={t}/></div>
+          <div style={{color:t.txt,fontSize:14,lineHeight:1.75,marginBottom:16}}>{proj.detail}</div>
+          {proj.milestones && <><SLabel t={t}>Milestones</SLabel>{proj.milestones.map((m,i)=><div key={i} style={{display:"flex",gap:10,marginBottom:8,alignItems:"flex-start"}}><span style={{fontSize:12,marginTop:1,flexShrink:0,color:m.startsWith("✓")?t.grn:m.startsWith("◎")?t.org:m.startsWith("✗")?t.red:t.muted}}>{m.slice(0,1)}</span><div style={{color:t.txt,fontSize:13,lineHeight:1.55}}>{m.slice(2)}</div></div>)}</>}
+          <div style={{background:cb(proj.clr,t),borderRadius:2,padding:"12px 14px",border:`1px solid ${cv(proj.clr,t)}44`,marginTop:16}}>
+            <div style={{color:cv(proj.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>Next milestone</div>
+            <div style={{color:t.txt,fontSize:13,fontWeight:600}}>{proj.milestone}</div>
+          </div>
+        </div>
+        <div style={{padding:"14px 20px",borderTop:`1px solid ${t.border}`}}>
+          <button onClick={onClose} style={{width:"100%",background:cv(proj.clr,t),border:"none",borderRadius:2,padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DECK DETAIL ─────────────────────────────────────────────────────────────
+function DeckDetail({deck,t,onClose}){
+  const [toast,setToast]=useState("");
+  function copyLink(){
+    navigator.clipboard.writeText(`${window.location.href}#deck-${deck.id}`).catch(()=>{});
+    setToast("✓ Link copied to clipboard");
+    setTimeout(()=>setToast(""),2500);
+  }
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",zIndex:400,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <Toast msg={toast} t={t}/>
+      <div style={{background:t.surf,borderRadius:"12px 12px 0 0",width:"100%",maxWidth:500,maxHeight:"82vh",display:"flex",flexDirection:"column"}}>
+        <div style={{background:cb(deck.clr,t),padding:"18px 20px 14px",borderRadius:"12px 12px 0 0",borderBottom:`1px solid ${t.border}`}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+            <div>
+              <div style={{display:"flex",gap:6,marginBottom:6}}><Badge label={deck.type} clr={deck.clr} t={t}/><Badge label="✓ Ready" clr="grn" t={t}/></div>
+              <div style={{color:t.txt,fontSize:16,fontWeight:700,lineHeight:1.3}}>{deck.icon} {deck.name}</div>
+              <div style={{color:t.muted,fontSize:12,marginTop:4}}>{deck.co} · {deck.slides>1?`${deck.slides} slides`:"1 page"} · Updated {deck.updated}</div>
+            </div>
+            <button onClick={onClose} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,color:t.txt2,width:32,height:32,cursor:"pointer",fontSize:18,marginLeft:10,flexShrink:0}}>✕</button>
+          </div>
+        </div>
+        <div style={{overflowY:"auto",flex:1,padding:"20px"}}>
+          <div style={{color:t.txt,fontSize:14,lineHeight:1.75,marginBottom:18}}>{deck.summary}</div>
+          <div style={{background:cb(deck.clr,t),borderRadius:2,padding:"12px 14px",border:`1px solid ${cv(deck.clr,t)}44`,marginBottom:18}}>
+            <div style={{color:cv(deck.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:6}}>⚡ How Wade uses this</div>
+            <div style={{color:t.txt,fontSize:13,lineHeight:1.65}}>{deck.use}</div>
+          </div>
+          <SLabel t={t}>Key slides</SLabel>
+          {deck.keySlides.map((s,i)=><div key={i} style={{display:"flex",gap:10,marginBottom:8,padding:"10px 12px",background:t.alt,borderRadius:2,border:`1px solid ${t.border}`}}><span style={{color:cv(deck.clr,t),fontSize:12,fontWeight:700,flexShrink:0}}>›</span><span style={{color:t.txt,fontSize:13}}>{s}</span></div>)}
+        </div>
+        <div style={{padding:"14px 20px",borderTop:`1px solid ${t.border}`,display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+          <button onClick={copyLink} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"11px",color:t.txt,fontSize:13,fontWeight:600,cursor:"pointer"}}>📋 Copy Link</button>
+          <button onClick={onClose} style={{background:cv(deck.clr,t),border:"none",borderRadius:2,padding:"11px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Done</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── WAFFLE MENU ─────────────────────────────────────────────────────────────
+function WaffleMenu({t,onClose,setPage}){
+  const items=[{icon:"🏠",label:"Home",page:"home"},{icon:"📈",label:"Pipeline",page:"pipeline"},{icon:"📂",label:"Decks",page:"decks"},{icon:"📰",label:"Briefings",page:"briefings"},{icon:"⚡",label:"Projects",page:"projects"},{icon:"💬",label:"Ask Meghan",page:"megan"}];
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&onClose()} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.45)",zIndex:400,display:"flex"}}>
+      <div style={{background:t.surf,width:260,height:"100%",overflowY:"auto",boxShadow:"4px 0 20px rgba(0,0,0,0.2)",display:"flex",flexDirection:"column"}}>
+        <div style={{background:"#0078d4",padding:"20px 20px 16px"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:2}}>
+            <svg width="22" height="22" viewBox="0 0 22 22"><rect x="0" y="0" width="9" height="9" fill="#F25022" rx="1"/><rect x="13" y="0" width="9" height="9" fill="#7FBA00" rx="1"/><rect x="0" y="13" width="9" height="9" fill="#00A4EF" rx="1"/><rect x="13" y="13" width="9" height="9" fill="#FFB900" rx="1"/></svg>
+            <div><div style={{color:"#fff",fontSize:14,fontWeight:700}}>The Office of the CTO</div><div style={{color:"rgba(255,255,255,0.8)",fontSize:11}}>US Commercial Industries</div></div>
+          </div>
+        </div>
         <div style={{padding:"8px 0",flex:1}}>
-          {items.map((item,i) => (
-            <div key={i} onClick={() => {setPage(item.page); onClose();}} style={{display:"flex",alignItems:"center",gap:14,padding:"13px 20px",cursor:"pointer",borderBottom:`1px solid ${t.border}`}}>
+          {items.map((item,i)=>(
+            <div key={i} onClick={()=>{setPage(item.page);onClose();}} style={{display:"flex",alignItems:"center",gap:14,padding:"13px 20px",cursor:"pointer",borderBottom:`1px solid ${t.border}`}}>
               <span style={{fontSize:18}}>{item.icon}</span>
               <span style={{color:t.txt,fontSize:14,fontWeight:500}}>{item.label}</span>
+              <span style={{marginLeft:"auto",color:t.muted,fontSize:16}}>›</span>
             </div>
           ))}
         </div>
@@ -230,169 +426,29 @@ function WaffleMenu({t, onClose, setPage}) {
   );
 }
 
-/* ── ACCOUNT DETAIL ───────────────────────────────────────────────────── */
-function AccountDetail({acct, t, onClose}) {
-  const [tab, setTab] = useState(0);
-  const tabs = ["Why It Matters","Org Chart","Last 90 Days","Current Motion","Expand","Next Move"];
-  return (
-    <div style={{position:"fixed",inset:0,background:t.bg,zIndex:300,display:"flex",flexDirection:"column",overflowY:"auto"}}>
-      <div style={{background:cb(acct.clr,t),padding:"16px 16px 0",flexShrink:0,borderBottom:`1px solid ${t.border}`}}>
-        <Back t={t} label="Back" onBack={onClose}/>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-          <div>
-            <div style={{color:t.txt2,fontSize:11,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>{acct.industry} · {acct.cardType}</div>
-            <div style={{color:t.txt,fontSize:22,fontWeight:700}}>{acct.icon} {acct.name}</div>
-          </div>
-          <div style={{textAlign:"right"}}>
-            <Badge label={acct.badge} clr={acct.badgeClr} t={t}/>
-            <div style={{color:cv(acct.clr,t),fontSize:16,fontWeight:700,marginTop:4}}>{acct.metric}</div>
-          </div>
-        </div>
-        <div style={{display:"flex",overflowX:"auto"}}>
-          {tabs.map((lbl,i) => (
-            <button key={i} onClick={() => setTab(i)} style={{background:"none",border:"none",borderBottom:`2px solid ${tab===i?cv(acct.clr,t):"transparent"}`,color:tab===i?cv(acct.clr,t):t.txt2,padding:"10px 12px",fontSize:12,fontWeight:tab===i?700:400,cursor:"pointer",whiteSpace:"nowrap"}}>
-              {lbl}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div style={{flex:1,padding:"20px 16px"}}>
-        {/* Why It Matters */}
-        {tab===0 && <div style={{color:t.txt,fontSize:15,lineHeight:1.8}}>{acct.whyItMatters}</div>}
-
-        {/* Org Chart */}
-        {tab===1 && (
-          <div>
-            <SLabel t={t} style={{marginBottom:14}}>Executive contacts — {acct.name}</SLabel>
-            {[1,2,3].map(tier => {
-              const people = acct.orgChart.filter(p => p.tier===tier);
-              if (!people.length) return null;
-              return (
-                <div key={tier} style={{marginBottom:18}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
-                    <div style={{height:1,flex:1,background:t.border}}/>
-                    <span style={{color:t.muted,fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em"}}>
-                      {tier===1?"C-Suite":tier===2?"VP / SVP / EVP":"Director Level"}
-                    </span>
-                    <div style={{height:1,flex:1,background:t.border}}/>
-                  </div>
-                  {people.map((p,i) => (
-                    <div key={i} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px 16px",marginBottom:8,borderLeft:`3px solid ${cv(p.clr,t)}`,boxShadow:t.shadow}}>
-                      <div style={{display:"flex",gap:6,alignItems:"center",marginBottom:4,flexWrap:"wrap"}}>
-                        <span style={{color:t.txt,fontSize:14,fontWeight:700}}>{p.name}</span>
-                        <Badge label={p.badge} clr={p.clr} t={t}/>
-                      </div>
-                      <div style={{color:t.txt2,fontSize:12,marginBottom:4}}>{p.title}</div>
-                      <div style={{color:t.muted,fontSize:11,fontWeight:600,textTransform:"uppercase",letterSpacing:"0.05em",marginBottom:8}}>{p.dept}</div>
-                      <div style={{background:cb(p.clr,t),borderRadius:2,padding:"8px 10px",marginBottom:10,border:`1px solid ${cv(p.clr,t)}33`}}>
-                        <div style={{color:cv(p.clr,t),fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:3}}>Why Wade needs this person</div>
-                        <div style={{color:t.txt,fontSize:12,lineHeight:1.55}}>{p.relevance}</div>
-                      </div>
-                      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-                        {p.email!=="—" && (
-                          <a href={`mailto:${p.email}`} style={{display:"flex",alignItems:"center",gap:5,background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"6px 12px"}}>
-                            <span style={{fontSize:13}}>✉️</span>
-                            <span style={{color:t.pri,fontSize:11,fontWeight:700}}>{p.email}</span>
-                          </a>
-                        )}
-                        {p.li!=="—" && (
-                          <a href={p.li} target="_blank" rel="noreferrer" style={{display:"flex",alignItems:"center",gap:5,background:"#0077b518",border:"1px solid #0077b544",borderRadius:2,padding:"6px 12px"}}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#0077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                            <span style={{color:"#0077b5",fontSize:11,fontWeight:700}}>LinkedIn</span>
-                          </a>
-                        )}
-                        {(p.email==="—" || p.li==="—") && (
-                          <div style={{display:"flex",alignItems:"center",gap:5,background:t.redLt,border:`1px solid ${t.red}44`,borderRadius:2,padding:"6px 12px"}}>
-                            <span style={{fontSize:12}}>⚠️</span>
-                            <span style={{color:t.red,fontSize:11,fontWeight:600}}>Verify with account team</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-            <div style={{background:t.alt,borderRadius:2,padding:"12px 14px",border:`1px solid ${t.border}`}}>
-              <div style={{color:t.muted,fontSize:11,lineHeight:1.6}}>⚠️ Emails shown are based on publicly known contact patterns. Always verify through the account team or LinkedIn before outreach.</div>
-            </div>
-          </div>
-        )}
-
-        {/* Last 90 Days */}
-        {tab===2 && acct.last90Days.map((item,i) => (
-          <div key={i} style={{display:"flex",gap:10,marginBottom:14,alignItems:"flex-start"}}>
-            <div style={{width:6,height:6,borderRadius:"50%",background:cv(acct.clr,t),marginTop:8,flexShrink:0}}/>
-            <div style={{color:t.txt,fontSize:14,lineHeight:1.65}}>{item}</div>
-          </div>
-        ))}
-
-        {/* Current Motion */}
-        {tab===3 && (
-          <div>
-            <SLabel t={t}>Active Microsoft work</SLabel>
-            {acct.currentMotion.map((item,i) => (
-              <div key={i} style={{display:"flex",gap:10,marginBottom:10,padding:"11px 13px",background:t.surf,borderRadius:2,border:`1px solid ${t.border}`,alignItems:"flex-start"}}>
-                <span style={{color:cv(acct.clr,t),fontSize:11,marginTop:2,flexShrink:0}}>▶</span>
-                <div style={{color:t.txt,fontSize:14,lineHeight:1.6}}>{item}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Expand */}
-        {tab===4 && (
-          <div>
-            <SLabel t={t}>Azure & AI expansion plays</SLabel>
-            {acct.expand.map((item,i) => (
-              <div key={i} style={{display:"flex",gap:10,marginBottom:10,padding:"12px 14px",background:cb(acct.clr,t),borderRadius:2,border:`1px solid ${cv(acct.clr,t)}33`,alignItems:"flex-start"}}>
-                <span style={{color:cv(acct.clr,t),fontWeight:700,fontSize:14,flexShrink:0}}>{i+1}</span>
-                <div style={{color:t.txt,fontSize:14,lineHeight:1.6}}>{item}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Next Move */}
-        {tab===5 && (
-          <div style={{background:cb(acct.clr,t),borderRadius:2,padding:"18px",border:`1px solid ${cv(acct.clr,t)}44`}}>
-            <div style={{color:cv(acct.clr,t),fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>⚡ Executive Next Move</div>
-            <div style={{color:t.txt,fontSize:15,lineHeight:1.8}}>{acct.nextMove}</div>
-          </div>
-        )}
-      </div>
-      <div style={{padding:"14px 16px",borderTop:`1px solid ${t.border}`,background:t.surf,flexShrink:0}}>
-        <button onClick={onClose} style={{width:"100%",background:cv(acct.clr,t),border:"none",borderRadius:2,padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Done</button>
-      </div>
-    </div>
-  );
-}
-
-/* ── HOME ─────────────────────────────────────────────────────────────── */
-function HomePage({t, setPage, setSelAcct}) {
-  const [kpiIdx, setKpiIdx] = useState(null);
+// ── HOME ────────────────────────────────────────────────────────────────────
+function HomePage({t,setPage,setSelAcct}){
+  const [kpiIdx,setKpiIdx]=useState(null);
   return (
     <div style={{padding:"16px",display:"flex",flexDirection:"column",gap:22}}>
-      {/* Hero */}
       <div style={{background:"#0078d4",borderRadius:2,padding:"20px 18px 18px"}}>
         <div style={{color:"rgba(255,255,255,0.8)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>Q1 FY26 · US Commercial Industries</div>
         <div style={{color:"#fff",fontSize:22,fontWeight:700,lineHeight:1.2,marginBottom:4}}>Turn Pipeline Into Revenue.</div>
         <div style={{color:"rgba(255,255,255,0.85)",fontSize:13,marginBottom:18}}>Your priorities, pipeline, and prep — in one place.</div>
         <div style={{display:"flex",gap:10}}>
-          <button onClick={() => setPage("pipeline")} style={{background:"#fff",color:"#0078d4",border:"none",borderRadius:2,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"}}>Review Pipeline</button>
-          <button onClick={() => setPage("megan")} style={{background:"transparent",color:"#fff",border:"1px solid rgba(255,255,255,0.55)",borderRadius:2,padding:"9px 18px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Ask Meghan</button>
+          <button onClick={()=>setPage("pipeline")} style={{background:"#fff",color:"#0078d4",border:"none",borderRadius:2,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer"}}>Review Pipeline</button>
+          <button onClick={()=>setPage("megan")} style={{background:"transparent",color:"#fff",border:"1px solid rgba(255,255,255,0.55)",borderRadius:2,padding:"9px 18px",fontSize:13,fontWeight:600,cursor:"pointer"}}>Ask Meghan</button>
         </div>
       </div>
 
-      {/* KPI Carousel */}
       <div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <SLabel t={t} style={{marginBottom:0}}>Executive KPIs</SLabel>
-          <button onClick={() => setPage("pipeline")} style={{background:"none",border:"none",color:t.pri,fontSize:12,fontWeight:600,cursor:"pointer"}}>Full view →</button>
+          <SLabel t={t} style={{marginBottom:0}}>Executive KPIs — tap for detail</SLabel>
+          <button onClick={()=>setPage("pipeline")} style={{background:"none",border:"none",color:t.pri,fontSize:12,fontWeight:600,cursor:"pointer"}}>Full view →</button>
         </div>
         <div style={{display:"flex",gap:10,overflowX:"auto",paddingBottom:6}}>
-          {KPI_CARDS.map((card,i) => (
-            <div key={i} onClick={() => setKpiIdx(kpiIdx===i?null:i)} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px",minWidth:158,flexShrink:0,cursor:"pointer",borderTop:`3px solid ${cv(card.clr,t)}`,boxShadow:t.shadow}}>
+          {KPI_CARDS.map((card,i)=>(
+            <div key={i} onClick={()=>setKpiIdx(kpiIdx===i?null:i)} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px",minWidth:155,flexShrink:0,cursor:"pointer",borderTop:`3px solid ${cv(card.clr,t)}`,boxShadow:t.shadow}}>
               <div style={{color:t.muted,fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.05em",marginBottom:6}}>{card.label}</div>
               <div style={{color:cv(card.clr,t),fontSize:28,fontWeight:700,lineHeight:1,marginBottom:4}}>{card.value}</div>
               <div style={{color:t.txt2,fontSize:11,marginBottom:8}}>{card.sub}</div>
@@ -404,40 +460,33 @@ function HomePage({t, setPage, setSelAcct}) {
           <div style={{background:cb(KPI_CARDS[kpiIdx].clr,t),borderRadius:2,padding:"12px 14px",border:`1px solid ${cv(KPI_CARDS[kpiIdx].clr,t)}44`,marginTop:2}}>
             <div style={{color:cv(KPI_CARDS[kpiIdx].clr,t),fontSize:11,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>{KPI_CARDS[kpiIdx].label}</div>
             <div style={{color:t.txt,fontSize:14,lineHeight:1.65}}>{KPI_CARDS[kpiIdx].detail}</div>
+            <button onClick={()=>setKpiIdx(null)} style={{background:"none",border:"none",color:t.muted,fontSize:11,cursor:"pointer",marginTop:8}}>Dismiss ✕</button>
           </div>
         )}
       </div>
 
-      {/* Quick Actions */}
       <div>
         <SLabel t={t}>Quick Actions</SLabel>
         <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:4}}>
-          {[
-            {label:"Open Decks",icon:"📂",page:"decks",clr:"pur"},
-            {label:"Pipeline",icon:"📈",page:"pipeline",clr:"grn"},
-            {label:"Scan News",icon:"📰",page:"briefings",clr:"org"},
-            {label:"Ask Meghan",icon:"💬",page:"megan",clr:"pri"},
-            {label:"Projects",icon:"⚡",page:"projects",clr:"yel"},
-          ].map((a,i) => (
-            <button key={i} onClick={() => setPage(a.page)} style={{background:cb(a.clr,t),color:cv(a.clr,t),border:`1px solid ${cv(a.clr,t)}44`,borderRadius:2,padding:"8px 14px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:5,flexShrink:0}}>
+          {[{label:"Open Decks",icon:"📂",page:"decks",clr:"pur"},{label:"Pipeline",icon:"📈",page:"pipeline",clr:"grn"},{label:"Scan News",icon:"📰",page:"briefings",clr:"org"},{label:"Ask Meghan",icon:"💬",page:"megan",clr:"pri"},{label:"Projects",icon:"⚡",page:"projects",clr:"yel"}].map((a,i)=>(
+            <button key={i} onClick={()=>setPage(a.page)} style={{background:cb(a.clr,t),color:cv(a.clr,t),border:`1px solid ${cv(a.clr,t)}44`,borderRadius:2,padding:"8px 14px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:5,flexShrink:0}}>
               <span style={{fontSize:14}}>{a.icon}</span>{a.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Signals */}
       <div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
           <SLabel t={t} style={{marginBottom:0}}>Signals — Act Now</SLabel>
-          <button onClick={() => setPage("briefings")} style={{background:"none",border:"none",color:t.pri,fontSize:12,fontWeight:600,cursor:"pointer"}}>All news →</button>
+          <button onClick={()=>setPage("briefings")} style={{background:"none",border:"none",color:t.pri,fontSize:12,fontWeight:600,cursor:"pointer"}}>All news →</button>
         </div>
         {[
           {acctId:"walmart",badge:"⚠️ Azure Alert",badgeClr:"red",title:"Walmart at 20% consumed — behind plan",sub:"New CTO mandate creates executive access window. Act this week."},
           {acctId:"chevron",badge:"Competitive",badgeClr:"org",title:"Chevron–Google exploration AI deal announced",sub:"Time-sensitive. CDO engagement needed before quarter end."},
           {acctId:"jci",badge:"AI Opportunity",badgeClr:"pur",title:"Johnson Controls: 3 AI paths, $22M potential",sub:"Digital Twins POC at 60%. Sponsor the scale-up motion."},
-        ].map((s,i) => (
-          <div key={i} onClick={() => setSelAcct(ACCOUNTS.find(a => a.id===s.acctId))} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"12px 14px",marginBottom:8,cursor:"pointer",borderLeft:`3px solid ${cv(s.badgeClr,t)}`,boxShadow:t.shadow}}>
+        ].map((s,i)=>(
+          <div key={i} onClick={()=>setSelAcct(ACCOUNTS.find(a=>a.id===s.acctId))} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"12px 14px",marginBottom:8,cursor:"pointer",borderLeft:`3px solid ${cv(s.badgeClr,t)}`,boxShadow:t.shadow}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div style={{flex:1}}>
                 <div style={{marginBottom:5}}><Badge label={s.badge} clr={s.badgeClr} t={t}/></div>
@@ -450,12 +499,11 @@ function HomePage({t, setPage, setSelAcct}) {
         ))}
       </div>
 
-      {/* Focus Accounts */}
       <div>
-        <SLabel t={t}>Focus Accounts</SLabel>
+        <SLabel t={t}>Focus Accounts — tap to drill down</SLabel>
         <div style={{display:"flex",gap:10}}>
-          {ACCOUNTS.map((acct,i) => (
-            <div key={i} onClick={() => setSelAcct(acct)} style={{flex:1,background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px 12px",cursor:"pointer",borderTop:`3px solid ${cv(acct.clr,t)}`,textAlign:"center",boxShadow:t.shadow}}>
+          {ACCOUNTS.map((acct,i)=>(
+            <div key={i} onClick={()=>setSelAcct(acct)} style={{flex:1,background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"14px 12px",cursor:"pointer",borderTop:`3px solid ${cv(acct.clr,t)}`,textAlign:"center",boxShadow:t.shadow}}>
               <div style={{fontSize:24,marginBottom:6}}>{acct.icon}</div>
               <div style={{color:t.muted,fontSize:10,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>{acct.industry}</div>
               <div style={{color:t.txt,fontSize:13,fontWeight:700,marginBottom:6}}>{acct.name}</div>
@@ -465,11 +513,10 @@ function HomePage({t, setPage, setSelAcct}) {
         </div>
       </div>
 
-      {/* Judson Language */}
       <div>
         <SLabel t={t}>Speak Judson's Language</SLabel>
         <div style={{background:t.surf,borderRadius:2,border:`1px solid ${t.border}`,overflow:"hidden",boxShadow:t.shadow}}>
-          {JUDSON.map((j,i) => (
+          {JUDSON.map((j,i)=>(
             <div key={i} style={{padding:"12px 14px",borderBottom:i<JUDSON.length-1?`1px solid ${t.border}`:"none"}}>
               <div style={{color:cv(j.clr,t),fontSize:14,fontWeight:700,marginBottom:3}}>{j.phrase}</div>
               <div style={{color:t.txt2,fontSize:12,lineHeight:1.5}}>{j.note}</div>
@@ -482,25 +529,28 @@ function HomePage({t, setPage, setSelAcct}) {
   );
 }
 
-/* ── PIPELINE ─────────────────────────────────────────────────────────── */
-function PipelinePage({t, setSelAcct}) {
+// ── PIPELINE ────────────────────────────────────────────────────────────────
+function PipelinePage({t,setSelAcct}){
+  const [selDeal,setSelDeal]=useState(null);
   return (
     <div style={{padding:"16px",paddingBottom:30}}>
+      {selDeal && <DealDetail deal={selDeal} t={t} onClose={()=>setSelDeal(null)}/>}
       <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:4}}>Move Revenue.</div>
-      <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Pipeline health, forecast, and accounts that need attention.</div>
+      <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Pipeline health, forecast, and accounts that need attention. Tap any deal for detail.</div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:22}}>
-        {[{l:"Closed Q1",v:"$147M",clr:"grn"},{l:"Pipeline 90d",v:"$312M",clr:"pri"},{l:"At Risk",v:"$33M",clr:"red"},{l:"Quota",v:"78%",clr:"grn"}].map((k,i) => (
+        {[{l:"Closed Q1",v:"$147M",clr:"grn"},{l:"Pipeline 90d",v:"$312M",clr:"pri"},{l:"At Risk",v:"$33M",clr:"red"},{l:"Quota",v:"78%",clr:"grn"}].map((k,i)=>(
           <div key={i} style={{background:t.surf,borderRadius:2,padding:"14px",border:`1px solid ${t.border}`,borderTop:`3px solid ${cv(k.clr,t)}`,boxShadow:t.shadow}}>
             <div style={{color:cv(k.clr,t),fontSize:24,fontWeight:700}}>{k.v}</div>
             <div style={{color:t.txt2,fontSize:12,fontWeight:600,marginTop:4}}>{k.l}</div>
           </div>
         ))}
       </div>
-      <SLabel t={t}>Top Deals</SLabel>
-      {PIPELINE_DEALS.map((deal,i) => {
-        const acct = ACCOUNTS.find(a => a.id===deal.acctId);
+      <SLabel t={t}>All Deals — tap for detail</SLabel>
+      {PIPELINE_DEALS.map((deal,i)=>{
+        const acct=ACCOUNTS.find(a=>a.id===deal.acctId);
+        const hasDetail=!!acct||!!DEAL_DETAILS[deal.id];
         return (
-          <div key={i} onClick={() => acct && setSelAcct(acct)} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"12px 14px",marginBottom:8,cursor:acct?"pointer":"default",borderLeft:`3px solid ${cv(deal.clr,t)}`,boxShadow:t.shadow}}>
+          <div key={i} onClick={()=>{if(acct) setSelAcct(acct); else if(DEAL_DETAILS[deal.id]) setSelDeal(deal);}} style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"12px 14px",marginBottom:8,cursor:hasDetail?"pointer":"default",borderLeft:`3px solid ${cv(deal.clr,t)}`,boxShadow:t.shadow}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div style={{flex:1}}>
                 <div style={{display:"flex",gap:6,marginBottom:5,alignItems:"center"}}>
@@ -511,7 +561,7 @@ function PipelinePage({t, setSelAcct}) {
               </div>
               <div style={{textAlign:"right",marginLeft:12}}>
                 <div style={{color:cv(deal.clr,t),fontSize:18,fontWeight:700}}>${deal.value}M</div>
-                {acct && <div style={{color:t.pri,fontSize:11,fontWeight:600,marginTop:2}}>Tap for detail →</div>}
+                {hasDetail && <div style={{color:t.pri,fontSize:11,fontWeight:600,marginTop:2}}>Tap for detail →</div>}
               </div>
             </div>
           </div>
@@ -521,68 +571,47 @@ function PipelinePage({t, setSelAcct}) {
   );
 }
 
-/* ── DECKS ────────────────────────────────────────────────────────────── */
-function DecksPage({t}) {
-  const [sel, setSel] = useState(null);
-  const [filter, setFilter] = useState("All");
-  const filters = ["All","Healthcare","Financial Services","Manufacturing","Energy","Cross-industry"];
-  const filtered = filter==="All" ? DECKS : DECKS.filter(d =>
-    d.co.toLowerCase().includes(filter.toLowerCase()) ||
-    (filter==="Cross-industry" && (d.co==="All Industries"||d.co==="Cross-Industry"))
-  );
+// ── DECKS ───────────────────────────────────────────────────────────────────
+function DecksPage({t}){
+  const [selDeck,setSelDeck]=useState(null);
+  const [filter,setFilter]=useState("All");
+  const [toast,setToast]=useState("");
+  const filters=["All","Retail","Manufacturing","Energy","Healthcare","Cross-industry"];
+  const filtered=filter==="All"?DECKS:DECKS.filter(d=>d.co.toLowerCase().includes(filter.toLowerCase())||(filter==="Cross-industry"&&(d.co==="All Industries"||d.co==="Cross-Industry")));
 
-  if (sel!==null) {
-    const d = DECKS[sel];
-    return (
-      <div style={{paddingBottom:30}}>
-        <div style={{background:cb(d.clr,t),padding:"16px 16px 0",borderBottom:`1px solid ${t.border}`}}>
-          <Back t={t} label="All Decks" onBack={() => setSel(null)}/>
-          <div style={{display:"flex",gap:8,marginBottom:8,flexWrap:"wrap"}}>
-            <Badge label={d.type} clr={d.clr} t={t}/>
-            <Badge label="✓ Ready" clr="grn" t={t}/>
-          </div>
-          <div style={{color:cv(d.clr,t),fontSize:11,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>{d.co}</div>
-          <div style={{color:t.txt,fontSize:18,fontWeight:700,lineHeight:1.3,marginBottom:4}}>{d.name}</div>
-          <div style={{color:t.muted,fontSize:12,marginBottom:14}}>{d.slides>1?`${d.slides} slides`:"1 page"} · Updated {d.updated}</div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-            <button style={{background:cv(d.clr,t),border:"none",borderRadius:"2px 2px 0 0",padding:"12px",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer"}}>Open →</button>
-            <button style={{background:t.surf,border:`1px solid ${t.border}`,borderRadius:"2px 2px 0 0",padding:"12px",color:t.txt,fontSize:14,fontWeight:600,cursor:"pointer"}}>Share</button>
-          </div>
-        </div>
-        <div style={{padding:"20px 16px"}}>
-          <div style={{background:cb(d.clr,t),borderRadius:2,padding:"14px 16px",border:`1px solid ${cv(d.clr,t)}44`}}>
-            <div style={{color:cv(d.clr,t),fontSize:11,fontWeight:700,textTransform:"uppercase",marginBottom:6}}>⚡ How Wade uses this</div>
-            <div style={{color:t.txt,fontSize:14,lineHeight:1.7}}>{d.use}</div>
-          </div>
-        </div>
-      </div>
-    );
+  function share(deck){
+    navigator.clipboard.writeText(`${window.location.href}#deck-${deck.id}`).catch(()=>{});
+    setToast(`✓ Link for "${deck.name.split("—")[0].trim()}" copied`);
+    setTimeout(()=>setToast(""),2500);
   }
 
   return (
     <div style={{padding:"16px",paddingBottom:30}}>
+      <Toast msg={toast} t={t}/>
+      {selDeck && <DeckDetail deck={selDeck} t={t} onClose={()=>setSelDeck(null)}/>}
       <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:4}}>Tell the Story.</div>
-      <div style={{color:t.txt2,fontSize:13,marginBottom:16}}>Every deck Meghan built. Tap to open or get your usage tip.</div>
+      <div style={{color:t.txt2,fontSize:13,marginBottom:16}}>Every deck Meghan built. Tap to open or share before any meeting.</div>
       <div style={{display:"flex",gap:8,overflowX:"auto",marginBottom:18,paddingBottom:4}}>
-        {filters.map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={{background:filter===f?t.pri:"transparent",color:filter===f?"#fff":t.txt2,border:`1px solid ${filter===f?t.pri:t.border}`,borderRadius:2,padding:"6px 14px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>{f}</button>
+        {filters.map(f=>(
+          <button key={f} onClick={()=>setFilter(f)} style={{background:filter===f?t.pri:"transparent",color:filter===f?"#fff":t.txt2,border:`1px solid ${filter===f?t.pri:t.border}`,borderRadius:2,padding:"6px 14px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>{f}</button>
         ))}
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        {filtered.map((d,i) => (
-          <div key={d.name} onClick={() => setSel(DECKS.findIndex(x => x.name===d.name))} style={{background:t.surf,borderRadius:2,padding:"14px 16px",border:`1px solid ${t.border}`,cursor:"pointer",borderLeft:`3px solid ${cv(d.clr,t)}`,boxShadow:t.shadow}}>
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
+        {filtered.map((d,i)=>(
+          <div key={d.id} style={{background:t.surf,borderRadius:2,border:`1px solid ${t.border}`,borderLeft:`3px solid ${cv(d.clr,t)}`,boxShadow:t.shadow,overflow:"hidden"}}>
+            <div onClick={()=>setSelDeck(d)} style={{padding:"14px 16px",cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
               <span style={{fontSize:26,flexShrink:0}}>{d.icon}</span>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}>
-                  <Badge label={d.type} clr={d.clr} t={t}/>
-                  <Badge label="✓ Ready" clr="grn" t={t}/>
-                </div>
+                <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}><Badge label={d.type} clr={d.clr} t={t}/><Badge label="✓ Ready" clr="grn" t={t}/></div>
                 <div style={{color:t.txt,fontSize:14,fontWeight:700,lineHeight:1.3,marginBottom:3}}>{d.name}</div>
                 <div style={{color:t.muted,fontSize:11}}>{d.co} · {d.slides>1?`${d.slides} slides`:"1 page"} · {d.updated}</div>
               </div>
               <span style={{color:t.muted,fontSize:20,flexShrink:0}}>›</span>
             </div>
+            <div style={{display:"flex",borderTop:`1px solid ${t.border}`}}>
+              <button onClick={()=>setSelDeck(d)} style={{flex:1,background:cb(d.clr,t),border:"none",borderRight:`1px solid ${t.border}`,padding:"10px",color:cv(d.clr,t),fontSize:12,fontWeight:700,cursor:"pointer"}}>Open →</button>
+              <button onClick={()=>share(d)} style={{flex:1,background:t.alt,border:"none",padding:"10px",color:t.txt2,fontSize:12,fontWeight:600,cursor:"pointer"}}>📋 Copy Link</button>
+            </div>
           </div>
         ))}
       </div>
@@ -590,275 +619,10 @@ function DecksPage({t}) {
   );
 }
 
-/* ── BRIEFINGS ────────────────────────────────────────────────────────── */
-function BriefingsPage({t, setSelAcct}) {
+// ── BRIEFINGS ───────────────────────────────────────────────────────────────
+function BriefingsPage({t,setSelAcct}){
+  const [selBrief,setSelBrief]=useState(null);
   return (
     <div style={{padding:"16px",paddingBottom:30}}>
-      <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:4}}>Know Before You Go.</div>
-      <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Customer news, competitive signals, and analyst themes — prioritized for Wade.</div>
-      {BRIEFINGS.map((b,i) => {
-        const acct = ACCOUNTS.find(a => a.name===b.account);
-        return (
-          <div key={i} onClick={() => acct && setSelAcct(acct)} style={{background:t.surf,borderRadius:2,padding:"14px 16px",marginBottom:10,border:`1px solid ${t.border}`,borderLeft:`3px solid ${cv(b.clr,t)}`,cursor:acct?"pointer":"default",boxShadow:t.shadow}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-              <div style={{display:"flex",gap:6,alignItems:"center",flexWrap:"wrap"}}>
-                <Badge label={b.type} clr={b.clr} t={t}/>
-                <span style={{color:t.muted,fontSize:11}}>{b.account}</span>
-                {b.priority==="urgent" && <Badge label="⚠️ Urgent" clr="red" t={t}/>}
-              </div>
-              <span style={{color:t.muted,fontSize:11,flexShrink:0,marginLeft:8}}>{b.time}</span>
-            </div>
-            <div style={{color:t.txt,fontSize:14,fontWeight:600,marginBottom:6}}>{b.headline}</div>
-            <div style={{color:t.txt2,fontSize:12,lineHeight:1.55}}>{b.note}</div>
-            {acct && <div style={{color:t.pri,fontSize:12,fontWeight:600,marginTop:8}}>See account detail →</div>}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ── PROJECTS ─────────────────────────────────────────────────────────── */
-function ProjectsPage({t, setSelAcct}) {
-  return (
-    <div style={{padding:"16px",paddingBottom:30}}>
-      <div style={{color:t.txt,fontSize:20,fontWeight:700,marginBottom:4}}>Keep It Moving.</div>
-      <div style={{color:t.txt2,fontSize:13,marginBottom:20}}>Active projects, milestones, and where Wade can unlock progress.</div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:22}}>
-        {[{l:"Active",v:PROJECTS.filter(p=>p.status==="Active").length,clr:"grn"},{l:"At Risk",v:PROJECTS.filter(p=>p.risk==="High").length,clr:"red"},{l:"This Week",v:2,clr:"org"}].map((k,i) => (
-          <div key={i} style={{background:cb(k.clr,t),borderRadius:2,padding:"12px",textAlign:"center",border:`1px solid ${cv(k.clr,t)}33`}}>
-            <div style={{color:cv(k.clr,t),fontSize:24,fontWeight:700}}>{k.v}</div>
-            <div style={{color:t.txt2,fontSize:11,marginTop:2}}>{k.l}</div>
-          </div>
-        ))}
-      </div>
-      <SLabel t={t}>Active Projects</SLabel>
-      {PROJECTS.map((proj,i) => {
-        const acct = proj.acctId ? ACCOUNTS.find(a => a.id===proj.acctId) : null;
-        return (
-          <div key={i} onClick={() => acct && setSelAcct(acct)} style={{background:t.surf,borderRadius:2,padding:"14px 16px",marginBottom:10,border:`1px solid ${t.border}`,borderLeft:`3px solid ${cv(proj.clr,t)}`,cursor:acct?"pointer":"default",boxShadow:t.shadow}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-              <div style={{flex:1}}>
-                <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}>
-                  <span style={{fontSize:16}}>{proj.icon}</span>
-                  <Badge label={proj.phase} clr={proj.clr} t={t}/>
-                  {proj.risk==="High" && <Badge label="⚠️ At Risk" clr="red" t={t}/>}
-                </div>
-                <div style={{color:t.txt,fontSize:14,fontWeight:600,marginBottom:3}}>{proj.name}</div>
-                <div style={{color:t.muted,fontSize:11,marginBottom:8}}>{proj.owner} · {proj.milestone}</div>
-              </div>
-              <div style={{color:cv(proj.clr,t),fontSize:18,fontWeight:700,marginLeft:12}}>{proj.pct}%</div>
-            </div>
-            <ProgBar pct={proj.pct} clr={proj.clr} t={t}/>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ── ASK MEGHAN ───────────────────────────────────────────────────────── */
-function MeghanPage({t}) {
-  const [msgs, setMsgs] = useState([{role:"assistant",content:"Hello Wade. I'm Ask Meghan — your executive intelligence layer for USCI.\n\nI know your pipeline, your accounts, your decks, and your signals. Use the prompts below or ask me anything."}]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem("meghan_api_key")||"");
-  const [showKey, setShowKey] = useState(!localStorage.getItem("meghan_api_key"));
-  const bottomRef = useRef(null);
-
-  const PROMPTS = [
-    {label:"🎯 What needs my attention today",prompt:"Give Wade Graham a prioritized list of what needs his attention today across USCI. Be specific: name accounts, dollar amounts, and deadlines. Maximum 5 items, ranked by urgency."},
-    {label:"🛒 Prep me for the Walmart meeting",prompt:"Prep Wade Graham for his upcoming Walmart CTO introduction call. Give him: the 3 things he must know, the opening he should use, the 2 questions he should ask, and the deck he should bring."},
-    {label:"⚡ Chevron competitive response",prompt:"Chevron just announced a Google exploration AI partnership. Give Wade a specific response plan: what to say to the Chevron CDO, how to use the Azure OpenAI seismic POC result as a counter, and what action to take before the April 22 briefing."},
-    {label:"📈 Top pipeline moves this week",prompt:"What are the top 3 pipeline actions Wade Graham should take this week to close Q1 at 82% or above? Name the accounts, the dollar amounts, and the specific action for each."},
-    {label:"🏭 JCI — next move",prompt:"What is the single best next move Wade Graham can make on the Johnson Controls Digital Twins expansion? Give the business case in 2 sentences and which deck to use."},
-  ];
-
-  useEffect(() => { bottomRef.current?.scrollIntoView({behavior:"smooth"}); }, [msgs]);
-
-  function saveKey(k) {
-    setApiKey(k);
-    if (k) { localStorage.setItem("meghan_api_key", k); setShowKey(false); }
-  }
-
-  async function send(text) {
-    if (!text.trim()) return;
-    if (!apiKey) { setShowKey(true); return; }
-    const next = [...msgs, {role:"user",content:text}];
-    setMsgs(next); setInput(""); setLoading(true);
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method:"POST",
-        headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-        body:JSON.stringify({model:"claude-opus-4-5",max_tokens:1000,system:MEGAN_SYS,messages:next.map(m=>({role:m.role,content:m.content}))})
-      });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error.message);
-      setMsgs([...next, {role:"assistant",content:data.content[0].text}]);
-    } catch(e) {
-      setMsgs([...next, {role:"assistant",content:`Connection issue: ${e.message}`}]);
-    }
-    setLoading(false);
-  }
-
-  return (
-    <div style={{display:"flex",flexDirection:"column",height:"calc(100vh - 112px)"}}>
-      <div style={{background:"#0078d4",padding:"14px 16px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
-        <div style={{width:36,height:36,borderRadius:"50%",background:"rgba(255,255,255,0.2)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,color:"#fff",flexShrink:0}}>MF</div>
-        <div>
-          <div style={{color:"#fff",fontWeight:700,fontSize:16}}>Ask Meghan</div>
-          <div style={{color:"rgba(255,255,255,0.8)",fontSize:11}}>Meghan Fasano · Executive Intelligence for USCI</div>
-        </div>
-        <button onClick={() => setShowKey(true)} style={{marginLeft:"auto",background:"rgba(255,255,255,0.15)",border:"none",borderRadius:2,color:"rgba(255,255,255,0.8)",fontSize:11,padding:"4px 10px",cursor:"pointer"}}>API Key</button>
-      </div>
-
-      {showKey && (
-        <div style={{background:t.orgLt,border:`1px solid ${t.org}44`,padding:"12px 16px",flexShrink:0}}>
-          <div style={{color:t.org,fontSize:11,fontWeight:700,marginBottom:6}}>Enter your Anthropic API key to enable Ask Meghan</div>
-          <div style={{display:"flex",gap:8}}>
-            <input type="password" defaultValue={apiKey} placeholder="sk-ant-..." onChange={e => setApiKey(e.target.value)} style={{flex:1,background:t.surf,border:`1px solid ${t.border}`,borderRadius:2,padding:"8px 10px",fontSize:12,color:t.txt,outline:"none"}}/>
-            <button onClick={() => saveKey(apiKey)} style={{background:t.org,border:"none",borderRadius:2,padding:"8px 14px",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer"}}>Save</button>
-            {apiKey && <button onClick={() => setShowKey(false)} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"8px 14px",color:t.txt2,fontSize:12,cursor:"pointer"}}>✕</button>}
-          </div>
-          <div style={{color:t.muted,fontSize:10,marginTop:6}}>Your key is stored locally in your browser only. Get a key at console.anthropic.com</div>
-        </div>
-      )}
-
-      <div style={{flex:1,overflowY:"auto",padding:"12px 16px",display:"flex",flexDirection:"column",gap:10}}>
-        {msgs.map((m,i) => (
-          <div key={i} style={{display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
-            {m.role==="assistant" && <div style={{width:24,height:24,borderRadius:"50%",background:"#0078d4",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:"#fff",flexShrink:0,marginRight:8,marginTop:2}}>MF</div>}
-            <div style={{maxWidth:"82%",background:m.role==="user"?t.pri:t.surf,color:m.role==="user"?"#fff":t.txt,borderRadius:m.role==="user"?"2px 2px 2px 8px":"2px 2px 8px 2px",padding:"10px 14px",fontSize:14,lineHeight:1.7,whiteSpace:"pre-wrap",border:m.role==="assistant"?`1px solid ${t.border}`:"none",boxShadow:m.role==="assistant"?t.shadow:"none"}}>
-              {m.content}
-            </div>
-          </div>
-        ))}
-        {loading && (
-          <div style={{display:"flex",justifyContent:"flex-start",alignItems:"flex-start",gap:8}}>
-            <div style={{width:24,height:24,borderRadius:"50%",background:"#0078d4",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:700,color:"#fff",flexShrink:0}}>MF</div>
-            <div style={{background:t.surf,borderRadius:"2px 2px 8px 2px",padding:"10px 14px",fontSize:14,color:t.txt2,border:`1px solid ${t.border}`}}>Thinking…</div>
-          </div>
-        )}
-        <div ref={bottomRef}/>
-      </div>
-
-      <div style={{padding:"8px 12px 10px",borderTop:`1px solid ${t.border}`,background:t.surf,flexShrink:0}}>
-        <div style={{color:t.muted,fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8}}>Quick prompts</div>
-        <div style={{display:"flex",overflowX:"auto",gap:8,marginBottom:10,paddingBottom:4}}>
-          {PROMPTS.map((p,i) => (
-            <button key={i} onClick={() => send(p.prompt)} style={{background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"7px 13px",fontSize:12,color:t.txt2,cursor:"pointer",whiteSpace:"nowrap",fontWeight:600,flexShrink:0}}>
-              {p.label}
-            </button>
-          ))}
-        </div>
-        <div style={{display:"flex",gap:8}}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => {if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send(input);}}} placeholder="Ask about pipeline, accounts, prep…" style={{flex:1,background:t.alt,border:`1px solid ${t.border}`,borderRadius:2,padding:"10px 13px",fontSize:14,color:t.txt,outline:"none"}}/>
-          <button onClick={() => send(input)} style={{background:t.pri,border:"none",borderRadius:2,padding:"10px 18px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Send</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ── TOP BAR ──────────────────────────────────────────────────────────── */
-function TopBar({t, mode, setMode, onWaffle, page}) {
-  const labels = {home:"Home",pipeline:"Pipeline",decks:"Decks",briefings:"Briefings",projects:"Projects",megan:"Ask Meghan"};
-  return (
-    <div style={{background:t.nav,borderBottom:`1px solid ${t.border}`,height:52,display:"flex",alignItems:"center",padding:"0 12px",gap:8,flexShrink:0,boxShadow:t.shadow}}>
-      <button onClick={onWaffle} style={{background:"none",border:"none",cursor:"pointer",padding:"5px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-        <svg width="18" height="18" viewBox="0 0 18 18">
-          {[[0,0],[7,0],[14,0],[0,7],[7,7],[14,7],[0,14],[7,14],[14,14]].map(([x,y],i) => (
-            <rect key={i} x={x} y={y} width="4" height="4" fill={t.txt2} rx="0.5"/>
-          ))}
-        </svg>
-      </button>
-      <div style={{width:1,height:18,background:t.border,flexShrink:0}}/>
-      <div style={{flex:1,minWidth:0}}>
-        <div style={{fontSize:12,fontWeight:700,color:t.txt,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>The Office of the CTO – USCI</div>
-        <div style={{fontSize:10,color:t.muted}}>{labels[page]||"Home"}</div>
-      </div>
-      <button onClick={() => setMode(m => m==="light"?"dark":"light")} style={{background:"none",border:`1px solid ${t.border}`,borderRadius:2,padding:"3px 8px",cursor:"pointer",fontSize:11,color:t.txt2,fontWeight:600,flexShrink:0}}>
-        {mode==="light"?"🌙":"☀️"}
-      </button>
-      <div style={{width:28,height:28,borderRadius:"50%",background:"#0078d4",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-        <span style={{color:"#fff",fontSize:10,fontWeight:700}}>WG</span>
-      </div>
-    </div>
-  );
-}
-
-/* ── JUDSON BAR ───────────────────────────────────────────────────────── */
-function JudsonBar({t}) {
-  return (
-    <div style={{background:"#0078d4",padding:"7px 14px",display:"flex",alignItems:"center",gap:8,overflowX:"auto",flexShrink:0}}>
-      <span style={{color:"rgba(255,255,255,0.7)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",whiteSpace:"nowrap",flexShrink:0}}>Judson's Vision:</span>
-      {["Frontier Transformation","Intelligence + Trust","Frontier Firms","Work IQ · Fabric IQ"].map((item,i) => (
-        <span key={i} style={{background:"rgba(255,255,255,0.15)",color:"#fff",fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:2,whiteSpace:"nowrap",flexShrink:0,border:"1px solid rgba(255,255,255,0.2)"}}>{item}</span>
-      ))}
-    </div>
-  );
-}
-
-/* ── BOTTOM NAV ───────────────────────────────────────────────────────── */
-const NAV_TABS = [
-  {id:"home",icon:"🏠",label:"Home",color:"#0078d4"},
-  {id:"pipeline",icon:"📈",label:"Pipeline",color:"#107c10"},
-  {id:"decks",icon:"📂",label:"Decks",color:"#5c2d91"},
-  {id:"briefings",icon:"📰",label:"Briefings",color:"#ca5010"},
-  {id:"projects",icon:"⚡",label:"Projects",color:"#7a6000"},
-  {id:"megan",icon:"💬",label:"Meghan",color:"#a4262c"},
-];
-
-function BottomNav({page, setPage, t}) {
-  return (
-    <div style={{background:t.nav,borderTop:`1px solid ${t.border}`,display:"flex",flexShrink:0,boxShadow:"0 -2px 8px rgba(0,0,0,0.07)"}}>
-      {NAV_TABS.map(tab => {
-        const on = page===tab.id;
-        return (
-          <button key={tab.id} onClick={() => setPage(tab.id)} style={{flex:1,background:on?tab.color+"12":"none",border:"none",borderTop:`2px solid ${on?tab.color:"transparent"}`,cursor:"pointer",padding:"8px 0 12px",display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-            <span style={{fontSize:18,lineHeight:1,opacity:on?1:0.35}}>{tab.icon}</span>
-            <span style={{fontSize:9,fontWeight:on?700:400,color:on?tab.color:t.muted}}>{tab.label}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ── APP ──────────────────────────────────────────────────────────────── */
-function App() {
-  const [mode, setMode] = useState("light");
-  const [page, setPage] = useState("home");
-  const [showWaffle, setShowWaffle] = useState(false);
-  const [selAcct, setSelAcct] = useState(null);
-  const t = mode==="light" ? LIGHT : DARK;
-
-  function renderPage() {
-    switch(page) {
-      case "home":      return <HomePage t={t} setPage={setPage} setSelAcct={setSelAcct}/>;
-      case "pipeline":  return <PipelinePage t={t} setSelAcct={setSelAcct}/>;
-      case "decks":     return <DecksPage t={t}/>;
-      case "briefings": return <BriefingsPage t={t} setSelAcct={setSelAcct}/>;
-      case "projects":  return <ProjectsPage t={t} setSelAcct={setSelAcct}/>;
-      case "megan":     return <MeghanPage t={t}/>;
-      default:          return <HomePage t={t} setPage={setPage} setSelAcct={setSelAcct}/>;
-    }
-  }
-
-  return (
-    <div style={{height:"100vh",display:"flex",flexDirection:"column",background:t.bg,fontFamily:"'Segoe UI',system-ui,-apple-system,sans-serif",maxWidth:500,margin:"0 auto",overflow:"hidden",position:"relative"}}>
-      <TopBar t={t} mode={mode} setMode={setMode} onWaffle={() => setShowWaffle(true)} page={page}/>
-      {page==="home" && <JudsonBar t={t}/>}
-      <div style={{flex:1,overflowY:"auto",WebkitOverflowScrolling:"touch"}}>{renderPage()}</div>
-      <BottomNav page={page} setPage={setPage} t={t}/>
-      {showWaffle && <WaffleMenu t={t} onClose={() => setShowWaffle(false)} setPage={setPage}/>}
-      {selAcct && <AccountDetail acct={selAcct} t={t} onClose={() => setSelAcct(null)}/>}
-    </div>
-  );
-}
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App/>);
-</script>
-</body>
-</html>
+      {selBrief && <BriefingDetail brief={selBrief} t={t} onClose={()=>setSelBrief(null)}/>}
+      <div style={{color:t.txt,fontSize:20
